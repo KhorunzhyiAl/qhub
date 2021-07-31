@@ -1,8 +1,5 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:qhub/MyWidgets/Flipper.dart';
-import 'package:qhub/Styles/TextStyles.dart' as textStyles;
 
 class LineInputField extends StatefulWidget {
   final String placeholder;
@@ -32,17 +29,13 @@ class _LineInputFieldState extends State<LineInputField> {
   }
 
   TextField _textField() {
+    var theme = Theme.of(context);
     return TextField(
-      style: textStyles.bodyStyle,
+      style: theme.textTheme.bodyText1,
       obscureText: widget._obscureText,
       decoration: InputDecoration(
         filled: true,
         fillColor: Colors.grey.shade200,
-        hintText: widget.placeholder,
-        hintStyle: TextStyle(
-          color: Colors.grey.shade500,
-          fontSize: textStyles.bodyStyle.fontSize,
-        ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(5),
           borderSide: BorderSide(

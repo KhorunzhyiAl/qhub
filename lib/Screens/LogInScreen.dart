@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:qhub/MyWidgets/LineInputField.dart';
-import 'package:qhub/Styles/TextStyles.dart' as textStyles;
 
 class LogInScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
       body: Container(
         color: Colors.white,
@@ -19,15 +20,14 @@ class LogInScreen extends StatelessWidget {
               // Label
               Text(
                 'Log in',
-                style: textStyles.heading1Style,
+                style: theme.textTheme.headline1,
               ),
 
-              // Fields
               // Username
               SizedBox(height: 40),
               Text(
                 'Username',
-                style: textStyles.captionStyle,
+                style: theme.textTheme.headline6,
               ),
               SizedBox(height: 5),
               LineInputField(
@@ -38,31 +38,20 @@ class LogInScreen extends StatelessWidget {
               SizedBox(height: 40),
               Text(
                 'Password',
-                style: textStyles.captionStyle,
+                style: theme.textTheme.headline6,
               ),
               SizedBox(height: 5),
               LineInputField(
                 '',
                 isPassword: true,
               ),
-              TextButton(
-                onPressed: () {},
-                style: ButtonStyle(
-                  alignment: Alignment.centerLeft,
-                  animationDuration: Duration(milliseconds: 100),
-                  foregroundColor:
-                      MaterialStateProperty.resolveWith((states) {
-                        if (states.contains(MaterialState.pressed)) {
-                          return Colors.blue;
-                        }
-                        return Colors.black;
-                      }),
-                  overlayColor:
-                      MaterialStateProperty.all<Color?>(Colors.transparent),
-                ),
-                child: Text(
-                  'Forgot password?',
-                  style: textStyles.hintStyle,
+
+              // Forgot password
+              Container(
+                alignment: Alignment.centerLeft,
+                child: TextButton(
+                  onPressed: () {},
+                  child: Text('Click here if you forgot password'),
                 ),
               ),
 
@@ -70,32 +59,17 @@ class LogInScreen extends StatelessWidget {
               // Buttons
               ElevatedButton(
                 onPressed: () {},
-                style: ButtonStyle(
-                  elevation: MaterialStateProperty.all<double>(10),
-                  backgroundColor:
-                      MaterialStateProperty.all<Color?>(Colors.black),
-                  padding: MaterialStateProperty.all<EdgeInsets?>(
-                      EdgeInsets.all(10)),
-                ),
                 child: Text(
                   'Log in',
-                  style: textStyles.heading1Style,
                 ),
               ),
               SizedBox(height: 20),
-              TextButton(
+              OutlinedButton(
                 onPressed: () {
                   Navigator.pushNamed(context, '/sign_up');
                 },
-                style: ButtonStyle(
-                  foregroundColor:
-                      MaterialStateProperty.all<Color?>(Colors.black),
-                  overlayColor:
-                      MaterialStateProperty.all<Color?>(Colors.black12),
-                ),
                 child: Text(
                   "Create an account",
-                  style: textStyles.captionStyle,
                 ),
               ),
               SizedBox(height: 40),
