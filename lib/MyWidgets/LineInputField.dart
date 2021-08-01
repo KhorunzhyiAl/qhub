@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:qhub/MyWidgets/Flipper.dart';
 
 class LineInputField extends StatefulWidget {
-  final String placeholder;
   final bool isPassword;
   bool _obscureText = false;
 
-  LineInputField(this.placeholder, {this.isPassword = false}) {
+  LineInputField({this.isPassword = false}) {
     if (isPassword) _obscureText = true;
   }
 
