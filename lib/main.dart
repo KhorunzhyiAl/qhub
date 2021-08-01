@@ -15,6 +15,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       theme: myTheme.currentTheme,
       themeMode: myTheme.currentMode,
+
       routes: <String, Widget Function(BuildContext)>{
         '/log_in': (context) {
           return CoolTransitionBuilder(child: LogInScreen());
