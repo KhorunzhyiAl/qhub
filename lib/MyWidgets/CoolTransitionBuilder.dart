@@ -17,13 +17,23 @@ class CoolTransitionBuilder extends StatefulWidget {
 class _CoolTransitionBuilderState extends State<CoolTransitionBuilder> {
   @override
   Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
+    final Size size;
+    switch (MediaQuery.of(context).orientation) {
+      case Orientation.portrait:
+        size = MediaQuery.of(context).size;
+        break;
+      case Orientation.landscape:
+        size = MediaQuery.of(context).size.flipped;
+        break;
+    }
+
     const offset = 1.5;
     const rippleWidth = 0.2;
 
-    var coef = sqrt(pow(offset, 2) + pow(size.height * (offset) / size.width, 2));
-    coef = coef / (1 - rippleWidth);    
-
+    var coef =
+        sqrt(pow(offset, 2) + pow(size.height * (offset) / size.width, 2));
+    coef = coef / (1 - rippleWidth);
+    coef += 0.2;
 
     if (widget._isFinished)
       return widget.child;
