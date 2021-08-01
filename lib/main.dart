@@ -23,6 +23,7 @@ class MyApp extends StatelessWidget {
           return CoolTransitionBuilder(child: SignUpScreen());
         },
         '/': (context) {
+          // Todo: there shoudl be a different screen.
           return LogInScreen();
         }
       },

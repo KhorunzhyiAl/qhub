@@ -14,6 +14,7 @@ class LineInputField extends StatefulWidget {
   _LineInputFieldState createState() => _LineInputFieldState();
 }
 
+
 class _LineInputFieldState extends State<LineInputField> {
   IconButton _hideButton() {
     return IconButton(
@@ -23,7 +24,7 @@ class _LineInputFieldState extends State<LineInputField> {
           widget._obscureText = !widget._obscureText;
         });
       },
-      padding: EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
       icon: Icon(widget._obscureText ? Icons.visibility_off : Icons.visibility),
     );
   }
@@ -38,7 +39,7 @@ class _LineInputFieldState extends State<LineInputField> {
         fillColor: Colors.grey.shade200,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(5),
-          borderSide: BorderSide(
+          borderSide: const BorderSide(
             width: 0,
             style: BorderStyle.none,
           ),
@@ -56,7 +57,7 @@ class _LineInputFieldState extends State<LineInputField> {
         if (widget.isPassword)
           Flipper(
             child: _hideButton(),
-            flipDuration: Duration(milliseconds: 200),
+            flipDuration: const Duration(milliseconds: 200),
             curve: Curves.easeInOutSine,
             axis: FlipAxis.X,
           ),

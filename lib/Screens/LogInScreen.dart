@@ -15,7 +15,7 @@ class LogInScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              Spacer(),
+              const Spacer(),
 
               // Label
               Text(
@@ -24,23 +24,23 @@ class LogInScreen extends StatelessWidget {
               ),
 
               // Username
-              SizedBox(height: 40),
+              const SizedBox(height: 40),
               Text(
                 'Username',
                 style: theme.textTheme.headline6,
               ),
-              SizedBox(height: 5),
+              const SizedBox(height: 5),
               LineInputField(
                 '',
               ),
 
               // Password
-              SizedBox(height: 40),
+              const SizedBox(height: 40),
               Text(
                 'Password',
                 style: theme.textTheme.headline6,
               ),
-              SizedBox(height: 5),
+              const SizedBox(height: 5),
               LineInputField(
                 '',
                 isPassword: true,
@@ -51,28 +51,28 @@ class LogInScreen extends StatelessWidget {
                 alignment: Alignment.centerLeft,
                 child: TextButton(
                   onPressed: () {},
-                  child: Text('Click here if you forgot password'),
+                  child: const Text('Click here if you forgot password'),
                 ),
               ),
 
-              Spacer(),
+              const Spacer(),
               // Buttons
               ElevatedButton(
                 onPressed: () {},
-                child: Text(
+                child: const Text(
                   'Log in',
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               OutlinedButton(
                 onPressed: () {
                   Navigator.pushNamed(context, '/sign_up');
                 },
-                child: Text(
+                child: const Text(
                   "Create an account",
                 ),
               ),
-              SizedBox(height: 40),
+              const SizedBox(height: 40),
             ],
           ),
         ),

@@ -10,28 +10,23 @@ class CoolTransitionBuilder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.black,
-      child: TweenAnimationBuilder(
-        duration: Duration(milliseconds: 600),
-        tween: Tween<double>(begin: 0.0, end: 1),
-        
-        builder: (context, double value, child) {
-          return ShaderMask(
-            shaderCallback: (rect) {
-              return RadialGradient(
-                radius: value * 4,
-                colors: [Colors.white, Colors.transparent],
-                stops: [1.0, 1.0],
-                center: FractionalOffset(1.5, 1.5),
-              ).createShader(rect);
-            },
-            child: child,
-          );
-        },
-
-        child: child,
-      ),
+    return TweenAnimationBuilder(
+      duration: const Duration(milliseconds: 600),
+      tween: Tween<double>(begin: 0.0, end: 1),
+      builder: (context, double value, child) {
+        return ShaderMask(
+          shaderCallback: (rect) {
+            return RadialGradient(
+              radius: value * 5,
+              colors: [Colors.white, Colors.black],
+              stops: [1.0, 1.0],
+              center: FractionalOffset(1.3, 2),
+            ).createShader(rect);
+          },
+          child: child,
+        );
+      },
+      child: child,
     );
   }
 }

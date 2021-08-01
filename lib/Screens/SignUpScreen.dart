@@ -18,7 +18,7 @@ class SignUpScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
-                Spacer(),
+                const Spacer(),
         
                 // Label
                 Text(
@@ -28,57 +28,57 @@ class SignUpScreen extends StatelessWidget {
         
                 // Fields
                 // Username
-                SizedBox(height: 40),
+                const SizedBox(height: 40),
                 Text(
                   'Username',
                   style: theme.textTheme.headline6,
                 ),
-                SizedBox(height: 5),
+                const SizedBox(height: 5),
                 LineInputField(
                   '',
                 ),
         
                 // Password
-                SizedBox(height: 40),
+                const SizedBox(height: 40),
                 Text(
                   'Password',
                   style: theme.textTheme.headline6,
                 ),
-                SizedBox(height: 5),
+                const SizedBox(height: 5),
                 LineInputField(
                   '',
                   isPassword: true,
                 ),
                 // Repeat password
-                SizedBox(height: 40),
+                const SizedBox(height: 40),
                 Text(
                   'Repeat password',
                   style: theme.textTheme.headline6,
                 ),
-                SizedBox(height: 5),
+                const SizedBox(height: 5),
                 LineInputField(
                   '',
                   isPassword: true,
                 ),
         
-                Spacer(),
+                const Spacer(),
                 // Buttons
                 ElevatedButton(
                   onPressed: () {},
-                  child: Text(
+                  child: const Text(
                     'Sign up',
                   ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 OutlinedButton(
                   onPressed: () {
                     Navigator.pushNamed(context, '/log_in');
                   },
-                  child: Text(
+                  child: const Text(
                     "Log in",
                   ),
                 ),
-                SizedBox(height: 40),
+                const SizedBox(height: 40),
               ],
             ),
           ),
