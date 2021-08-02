@@ -46,7 +46,9 @@ class SignUpScreen extends StatelessWidget {
                   const SizedBox(height: 20),
                   OutlinedButton(
                     onPressed: () {
-                      Navigator.pushNamed(context, '/log_in');
+                      // todo: this doesn't seem like a good solution. Wheather a route must be
+                      // placed at the bottom of the stack should be defined somewhere else, probably
+                      Navigator.pushNamedAndRemoveUntil(context, '/log_in', (_) => false);
                     },
                     child: const Text("Log in"),
                   ),

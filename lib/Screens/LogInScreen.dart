@@ -47,7 +47,7 @@ class LogInScreen extends StatelessWidget {
                   const SizedBox(height: 20),
                   OutlinedButton(
                     onPressed: () {
-                      Navigator.pushNamed(context, '/sign_up');
+                      Navigator.pushNamedAndRemoveUntil(context, '/sign_up', (_) => false);
                     },
                     child: const Text("Create an account"),
                   ),
