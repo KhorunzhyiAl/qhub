@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:qhub/MyWidgets/Flipper.dart';
+import 'package:qhub/Screens/widgets/Flipper.dart';
 
 class LineInputField extends StatefulWidget {
   final bool isPassword;

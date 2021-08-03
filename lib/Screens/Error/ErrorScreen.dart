@@ -1,0 +1,26 @@
+import 'package:flutter/material.dart';
+
+
+class ErrorScreen extends StatelessWidget {
+  final String message;
+
+  ErrorScreen({required this.message});
+
+  @override
+  Widget build(BuildContext context) {
+    var theme = Theme.of(context);
+
+    return Scaffold(
+      body: Container(
+          color: Colors.transparent,
+          child: Center(
+            child: Column(
+              children: [
+                Text('Error', style: theme.textTheme.headline1),
+                Text(message, style: theme.textTheme.caption),
+              ],
+            ),
+          )),
+    );
+  }
+}

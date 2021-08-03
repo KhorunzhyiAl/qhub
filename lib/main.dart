@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:qhub/RouteGenerator.dart';
-import 'package:qhub/Styles/MyTheme.dart';
+import 'package:qhub/Domain/Navigation/RouteGenerator.dart';
+import 'package:qhub/Config/MyTheme.dart';
 
 void main() {
   runApp(MyApp());
