@@ -1,9 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:qhub/Domain/Api/Client/AuthenticationModel.dart';
+import 'package:qhub/Domain/Navigation/Routes.dart';
 
-class IntroLoadingScreen extends StatelessWidget {
+class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
+
+    // If the login successfull, open the home screen. If not, open the log in screen.
+    AuthenticationModel.logInWithToken().then((value) {
+      switch (value) {
+        case true:
+          Navigator.of(context).pushNamedAndRemoveUntil(Routes.home, (route) => false);
+          break;
+        case false:
+          Navigator.of(context).pushNamedAndRemoveUntil(Routes.logIn, (route) => false);
+          break;
+      }
+    });
+
     return Scaffold(
       body: Center(
         child: Container(

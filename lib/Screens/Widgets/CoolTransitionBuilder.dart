@@ -41,8 +41,9 @@ class _CoolTransitionBuilderState extends State<CoolTransitionBuilder> {
       return Container(
         color: Colors.white,
         child: TweenAnimationBuilder(
-          duration: const Duration(milliseconds: 600),
+          duration: const Duration(milliseconds: 700),
           tween: Tween<double>(begin: 0.0, end: 1),
+          curve: Curves.easeOutSine,
           onEnd: () {
             setState(() {
               widget._isFinished = true;

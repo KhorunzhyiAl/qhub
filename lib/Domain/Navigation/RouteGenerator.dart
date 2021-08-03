@@ -1,31 +1,34 @@
 import 'package:flutter/material.dart';
-import 'package:qhub/Screens/Slpash/IntroLoadingScreen.dart';
+import 'package:qhub/Screens/Slpash/SplashScreen.dart';
 import 'package:qhub/Screens/login/LogInScreen.dart';
 import 'package:qhub/Screens/widgets/CoolTransitionBuilder.dart';
 import 'package:qhub/Screens/signup/SignUpScreen.dart';
 import 'package:qhub/Screens/error/ErrorScreen.dart';
+import 'package:qhub/Domain/Navigation/Routes.dart';
 
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
+    final Widget screen;
+
     switch (settings.name) {
-      case '/':
-        return MaterialPageRoute(builder: (context) {
-          return IntroLoadingScreen();
-        });
-      case '/log_in':
-        return MaterialPageRoute(builder: (context) {
-          return CoolTransitionBuilder(child: LogInScreen());
-        });
-      case '/sign_up':
-        return MaterialPageRoute(builder: (context) {
-          return CoolTransitionBuilder(child: SignUpScreen());
-        });
+      case Routes.splash:
+        screen = SplashScreen();
+        break;
+      case Routes.logIn:
+        screen = LogInScreen();
+        break;
+      case Routes.signUp:
+        screen =  SignUpScreen();
+        break;
+      case Routes.home:
+        screen = Container();
+        break;
       default:
-        return MaterialPageRoute(builder: (context) {
-          return ErrorScreen(message: "Route '${settings.name}' doesn't exist");
-        });
+        screen = ErrorScreen(message: "Route '${settings.name}' doesn't exist");
     }
+
+    return MaterialPageRoute(builder: (context) {
+      return screen;
+    });
   }
 }
-
-
