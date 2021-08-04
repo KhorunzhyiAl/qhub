@@ -25,8 +25,10 @@ class MyTheme with ChangeNotifier {
 
   ThemeData get light => ThemeData(
         backgroundColor: Colors.white,
-        
-        
+
+        // Use for single line text input fields. I don't know the correct property for this.
+        canvasColor: Colors.grey.shade200,
+
         outlinedButtonTheme: OutlinedButtonThemeData(
           style: ButtonStyle(
             textStyle: MaterialStateProperty.all(TextStyle(

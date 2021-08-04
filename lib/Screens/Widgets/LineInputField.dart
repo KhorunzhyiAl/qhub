@@ -7,6 +7,7 @@ class _FieldData {
 }
 
 class LineInputField extends StatefulWidget {
+  final String name;
   final bool isPassword;
   final void Function(String)? onSubmitted;
   final fieldData = _FieldData();
@@ -14,6 +15,7 @@ class LineInputField extends StatefulWidget {
   String get text => fieldData.text;
 
   LineInputField({
+    required this.name,
     this.isPassword = false,
     this.onSubmitted,
   }) {
@@ -34,7 +36,9 @@ class _LineInputFieldState extends State<LineInputField> {
         });
       },
       padding: const EdgeInsets.symmetric(horizontal: 20),
-      icon: Icon(widget.fieldData.obscureText ? Icons.visibility_off : Icons.visibility),
+      icon: Icon(widget.fieldData.obscureText
+          ? Icons.visibility_off
+          : Icons.visibility),
     );
   }
 
@@ -46,8 +50,7 @@ class _LineInputFieldState extends State<LineInputField> {
       onSubmitted: widget.onSubmitted,
       decoration: InputDecoration(
         filled: true,
-        // TODO: use a theme color
-        fillColor: Colors.grey.shade200,
+        fillColor: theme.canvasColor,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(5),
           borderSide: const BorderSide(
@@ -61,18 +64,28 @@ class _LineInputFieldState extends State<LineInputField> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      alignment: Alignment.centerRight,
-      children: <Widget>[
-        _textField(),
-        if (widget.isPassword)
-          Flipper(
-            child: _hideButton(),
-            flipDuration: const Duration(milliseconds: 200),
-            curve: Curves.easeInOutSine,
-            axis: FlipAxis.X,
+    var theme = Theme.of(context);
+    return Container(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(widget.name, style: theme.textTheme.headline6),
+          const SizedBox(height: 5),
+          Stack(
+            alignment: Alignment.centerRight,
+            children: <Widget>[
+              _textField(),
+              if (widget.isPassword)
+                Flipper(
+                  child: _hideButton(),
+                  flipDuration: const Duration(milliseconds: 200),
+                  curve: Curves.easeInOutSine,
+                  axis: FlipAxis.X,
+                ),
+            ],
           ),
-      ],
+        ],
+      ),
     );
   }
 }

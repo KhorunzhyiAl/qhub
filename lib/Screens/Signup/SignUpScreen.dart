@@ -6,17 +6,22 @@ import 'package:qhub/Domain/Api/Client/SignUpModel.dart';
 
 class SignUpScreen extends StatelessWidget {
   final _usernameField = LineInputField(
+    name: 'Username',
     onSubmitted: (text) {
       SignUpModel.verifySignUpData(username: text);
     },
   );
   final _password1Field = LineInputField(
+    name: 'Password',
     isPassword: true,
     onSubmitted: (text) {
       SignUpModel.verifySignUpData(password: text);
     },
   );
-  final _password2Field = LineInputField(isPassword: true);
+  final _password2Field = LineInputField(
+    name: 'Repeat password',
+    isPassword: true,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -24,8 +29,8 @@ class SignUpScreen extends StatelessWidget {
     final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
+      backgroundColor: theme.backgroundColor,
       body: Container(
-        color: Colors.white,
         child: SingleChildScrollView(
           child: Container(
             height: max(screenHeight, 660),
@@ -38,18 +43,14 @@ class SignUpScreen extends StatelessWidget {
                 children: <Widget>[
                   const Spacer(),
                   Text('Sign up', style: theme.textTheme.headline1),
+
                   const SizedBox(height: 40),
-                  Text('Username', style: theme.textTheme.headline6),
-                  const SizedBox(height: 5),
                   _usernameField,
                   const SizedBox(height: 40),
-                  Text('Password', style: theme.textTheme.headline6),
-                  const SizedBox(height: 5),
                   _password1Field,
                   const SizedBox(height: 40),
-                  Text('Repeat password', style: theme.textTheme.headline6),
-                  const SizedBox(height: 5),
                   _password2Field,
+                  
                   const Spacer(),
                   ElevatedButton(
                     onPressed: () async {

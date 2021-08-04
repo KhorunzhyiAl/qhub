@@ -6,8 +6,11 @@ import 'package:qhub/Domain/Api/Client/AuthenticationModel.dart';
 import 'package:qhub/Domain/Navigation/Routes.dart';
 
 class LogInScreen extends StatelessWidget {
-  final _usernameField = LineInputField();
+  final _usernameField = LineInputField(
+    name: 'Username',
+  );
   final _passwordField = LineInputField(
+    name: 'Password',
     isPassword: true,
   );
 
@@ -17,8 +20,8 @@ class LogInScreen extends StatelessWidget {
     final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
+      backgroundColor: theme.backgroundColor,
       body: Container(
-        color: Colors.white,
         child: SingleChildScrollView(
           child: Container(
             height: max(screenHeight, 600),
@@ -31,19 +34,16 @@ class LogInScreen extends StatelessWidget {
                 children: <Widget>[
                   const Spacer(),
                   Text('Log in', style: theme.textTheme.headline1),
+
                   const SizedBox(height: 40),
-                  Text('Username', style: theme.textTheme.headline6),
-                  const SizedBox(height: 5),
                   _usernameField,
                   const SizedBox(height: 40),
-                  Text('Password', style: theme.textTheme.headline6),
-                  const SizedBox(height: 5),
                   _passwordField,
                   Container(
                     alignment: Alignment.centerLeft,
                     child: TextButton(
                       onPressed: () {},
-                      child: const Text('Click here if you forgot password'),
+                      child: const Text('Forgot password'),
                     ),
                   ),
                   const Spacer(),
