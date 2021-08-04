@@ -1,34 +1,40 @@
 import 'package:flutter/material.dart';
 import 'package:qhub/Screens/widgets/Flipper.dart';
 
+class _FieldData {
+  var text = '';
+  var obscureText = false;
+}
+
 class LineInputField extends StatefulWidget {
   final bool isPassword;
   final void Function(String)? onSubmitted;
+  final fieldData = _FieldData();
+
+  String get text => fieldData.text;
 
   LineInputField({
     this.isPassword = false,
     this.onSubmitted,
-  });
+  }) {
+    fieldData.obscureText = isPassword;
+  }
 
   @override
   _LineInputFieldState createState() => _LineInputFieldState();
 }
 
-
-
 class _LineInputFieldState extends State<LineInputField> {
-  bool _obscureText = false;
-
   IconButton _hideButton() {
     return IconButton(
       key: UniqueKey(),
       onPressed: () {
         setState(() {
-          _obscureText = !_obscureText;
+          widget.fieldData.obscureText = !widget.fieldData.obscureText;
         });
       },
       padding: const EdgeInsets.symmetric(horizontal: 20),
-      icon: Icon(_obscureText ? Icons.visibility_off : Icons.visibility),
+      icon: Icon(widget.fieldData.obscureText ? Icons.visibility_off : Icons.visibility),
     );
   }
 
@@ -36,7 +42,7 @@ class _LineInputFieldState extends State<LineInputField> {
     var theme = Theme.of(context);
     return TextField(
       style: theme.textTheme.bodyText1,
-      obscureText: _obscureText,
+      obscureText: widget.fieldData.obscureText,
       onSubmitted: widget.onSubmitted,
       decoration: InputDecoration(
         filled: true,
@@ -51,12 +57,6 @@ class _LineInputFieldState extends State<LineInputField> {
         ),
       ),
     );
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _obscureText = widget.isPassword;
   }
 
   @override

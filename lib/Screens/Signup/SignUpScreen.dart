@@ -1,10 +1,22 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
+
 import 'package:qhub/Screens/widgets/LineInputField.dart';
+import 'package:qhub/Domain/Api/Client/SignUpModel.dart';
 
 class SignUpScreen extends StatelessWidget {
-
+  final _usernameField = LineInputField(
+    onSubmitted: (text) {
+      SignUpModel.verifySignUpData(username: text);
+    },
+  );
+  final _password1Field = LineInputField(
+    isPassword: true,
+    onSubmitted: (text) {
+      SignUpModel.verifySignUpData(password: text);
+    },
+  );
+  final _password2Field = LineInputField(isPassword: true);
 
   @override
   Widget build(BuildContext context) {
@@ -29,26 +41,39 @@ class SignUpScreen extends StatelessWidget {
                   const SizedBox(height: 40),
                   Text('Username', style: theme.textTheme.headline6),
                   const SizedBox(height: 5),
-                  LineInputField(),
+                  _usernameField,
                   const SizedBox(height: 40),
                   Text('Password', style: theme.textTheme.headline6),
                   const SizedBox(height: 5),
-                  LineInputField(isPassword: true),
+                  _password1Field,
                   const SizedBox(height: 40),
                   Text('Repeat password', style: theme.textTheme.headline6),
                   const SizedBox(height: 5),
-                  LineInputField(isPassword: true),
+                  _password2Field,
                   const Spacer(),
                   ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () async {
+                      await SignUpModel.verifySignUpData(
+                        password: _password1Field.text,
+                        repeatPassword: _password2Field.text,
+                      );
+
+                      if (await SignUpModel.signUp(
+                          _usernameField.text, _password1Field.text)) {
+                        Navigator.of(context)
+                            .pushNamedAndRemoveUntil('/home', (route) => false);
+                      }
+                    },
                     child: const Text('Sign up'),
                   ),
                   const SizedBox(height: 20),
                   OutlinedButton(
                     onPressed: () {
                       // todo: this doesn't seem like a good solution. Wheather a route must be
-                      // placed at the bottom of the stack should be defined somewhere else, probably
-                      Navigator.pushNamedAndRemoveUntil(context, '/log_in', (_) => false);
+                      // placed at the bottom of the stack should be defined somewhere else,
+                      // probably
+                      Navigator.pushNamedAndRemoveUntil(
+                          context, '/log_in', (_) => false);
                     },
                     child: const Text("Log in"),
                   ),

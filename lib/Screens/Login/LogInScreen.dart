@@ -5,17 +5,16 @@ import 'package:qhub/Screens/widgets/LineInputField.dart';
 import 'package:qhub/Domain/Api/Client/AuthenticationModel.dart';
 import 'package:qhub/Domain/Navigation/Routes.dart';
 
-class _FieldData {
-  String username = '';
-  String password = '';
-}
-
 class LogInScreen extends StatelessWidget {
+  final _usernameField = LineInputField();
+  final _passwordField = LineInputField(
+    isPassword: true,
+  );
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final screenHeight = MediaQuery.of(context).size.height;
-    var fieldData = _FieldData();
 
     return Scaffold(
       body: Container(
@@ -35,20 +34,11 @@ class LogInScreen extends StatelessWidget {
                   const SizedBox(height: 40),
                   Text('Username', style: theme.textTheme.headline6),
                   const SizedBox(height: 5),
-                  LineInputField(
-                    onSubmitted: (text) {
-                      fieldData.username = text;
-                    },
-                  ),
+                  _usernameField,
                   const SizedBox(height: 40),
                   Text('Password', style: theme.textTheme.headline6),
                   const SizedBox(height: 5),
-                  LineInputField(
-                    isPassword: true,
-                    onSubmitted: (text) {
-                      fieldData.password = text;
-                    },
-                  ),
+                  _passwordField,
                   Container(
                     alignment: Alignment.centerLeft,
                     child: TextButton(
@@ -60,10 +50,11 @@ class LogInScreen extends StatelessWidget {
                   ElevatedButton(
                     onPressed: () async {
                       if (await AuthenticationModel.logInWithPassword(
-                        fieldData.username,
-                        fieldData.password,
+                        _usernameField.text,
+                        _passwordField.text,
                       )) {
-                        Navigator.pushNamedAndRemoveUntil(context, Routes.home, (route) => false);
+                        Navigator.pushNamedAndRemoveUntil(
+                            context, Routes.home, (route) => false);
                       }
                     },
                     child: const Text('Log in'),
