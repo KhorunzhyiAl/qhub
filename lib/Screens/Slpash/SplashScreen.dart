@@ -20,6 +20,7 @@ class SplashScreen extends StatelessWidget {
     });
 
     return Scaffold(
+      backgroundColor: Theme.of(context).backgroundColor,
       body: Center(
         child: Container(
           color: Colors.transparent,
@@ -37,6 +38,7 @@ class SplashScreen extends StatelessWidget {
               LinearProgressIndicator(
                 minHeight: 40,
                 color: Colors.black,
+                backgroundColor: Colors.transparent
               ),
             ],
           ),

@@ -9,7 +9,7 @@ class _FieldData {
 class LineInputField extends StatefulWidget {
   final String name;
   final bool isPassword;
-  final void Function(String)? onSubmitted;
+  final void Function(String)? onChanged;
   final fieldData = _FieldData();
 
   String get text => fieldData.text;
@@ -17,7 +17,7 @@ class LineInputField extends StatefulWidget {
   LineInputField({
     required this.name,
     this.isPassword = false,
-    this.onSubmitted,
+    this.onChanged,
   }) {
     fieldData.obscureText = isPassword;
   }
@@ -47,7 +47,7 @@ class _LineInputFieldState extends State<LineInputField> {
     return TextField(
       style: theme.textTheme.bodyText1,
       obscureText: widget.fieldData.obscureText,
-      onSubmitted: widget.onSubmitted,
+      onChanged: widget.onChanged,
       decoration: InputDecoration(
         filled: true,
         fillColor: theme.canvasColor,

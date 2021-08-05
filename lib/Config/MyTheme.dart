@@ -28,6 +28,7 @@ class MyTheme with ChangeNotifier {
 
         // Use for single line text input fields. I don't know the correct property for this.
         canvasColor: Colors.grey.shade200,
+        errorColor: Colors.red.shade700,
 
         outlinedButtonTheme: OutlinedButtonThemeData(
           style: ButtonStyle(
@@ -121,7 +122,7 @@ class MyTheme with ChangeNotifier {
             color: Colors.black,
           ),
           caption: TextStyle(
-            fontSize: 22,
+            fontSize: 16,
             fontWeight: FontWeight.w300,
             color: Colors.black87,
           ),
