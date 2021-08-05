@@ -39,13 +39,29 @@ class MyTheme with ChangeNotifier {
             overlayColor: MaterialStateProperty.all(Colors.black.withAlpha(50)),
           ),
         ),
+        
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ButtonStyle(
             animationDuration: Duration(milliseconds: 100),
             padding: MaterialStateProperty.all(EdgeInsets.all(15)),
-            elevation: MaterialStateProperty.all(10.0),
-            backgroundColor: MaterialStateProperty.all(Colors.black),
-            overlayColor: MaterialStateProperty.all(Colors.white),
+            elevation: MaterialStateProperty.resolveWith((states) {
+              if (states.contains(MaterialState.disabled)) {
+                return 0;
+              }
+              return 10;
+            }),
+            backgroundColor: MaterialStateProperty.resolveWith((states) {
+              if (states.contains(MaterialState.disabled)) {
+                return Colors.grey.shade500;
+              }
+              return Colors.black;
+            }),
+            overlayColor: MaterialStateProperty.resolveWith((states) {
+              if (states.contains(MaterialState.disabled)) {
+                return Colors.transparent;
+              }
+              return Colors.white;
+            }),
             foregroundColor: MaterialStateProperty.resolveWith((states) {
               if (states.contains(MaterialState.pressed)) {
                 return Colors.black;

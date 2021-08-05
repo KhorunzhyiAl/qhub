@@ -3,16 +3,15 @@ import 'package:flutter/foundation.dart';
 
 class SignUpModel {
   /// The following properties update every time [verifySignUpData] is called
-  ValueNotifier<SignUpStatus> status = ValueNotifier(SignUpStatus.correct);
+  ValueNotifier<SignUpStatus> status = ValueNotifier(SignUpStatus.incorrect);
   ValueNotifier<List<String>> usernameErrorNotifier = ValueNotifier([]);
   ValueNotifier<String?> password1ErrorNotifier = ValueNotifier(null);
   ValueNotifier<String?> password2ErrorNotifier = ValueNotifier(null);
 
-
-
   String? _username;
   set username(String text) {
     _username = text.length > 0 ? text : null;
+    print('username changed: $_username');
     _verifySignUpData();
   }
 
@@ -43,20 +42,25 @@ class SignUpModel {
   /// Doesn't compare passwords if [repeatPassword] is null.
   /// TODO: currently all the checks a made up. Match the requirements with the server's.
   Future<void> _verifySignUpData() async {
+    bool hasError = false;
+
+    // password length >= 5
     if (_password1 != null && _password1!.length < 5) {
       password1ErrorNotifier.value = 'Password must contain 5 or more characters';
-      status.value = SignUpStatus.incorrect;
+      hasError = true;
     } else {
       password1ErrorNotifier.value = null;
     }
 
+    // Passwords match
     if (_password1 != null && _password2 != null && _password1 != _password2) {
       password2ErrorNotifier.value = 'Passwords do not match';
-      status.value = SignUpStatus.incorrect;
+      hasError = true;
     } else {
       password2ErrorNotifier.value = null;
     }
 
+    // Username check
     if (_username != null) {
       var usernameErrors = <String>[];
       if (_username!.length > 20) {
@@ -70,18 +74,35 @@ class SignUpModel {
       }
 
       usernameErrorNotifier.value = usernameErrors;
-      status.value = usernameErrors.length > 0 ? SignUpStatus.incorrect : SignUpStatus.correct;
-
-      // Chek if not taken;
-      // TODO: dummy
-      if (await Future<bool>.delayed(Duration(seconds: 2), () => false)) {
-        usernameErrors.add('Username is taken');
-        usernameErrorNotifier.value = usernameErrors;
-        status.value = SignUpStatus.incorrect;
-      }
+      hasError |= usernameErrors.length > 0;
     } else {
       usernameErrorNotifier.value = [];
-      status.value = SignUpStatus.incorrect;
+      hasError = true;
+    }
+
+    // Passwords not null
+    if (_password1 == null || _password2 == null) {
+      hasError = true;
+    }
+
+    switch (hasError) {
+      case true:
+        status.value = SignUpStatus.incorrect;
+        break;
+      case false:
+        status.value = SignUpStatus.correct;
+    }
+
+    // Username taken check (queries the server)
+    if (_username != null) {
+      var usernameCopy = _username.toString();
+      if (await Future<bool>.delayed(Duration(seconds: 2), () => true)) {
+        if (_username == usernameCopy) {
+          usernameErrorNotifier.value = usernameErrorNotifier.value + ['Username is taken'];
+          hasError = true;
+          status.value = SignUpStatus.incorrect;
+        }
+      }
     }
   }
 }

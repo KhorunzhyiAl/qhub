@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:qhub/Domain/Api/Enums.dart';
 
 import 'package:qhub/Screens/widgets/LineInputField.dart';
 import 'package:qhub/Domain/Api/Client/SignUpModel.dart';
@@ -100,13 +101,21 @@ class SignUpScreen extends StatelessWidget {
                     },
                   ),
                   const Spacer(),
-                  ElevatedButton(
-                    onPressed: () async {
-                      if (await model.signUp()) {
-                        Navigator.of(context).pushNamedAndRemoveUntil('/home', (route) => false);
-                      }
+                  ValueListenableBuilder<SignUpStatus>(
+                    valueListenable: model.status,
+                    builder: (context, status, widget) {
+                      return ElevatedButton(
+                        onPressed: status == SignUpStatus.correct
+                            ? () async {
+                                if (await model.signUp()) {
+                                  Navigator.of(context)
+                                      .pushNamedAndRemoveUntil('/home', (route) => false);
+                                }
+                              }
+                            : null,
+                        child: const Text('Sign up'),
+                      );
                     },
-                    child: const Text('Sign up'),
                   ),
                   const SizedBox(height: 20),
                   OutlinedButton(
