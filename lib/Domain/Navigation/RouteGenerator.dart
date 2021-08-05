@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:qhub/Screens/Slpash/SplashScreen.dart';
 import 'package:qhub/Screens/login/LogInScreen.dart';
-import 'package:qhub/Screens/widgets/CoolTransitionBuilder.dart';
 import 'package:qhub/Screens/signup/SignUpScreen.dart';
 import 'package:qhub/Screens/error/ErrorScreen.dart';
 import 'package:qhub/Domain/Navigation/Routes.dart';
