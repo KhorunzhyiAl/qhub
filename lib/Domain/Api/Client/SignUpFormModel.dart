@@ -14,23 +14,25 @@ class SignUpModel {
   ValueNotifier<String?> password1ErrorNotifier = ValueNotifier(null);
   ValueNotifier<String?> password2ErrorNotifier = ValueNotifier(null);
 
-
   String? _username;
   set username(String text) {
     _username = text.length > 0 ? text : null;
     _verifyUsername();
+    _verifyAll();
   }
 
   String? _password1;
   set password1(String text) {
     _password1 = text.length > 0 ? text : null;
     _verifyPassword();
+    _verifyAll();
   }
 
   String? _password2;
   set password2(String text) {
     _password2 = text.length > 0 ? text : null;
     _verifyPassword();
+    _verifyAll();
   }
 
   /// Makes a sign up request to the server. Returns true if successful.
@@ -38,7 +40,11 @@ class SignUpModel {
     if (status.value != SignUpStatus.signUpEnabled) {
       return false;
     }
-    return _clientModel.signUp(_username!, _password1!);
+
+    status.value = SignUpStatus.busy;
+    bool res = await _clientModel.signUp(_username!, _password1!);
+    status.value = SignUpStatus.signUpEnabled;
+    return res;
   }
 
   void _verifyUsername() async {
@@ -66,6 +72,7 @@ class SignUpModel {
     if (await Future<bool>.delayed(Duration(seconds: 2), () => true)) {
       if (_username == usernameCopy) {
         usernameErrorNotifier.value = 'Username is taken';
+        status.value = SignUpStatus.signUpDisabled;
       }
       return;
     }
@@ -99,5 +106,16 @@ class SignUpModel {
     }
 
     password2ErrorNotifier.value = null;
+  }
+
+  void _verifyAll() {
+    if (usernameErrorNotifier.value == null &&
+        password1ErrorNotifier.value == null &&
+        password2ErrorNotifier.value == null) {
+      status.value = SignUpStatus.signUpEnabled;
+      return;
+    } else {
+      status.value = SignUpStatus.signUpDisabled;
+    }
   }
 }

@@ -24,6 +24,9 @@ class LogInFormModel {
   }
 
   void logIn() async {
+    if (status.value != LogInStatus.logInEnabled) {
+      return;
+    }
     if (_username == null) {
       usernameErrorNotifier.value = 'Username must not be empty';
     }
@@ -31,11 +34,13 @@ class LogInFormModel {
       passwordErrorNotifier.value = 'Password must not be empty';
     }
 
+    status.value = LogInStatus.busy;
     if (await clientModel.logInWithPassword(_username!, _password!)) {
       passwordErrorNotifier.value = null;
-    } else{
+    } else {
       passwordErrorNotifier.value = 'Incorrect username or password';
     }
+    status.value = LogInStatus.logInEnabled;
   }
 
   void _validateFields() {

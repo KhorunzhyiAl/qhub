@@ -9,7 +9,6 @@ import 'package:qhub/Screens/Widgets/LineInputField.dart';
 import 'package:qhub/Domain/Locators/Locator.dart';
 import 'package:qhub/Screens/Widgets/ErrorText.dart';
 
-
 class SignUpScreen extends StatelessWidget {
   final model = locator<SignUpModel>();
 
@@ -70,7 +69,6 @@ class SignUpScreen extends StatelessWidget {
                       return ErrorText(message);
                     },
                   ),
-
                   const SizedBox(height: 40),
                   _password1Field,
                   ValueListenableBuilder<String?>(
@@ -79,7 +77,6 @@ class SignUpScreen extends StatelessWidget {
                       return ErrorText(message);
                     },
                   ),
-
                   const SizedBox(height: 40),
                   _password2Field,
                   ValueListenableBuilder<String?>(
@@ -88,30 +85,45 @@ class SignUpScreen extends StatelessWidget {
                       return ErrorText(message);
                     },
                   ),
-                 
                   const Spacer(),
                   ValueListenableBuilder<SignUpStatus>(
                     valueListenable: model.status,
                     builder: (context, status, widget) {
+                      void Function()? onPressed;
+                      switch (status) {
+                        case SignUpStatus.signUpEnabled:
+                          onPressed = () {
+                            model.signUp();
+                          };
+                          break;
+                        case SignUpStatus.signUpDisabled:
+                          onPressed = null;
+                          break;
+                        case SignUpStatus.busy:
+                          onPressed = null;
+                          break;
+                      }
+
                       return ElevatedButton(
-                        onPressed: status == SignUpStatus.signUpEnabled
-                            ? () async {
-                                if (await model.signUp()) {
-                                  Navigator.of(context)
-                                      .pushNamedAndRemoveUntil('/home', (route) => false);
-                                }
-                              }
-                            : null,
-                        child: const Text('Sign up'),
+                        onPressed: onPressed,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            if (status == SignUpStatus.busy) ...[
+                              CircularProgressIndicator(
+                                color: Colors.white,
+                              ),
+                              SizedBox(width: 20),
+                            ],
+                            const Text('SignUp'),
+                          ],
+                        ),
                       );
                     },
                   ),
                   const SizedBox(height: 20),
                   OutlinedButton(
                     onPressed: () {
-                      // todo: this doesn't seem like a good solution. Wheather a route must be
-                      // placed at the bottom of the stack should be defined somewhere else,
-                      // probably
                       Navigator.pushNamedAndRemoveUntil(context, Routes.logIn, (_) => false);
                     },
                     child: const Text("Log in"),

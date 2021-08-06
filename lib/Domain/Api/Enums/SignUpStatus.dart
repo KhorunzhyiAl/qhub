@@ -2,4 +2,5 @@
 enum SignUpStatus {
   signUpDisabled,
   signUpEnabled,
+  busy,
 }

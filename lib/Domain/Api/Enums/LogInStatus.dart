@@ -2,4 +2,5 @@
 enum LogInStatus {
   logInDisabled,
   logInEnabled,
+  busy,
 }
