@@ -77,7 +77,7 @@ class LogInScreen extends StatelessWidget {
                     valueListenable: formModel.status,
                     builder: (_, status, __) {
                       return ElevatedButton(
-                        onPressed: status == LogInStatus.filled
+                        onPressed: status == LogInStatus.logInEnabled
                             ? () {
                                 formModel.logIn();
                               }

@@ -22,7 +22,6 @@ class SignUpScreen extends StatelessWidget {
       name: 'Username',
       onChanged: (text) {
         model.username = text;
-        model.verifySignUpDataLocally();
       },
       onSubmitted: (text) {
         model.username = text;
@@ -35,7 +34,6 @@ class SignUpScreen extends StatelessWidget {
       isPassword: true,
       onChanged: (text) {
         model.password1 = text;
-        model.verifySignUpDataLocally();
       },
     );
 
@@ -44,7 +42,6 @@ class SignUpScreen extends StatelessWidget {
       isPassword: true,
       onChanged: (text) {
         model.password2 = text;
-        model.verifySignUpDataLocally();
       },
     );
   }
@@ -107,7 +104,7 @@ class SignUpScreen extends StatelessWidget {
                     valueListenable: model.status,
                     builder: (context, status, widget) {
                       return ElevatedButton(
-                        onPressed: status == SignUpStatus.correct
+                        onPressed: status == SignUpStatus.signUpEnabled
                             ? () async {
                                 if (await model.signUp()) {
                                   Navigator.of(context)

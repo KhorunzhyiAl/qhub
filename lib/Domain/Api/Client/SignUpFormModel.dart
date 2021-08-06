@@ -1,11 +1,15 @@
 import 'dart:async';
 
 import 'package:qhub/Domain/Api/Enums/SignUpStatus.dart';
+import 'package:qhub/Domain/Api/Client/ClientModel.dart';
 import 'package:flutter/foundation.dart';
+import 'package:qhub/Domain/Locators/Locator.dart';
 
 class SignUpModel {
+  ClientModel _clientModel = locator<ClientModel>();
+
   /// The following properties update every time [verifySignUpData] is called
-  ValueNotifier<SignUpStatus> status = ValueNotifier(SignUpStatus.incorrect);
+  ValueNotifier<SignUpStatus> status = ValueNotifier(SignUpStatus.signUpDisabled);
   // ValueNotifier<String?> usernameErrorNotifier = ValueNotifier(null);
   // ValueNotifier<String?> password1ErrorNotifier = ValueNotifier(null);
   // ValueNotifier<String?> password2ErrorNotifier = ValueNotifier(null);
@@ -21,27 +25,32 @@ class SignUpModel {
   String? _username;
   set username(String text) {
     _username = text.length > 0 ? text : null;
+    verifySignUpDataLocal();
   }
 
   String? _password1;
   set password1(String text) {
     _password1 = text.length > 0 ? text : null;
+    verifySignUpDataLocal();
   }
 
   String? _password2;
   set password2(String text) {
     _password2 = text.length > 0 ? text : null;
+    verifySignUpDataLocal();
   }
 
   /// Makes a sign up request to the server. Returns true if successful.
   Future<bool> signUp() async {
-    if (status.value != SignUpStatus.correct) {
+    if (status.value != SignUpStatus.signUpEnabled) {
       return false;
     }
-    return Future.delayed(Duration(seconds: 2), () => true);
+    return _clientModel.signUp(_username!, _password1!);
   }
 
-  void verifySignUpDataLocally() {
+  /// Verifies everything that can be done without sending a request to the server. That is 
+  /// everything exept for the "username is taken" check.
+  void verifySignUpDataLocal() {
     bool hasError = false;
 
     // password length >= 5
@@ -85,10 +94,10 @@ class SignUpModel {
 
     switch (hasError) {
       case true:
-        status.value = SignUpStatus.incorrect;
+        status.value = SignUpStatus.signUpDisabled;
         break;
       case false:
-        status.value = SignUpStatus.correct;
+        status.value = SignUpStatus.signUpEnabled;
     }
   }
 
@@ -98,7 +107,7 @@ class SignUpModel {
       if (await Future<bool>.delayed(Duration(seconds: 2), () => true)) {
         if (_username == usernameCopy) {
           _usernameErrorStreamController.add('Username is taken');
-          status.value = SignUpStatus.incorrect;
+          status.value = SignUpStatus.signUpDisabled;
         }
       }
     }

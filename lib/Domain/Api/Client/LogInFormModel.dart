@@ -6,7 +6,7 @@ import 'package:qhub/Domain/Locators/Locator.dart';
 class LogInFormModel {
   ClientModel clientModel = locator<ClientModel>();
 
-  ValueNotifier<LogInStatus> status = ValueNotifier(LogInStatus.empty);
+  ValueNotifier<LogInStatus> status = ValueNotifier(LogInStatus.logInDisabled);
   ValueNotifier<String?> usernameErrorNotifier = ValueNotifier(null);
   ValueNotifier<String?> passwordErrorNotifier = ValueNotifier(null);
 
@@ -40,9 +40,10 @@ class LogInFormModel {
 
   void _validateFields() {
     if (_username != null && _password != null) {
-      status.value = LogInStatus.filled;
+      status.value = LogInStatus.logInEnabled;
+      passwordErrorNotifier.value = null;
     } else {
-      status.value = LogInStatus.empty;
+      status.value = LogInStatus.logInDisabled;
     }
   }
 }
