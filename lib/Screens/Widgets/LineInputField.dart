@@ -10,6 +10,7 @@ class LineInputField extends StatefulWidget {
   final String name;
   final bool isPassword;
   final void Function(String)? onChanged;
+  final void Function(String)? onSubmitted;
   final fieldData = _FieldData();
 
   String get text => fieldData.text;
@@ -18,6 +19,7 @@ class LineInputField extends StatefulWidget {
     required this.name,
     this.isPassword = false,
     this.onChanged,
+    this.onSubmitted,
   }) {
     fieldData.obscureText = isPassword;
   }
@@ -36,9 +38,7 @@ class _LineInputFieldState extends State<LineInputField> {
         });
       },
       padding: const EdgeInsets.symmetric(horizontal: 20),
-      icon: Icon(widget.fieldData.obscureText
-          ? Icons.visibility_off
-          : Icons.visibility),
+      icon: Icon(widget.fieldData.obscureText ? Icons.visibility_off : Icons.visibility),
     );
   }
 
@@ -48,6 +48,7 @@ class _LineInputFieldState extends State<LineInputField> {
       style: theme.textTheme.bodyText1,
       obscureText: widget.fieldData.obscureText,
       onChanged: widget.onChanged,
+      onSubmitted: widget.onSubmitted,
       decoration: InputDecoration(
         filled: true,
         fillColor: theme.canvasColor,

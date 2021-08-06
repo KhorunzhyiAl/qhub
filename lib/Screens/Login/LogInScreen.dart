@@ -2,8 +2,9 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 import 'package:qhub/Screens/widgets/LineInputField.dart';
-import 'package:qhub/Domain/Api/Client/AuthenticationModel.dart';
+import 'package:qhub/Domain/Api/Client/ClientModel.dart';
 import 'package:qhub/Domain/Navigation/Routes.dart';
+import 'package:qhub/Domain/Locators/Locator.dart';
 
 class LogInScreen extends StatelessWidget {
   final _usernameField = LineInputField(
@@ -18,6 +19,7 @@ class LogInScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final screenHeight = MediaQuery.of(context).size.height;
+    final clientModel = locator<ClientModel>();
 
     return Scaffold(
       backgroundColor: theme.backgroundColor,
@@ -34,7 +36,6 @@ class LogInScreen extends StatelessWidget {
                 children: <Widget>[
                   const Spacer(),
                   Text('Log in', style: theme.textTheme.headline1),
-
                   const SizedBox(height: 40),
                   _usernameField,
                   const SizedBox(height: 40),
@@ -49,21 +50,17 @@ class LogInScreen extends StatelessWidget {
                   const Spacer(),
                   ElevatedButton(
                     onPressed: () async {
-                      if (await AuthenticationModel.logInWithPassword(
+                      await clientModel.logInWithPassword(
                         _usernameField.text,
                         _passwordField.text,
-                      )) {
-                        Navigator.pushNamedAndRemoveUntil(
-                            context, Routes.home, (route) => false);
-                      }
+                      );
                     },
                     child: const Text('Log in'),
                   ),
                   const SizedBox(height: 20),
                   OutlinedButton(
                     onPressed: () {
-                      Navigator.pushNamedAndRemoveUntil(
-                          context, '/sign_up', (_) => false);
+                      Navigator.pushNamedAndRemoveUntil(context, Routes.signUp, (_) => false);
                     },
                     child: const Text("Create an account"),
                   ),

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 class ErrorScreen extends StatelessWidget {
   final String message;
 
@@ -12,15 +11,15 @@ class ErrorScreen extends StatelessWidget {
 
     return Scaffold(
       body: Container(
-          color: Colors.transparent,
-          child: Center(
-            child: Column(
-              children: [
-                Text('Error', style: theme.textTheme.headline1),
-                Text(message, style: theme.textTheme.caption),
-              ],
-            ),
-          )),
+        color: Colors.transparent,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text('Error', style: theme.textTheme.headline1),
+            Text(message, style: theme.textTheme.caption),
+          ],
+        ),
+      ),
     );
   }
 }

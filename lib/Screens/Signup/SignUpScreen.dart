@@ -1,65 +1,58 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:qhub/Domain/Api/Enums.dart';
+import 'package:provider/provider.dart';
+import 'package:qhub/Domain/Api/Enums/SignUpStatus.dart';
+import 'package:qhub/Domain/Navigation/Routes.dart';
 
 import 'package:qhub/Screens/widgets/LineInputField.dart';
 import 'package:qhub/Domain/Api/Client/SignUpModel.dart';
 import 'package:qhub/Domain/Locators/Locator.dart';
+import 'package:qhub/Screens/Widgets/ErrorText.dart';
 
-class _ErrorMessage extends StatelessWidget {
-  final String? error;
-
-  _ErrorMessage(this.error);
-
-  @override
-  Widget build(BuildContext context) {
-    var theme = Theme.of(context);
-
-    return AnimatedContainer(
-      duration: Duration(milliseconds: 150),
-      height: error != null ? 25 : 0,
-      curve: Curves.easeOutSine,
-      alignment: Alignment.centerLeft,
-      child: error != null
-          ? Text(
-              error!,
-              style: theme.textTheme.caption?.copyWith(color: theme.errorColor),
-            )
-          : null,
-    );
-  }
-}
 
 class SignUpScreen extends StatelessWidget {
-  final _usernameField = LineInputField(
-    name: 'Username',
-    onChanged: (text) {
-      var model = locator<SignUpModel>();
-      model.username = text;
-    },
-  );
-  final _password1Field = LineInputField(
-    name: 'Password',
-    isPassword: true,
-    onChanged: (text) {
-      var model = locator<SignUpModel>();
-      model.password1 = text;
-    },
-  );
-  final _password2Field = LineInputField(
-    name: 'Repeat password',
-    isPassword: true,
-    onChanged: (text) {
-      var model = locator<SignUpModel>();
-      model.password2 = text;
-    },
-  );
+  final model = locator<SignUpModel>();
+
+  late final _usernameField;
+  late final _password1Field;
+  late final _password2Field;
+
+  SignUpScreen() {
+    _usernameField = LineInputField(
+      name: 'Username',
+      onChanged: (text) {
+        model.username = text;
+        model.verifySignUpDataLocally();
+      },
+      onSubmitted: (text) {
+        model.username = text;
+        model.verifyUsername();
+      },
+    );
+
+    _password1Field = LineInputField(
+      name: 'Password',
+      isPassword: true,
+      onChanged: (text) {
+        model.password1 = text;
+        model.verifySignUpDataLocally();
+      },
+    );
+
+    _password2Field = LineInputField(
+      name: 'Repeat password',
+      isPassword: true,
+      onChanged: (text) {
+        model.password2 = text;
+        model.verifySignUpDataLocally();
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final screenHeight = MediaQuery.of(context).size.height;
-    final model = locator<SignUpModel>();
 
     return Scaffold(
       backgroundColor: theme.backgroundColor,
@@ -78,27 +71,36 @@ class SignUpScreen extends StatelessWidget {
                   Text('Sign up', style: theme.textTheme.headline1),
                   const SizedBox(height: 40),
                   _usernameField,
-                  ValueListenableBuilder<List<String>>(
-                    valueListenable: model.usernameErrorNotifier,
-                    builder: (context, errors, _) {
-                      return _ErrorMessage(errors.length > 0 ? errors[0] : null);
-                    },
+                  StreamProvider<String?>(
+                    create: (context) => model.usernameErrorStream,
+                    initialData: null,
+                    child: Consumer<String?>(
+                      builder: (context, message, child) {
+                        return ErrorText(message);
+                      },
+                    ),
                   ),
                   const SizedBox(height: 40),
                   _password1Field,
-                  ValueListenableBuilder<String?>(
-                    valueListenable: model.password1ErrorNotifier,
-                    builder: (context, error, _) {
-                      return _ErrorMessage(error);
-                    },
+                  StreamProvider<String?>(
+                    create: (context) => model.password1ErrorStream,
+                    initialData: null,
+                    child: Consumer<String?>(
+                      builder: (context, message, child) {
+                        return ErrorText(message);
+                      },
+                    ),
                   ),
                   const SizedBox(height: 40),
                   _password2Field,
-                  ValueListenableBuilder<String?>(
-                    valueListenable: model.password2ErrorNotifier,
-                    builder: (context, error, _) {
-                      return _ErrorMessage(error);
-                    },
+                  StreamProvider<String?>(
+                    create: (context) => model.password2ErrorStraem,
+                    initialData: null,
+                    child: Consumer<String?>(
+                      builder: (context, message, child) {
+                        return ErrorText(message);
+                      },
+                    ),
                   ),
                   const Spacer(),
                   ValueListenableBuilder<SignUpStatus>(
@@ -123,7 +125,7 @@ class SignUpScreen extends StatelessWidget {
                       // todo: this doesn't seem like a good solution. Wheather a route must be
                       // placed at the bottom of the stack should be defined somewhere else,
                       // probably
-                      Navigator.pushNamedAndRemoveUntil(context, '/log_in', (_) => false);
+                      Navigator.pushNamedAndRemoveUntil(context, Routes.logIn, (_) => false);
                     },
                     child: const Text("Log in"),
                   ),
