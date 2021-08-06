@@ -23,10 +23,6 @@ class SignUpScreen extends StatelessWidget {
       onChanged: (text) {
         model.username = text;
       },
-      onSubmitted: (text) {
-        model.username = text;
-        model.verifyUsername();
-      },
     );
 
     _password1Field = LineInputField(
@@ -68,37 +64,31 @@ class SignUpScreen extends StatelessWidget {
                   Text('Sign up', style: theme.textTheme.headline1),
                   const SizedBox(height: 40),
                   _usernameField,
-                  StreamProvider<String?>(
-                    create: (context) => model.usernameErrorStream,
-                    initialData: null,
-                    child: Consumer<String?>(
-                      builder: (context, message, child) {
-                        return ErrorText(message);
-                      },
-                    ),
+                  ValueListenableBuilder<String?>(
+                    valueListenable: model.usernameErrorNotifier,
+                    builder: (_, message, __) {
+                      return ErrorText(message);
+                    },
                   ),
+
                   const SizedBox(height: 40),
                   _password1Field,
-                  StreamProvider<String?>(
-                    create: (context) => model.password1ErrorStream,
-                    initialData: null,
-                    child: Consumer<String?>(
-                      builder: (context, message, child) {
-                        return ErrorText(message);
-                      },
-                    ),
+                  ValueListenableBuilder<String?>(
+                    valueListenable: model.password1ErrorNotifier,
+                    builder: (_, message, __) {
+                      return ErrorText(message);
+                    },
                   ),
+
                   const SizedBox(height: 40),
                   _password2Field,
-                  StreamProvider<String?>(
-                    create: (context) => model.password2ErrorStraem,
-                    initialData: null,
-                    child: Consumer<String?>(
-                      builder: (context, message, child) {
-                        return ErrorText(message);
-                      },
-                    ),
+                  ValueListenableBuilder<String?>(
+                    valueListenable: model.password2ErrorNotifier,
+                    builder: (_, message, __) {
+                      return ErrorText(message);
+                    },
                   ),
+                 
                   const Spacer(),
                   ValueListenableBuilder<SignUpStatus>(
                     valueListenable: model.status,
