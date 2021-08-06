@@ -18,12 +18,14 @@ class ClientModel {
 
   /// Makes a log in request to the server. Sets the status to [ClientStatus.loggedIn] if case of
   /// success;
-  Future<void> logInWithPassword(String username, String password) async {
+  Future<bool> logInWithPassword(String username, String password) async {
     isBusy.value = true;
-    if (await Future.delayed(Duration(seconds: 2), () => true)) {
+    if (await Future.delayed(Duration(seconds: 2), () => false)) {
       status.value = ClientStatus.loggedIn;
+      return true;
     }
     isBusy.value = false;
+    return false;
   }
 
   /// If there is a token, makes a request to verify it. Sets the status to [ClientStatus.loggedIn]

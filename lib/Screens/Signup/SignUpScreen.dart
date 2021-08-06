@@ -4,8 +4,8 @@ import 'package:provider/provider.dart';
 import 'package:qhub/Domain/Api/Enums/SignUpStatus.dart';
 import 'package:qhub/Domain/Navigation/Routes.dart';
 
-import 'package:qhub/Screens/widgets/LineInputField.dart';
-import 'package:qhub/Domain/Api/Client/SignUpModel.dart';
+import 'package:qhub/Domain/Api/Client/SignUpFormModel.dart';
+import 'package:qhub/Screens/Widgets/LineInputField.dart';
 import 'package:qhub/Domain/Locators/Locator.dart';
 import 'package:qhub/Screens/Widgets/ErrorText.dart';
 

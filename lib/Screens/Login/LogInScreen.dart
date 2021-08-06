@@ -1,25 +1,38 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:qhub/Domain/Api/Enums/LogInStatus.dart';
+import 'package:qhub/Screens/Widgets/ErrorText.dart';
 
 import 'package:qhub/Screens/widgets/LineInputField.dart';
-import 'package:qhub/Domain/Api/Client/ClientModel.dart';
 import 'package:qhub/Domain/Navigation/Routes.dart';
 import 'package:qhub/Domain/Locators/Locator.dart';
+import 'package:qhub/Domain/Api/Client/LogInFormModel.dart';
 
 class LogInScreen extends StatelessWidget {
-  final _usernameField = LineInputField(
-    name: 'Username',
-  );
-  final _passwordField = LineInputField(
-    name: 'Password',
-    isPassword: true,
-  );
+  final formModel = locator<LogInFormModel>();
+  late final _usernameField;
+  late final _passwordField;
+
+  LogInScreen() {
+    _usernameField = LineInputField(
+      name: 'Username',
+      onChanged: (text) {
+        formModel.username = text;
+      },
+    );
+    _passwordField = LineInputField(
+      name: 'Password',
+      isPassword: true,
+      onChanged: (text) {
+        formModel.password = text;
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final screenHeight = MediaQuery.of(context).size.height;
-    final clientModel = locator<ClientModel>();
 
     return Scaffold(
       backgroundColor: theme.backgroundColor,
@@ -38,8 +51,20 @@ class LogInScreen extends StatelessWidget {
                   Text('Log in', style: theme.textTheme.headline1),
                   const SizedBox(height: 40),
                   _usernameField,
+                  ValueListenableBuilder<String?>(
+                    valueListenable: formModel.usernameErrorNotifier,
+                    builder: (context, message, child) {
+                      return ErrorText(message);
+                    },
+                  ),
                   const SizedBox(height: 40),
                   _passwordField,
+                  ValueListenableBuilder<String?>(
+                    valueListenable: formModel.passwordErrorNotifier,
+                    builder: (context, message, child) {
+                      return ErrorText(message);
+                    },
+                  ),
                   Container(
                     alignment: Alignment.centerLeft,
                     child: TextButton(
@@ -48,14 +73,18 @@ class LogInScreen extends StatelessWidget {
                     ),
                   ),
                   const Spacer(),
-                  ElevatedButton(
-                    onPressed: () async {
-                      await clientModel.logInWithPassword(
-                        _usernameField.text,
-                        _passwordField.text,
+                  ValueListenableBuilder<LogInStatus>(
+                    valueListenable: formModel.status,
+                    builder: (_, status, __) {
+                      return ElevatedButton(
+                        onPressed: status == LogInStatus.filled
+                            ? () {
+                                formModel.logIn();
+                              }
+                            : null,
+                        child: const Text('Log in'),
                       );
                     },
-                    child: const Text('Log in'),
                   ),
                   const SizedBox(height: 20),
                   OutlinedButton(
