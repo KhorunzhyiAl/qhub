@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:qhub/Domain/Api/Client/ClientModel.dart';
+import 'package:qhub/Domain/Services/ClientService.dart';
 import 'package:qhub/Domain/Locators/Locator.dart';
 
 class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final clientModel = locator<ClientModel>();
+    final clientModel = locator<ClientService>();
 
     clientModel.logInWithToken();
 

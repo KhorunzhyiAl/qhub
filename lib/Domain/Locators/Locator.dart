@@ -1,12 +1,12 @@
 import 'package:get_it/get_it.dart';
-import 'package:qhub/Domain/Api/Client/LogInFormModel.dart';
-import 'package:qhub/Domain/Api/Client/SignUpFormModel.dart';
-import 'package:qhub/Domain/Api/Client/ClientModel.dart';
+import 'package:qhub/Domain/Models/LogInFormModel.dart';
+import 'package:qhub/Domain/Models/SignUpFormModel.dart';
+import 'package:qhub/Domain/Services/ClientService.dart';
 
 var locator = GetIt.instance;
 
 void initLocator() {
-  locator.registerFactory<SignUpModel>(() => SignUpModel());
+  locator.registerFactory<SignUpFormModel>(() => SignUpFormModel());
   locator.registerFactory<LogInFormModel>(() => LogInFormModel());
-  locator.registerSingleton<ClientModel>(ClientModel());
+  locator.registerSingleton<ClientService>(ClientService());
 }

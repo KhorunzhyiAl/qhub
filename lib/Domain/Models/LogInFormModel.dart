@@ -1,10 +1,10 @@
-import 'package:qhub/Domain/Api/Client/ClientModel.dart';
+import 'package:qhub/Domain/Services/ClientService.dart';
 import 'package:flutter/foundation.dart';
-import 'package:qhub/Domain/Api/Enums/LogInStatus.dart';
+import 'package:qhub/Domain/Services/Enums/LogInStatus.dart';
 import 'package:qhub/Domain/Locators/Locator.dart';
 
 class LogInFormModel {
-  ClientModel clientModel = locator<ClientModel>();
+  ClientService clientModel = locator<ClientService>();
 
   ValueNotifier<LogInStatus> status = ValueNotifier(LogInStatus.logInDisabled);
   ValueNotifier<String?> usernameErrorNotifier = ValueNotifier(null);

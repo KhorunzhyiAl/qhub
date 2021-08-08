@@ -1,12 +1,12 @@
 import 'dart:async';
 
-import 'package:qhub/Domain/Api/Enums/SignUpStatus.dart';
-import 'package:qhub/Domain/Api/Client/ClientModel.dart';
+import 'package:qhub/Domain/Services/Enums/SignUpStatus.dart';
+import 'package:qhub/Domain/Services/ClientService.dart';
 import 'package:flutter/foundation.dart';
 import 'package:qhub/Domain/Locators/Locator.dart';
 
-class SignUpModel {
-  ClientModel _clientModel = locator<ClientModel>();
+class SignUpFormModel {
+  ClientService _clientModel = locator<ClientService>();
 
   /// The following properties update every time [verifySignUpData] is called
   ValueNotifier<SignUpStatus> status = ValueNotifier(SignUpStatus.signUpDisabled);

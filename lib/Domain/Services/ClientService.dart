@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'package:flutter/cupertino.dart';
-import 'package:qhub/Domain/Api/Enums/ClientStatus.dart';
+import 'package:qhub/Domain/Services/Enums/ClientStatus.dart';
 
-class ClientModel {
+class ClientService {
   ValueNotifier<ClientStatus> status = ValueNotifier(ClientStatus.trying);
   ValueNotifier<bool> isBusy = ValueNotifier(false);
 

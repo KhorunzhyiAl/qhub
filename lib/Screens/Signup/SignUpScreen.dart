@@ -1,16 +1,15 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:qhub/Domain/Api/Enums/SignUpStatus.dart';
+import 'package:qhub/Domain/Services/Enums/SignUpStatus.dart';
 import 'package:qhub/Domain/Navigation/Routes.dart';
 
-import 'package:qhub/Domain/Api/Client/SignUpFormModel.dart';
+import 'package:qhub/Domain/Models/SignUpFormModel.dart';
 import 'package:qhub/Screens/Widgets/LineInputField.dart';
 import 'package:qhub/Domain/Locators/Locator.dart';
 import 'package:qhub/Screens/Widgets/ErrorText.dart';
 
 class SignUpScreen extends StatelessWidget {
-  final model = locator<SignUpModel>();
+  final model = locator<SignUpFormModel>();
 
   late final _usernameField;
   late final _password1Field;
