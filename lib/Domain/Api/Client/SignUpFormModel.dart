@@ -14,25 +14,25 @@ class SignUpModel {
   ValueNotifier<String?> password1ErrorNotifier = ValueNotifier(null);
   ValueNotifier<String?> password2ErrorNotifier = ValueNotifier(null);
 
-  String? _username;
+  String _username = '';
   set username(String text) {
-    _username = text.length > 0 ? text : null;
+    _username = text;
     _verifyUsername();
-    _verifyAll();
+    _updateStatus();
   }
 
-  String? _password1;
+  String _password1 = '';
   set password1(String text) {
-    _password1 = text.length > 0 ? text : null;
+    _password1 = text;
     _verifyPassword();
-    _verifyAll();
+    _updateStatus();
   }
 
-  String? _password2;
+  String _password2 = '';
   set password2(String text) {
-    _password2 = text.length > 0 ? text : null;
+    _password2 = text;
     _verifyPassword();
-    _verifyAll();
+    _updateStatus();
   }
 
   /// Makes a sign up request to the server. Returns true if successful.
@@ -41,27 +41,29 @@ class SignUpModel {
       return false;
     }
 
+    _verifyUsername();
+    _verifyPassword();
+
     status.value = SignUpStatus.busy;
-    bool res = await _clientModel.signUp(_username!, _password1!);
-    status.value = SignUpStatus.signUpEnabled;
+    bool res = await _clientModel.signUp(_username, _password1);
+    _updateStatus();
     return res;
   }
 
   void _verifyUsername() async {
-    if (_username == null) {
-      usernameErrorNotifier.value = null;
+    if (_username.isEmpty) {
+      usernameErrorNotifier.value = 'Must not be empty';
       return;
     }
-
-    if (_username!.length > 20) {
+    if (_username.length > 20) {
       usernameErrorNotifier.value = 'Must contain 30 or less characters';
       return;
     }
-    if (_username!.length < 2) {
+    if (_username.length < 2) {
       usernameErrorNotifier.value = 'Must contain 2 or more characters';
       return;
     }
-    if (_username!.contains(' ')) {
+    if (_username.contains(' ')) {
       usernameErrorNotifier.value = 'Must not contain spaces';
       return;
     }
@@ -81,13 +83,13 @@ class SignUpModel {
   void _verifyPassword() {
     // MAIN PASSWORD CHECKS
 
-    if (_password1 == null) {
-      password1ErrorNotifier.value = null;
+    if (_password1.isEmpty) {
+      password1ErrorNotifier.value = 'Must not be empty';
       return;
     }
 
     // password length >= 5
-    if (_password1!.length < 5) {
+    if (_password1.length < 5) {
       password1ErrorNotifier.value = 'Password must contain 5 or more characters';
       return;
     }
@@ -95,8 +97,8 @@ class SignUpModel {
 
     // REPEAT PASSWORD CHECKS
 
-    if (_password2 == null) {
-      password2ErrorNotifier.value = null;
+    if (_password2.isEmpty) {
+      password2ErrorNotifier.value = 'Must not be empty';
       return;
     }
     // Passwords match
@@ -108,10 +110,14 @@ class SignUpModel {
     password2ErrorNotifier.value = null;
   }
 
-  void _verifyAll() {
+  void _updateStatus() {
     if (usernameErrorNotifier.value == null &&
         password1ErrorNotifier.value == null &&
-        password2ErrorNotifier.value == null) {
+        password2ErrorNotifier.value == null &&
+        _username.isNotEmpty &&
+        _password1.isNotEmpty &&
+        _password2.isNotEmpty) {
+      print('username: $_username, password: $_password1, password2: $_password2');
       status.value = SignUpStatus.signUpEnabled;
       return;
     } else {
