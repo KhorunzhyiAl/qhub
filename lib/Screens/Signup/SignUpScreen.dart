@@ -9,7 +9,6 @@ import 'package:qhub/Screens/Widgets/LineInputField.dart';
 import 'package:qhub/Domain/Locators/Locator.dart';
 import 'package:qhub/Screens/Widgets/ErrorText.dart';
 
-
 class SignUpScreen extends StatelessWidget {
   final model = locator<SignUpModel>();
 
@@ -22,11 +21,6 @@ class SignUpScreen extends StatelessWidget {
       name: 'Username',
       onChanged: (text) {
         model.username = text;
-        model.verifySignUpDataLocally();
-      },
-      onSubmitted: (text) {
-        model.username = text;
-        model.verifyUsername();
       },
     );
 
@@ -35,7 +29,6 @@ class SignUpScreen extends StatelessWidget {
       isPassword: true,
       onChanged: (text) {
         model.password1 = text;
-        model.verifySignUpDataLocally();
       },
     );
 
@@ -44,7 +37,6 @@ class SignUpScreen extends StatelessWidget {
       isPassword: true,
       onChanged: (text) {
         model.password2 = text;
-        model.verifySignUpDataLocally();
       },
     );
   }
@@ -71,60 +63,67 @@ class SignUpScreen extends StatelessWidget {
                   Text('Sign up', style: theme.textTheme.headline1),
                   const SizedBox(height: 40),
                   _usernameField,
-                  StreamProvider<String?>(
-                    create: (context) => model.usernameErrorStream,
-                    initialData: null,
-                    child: Consumer<String?>(
-                      builder: (context, message, child) {
-                        return ErrorText(message);
-                      },
-                    ),
+                  ValueListenableBuilder<String?>(
+                    valueListenable: model.usernameErrorNotifier,
+                    builder: (_, message, __) {
+                      return ErrorText(message);
+                    },
                   ),
                   const SizedBox(height: 40),
                   _password1Field,
-                  StreamProvider<String?>(
-                    create: (context) => model.password1ErrorStream,
-                    initialData: null,
-                    child: Consumer<String?>(
-                      builder: (context, message, child) {
-                        return ErrorText(message);
-                      },
-                    ),
+                  ValueListenableBuilder<String?>(
+                    valueListenable: model.password1ErrorNotifier,
+                    builder: (_, message, __) {
+                      return ErrorText(message);
+                    },
                   ),
                   const SizedBox(height: 40),
                   _password2Field,
-                  StreamProvider<String?>(
-                    create: (context) => model.password2ErrorStraem,
-                    initialData: null,
-                    child: Consumer<String?>(
-                      builder: (context, message, child) {
-                        return ErrorText(message);
-                      },
-                    ),
+                  ValueListenableBuilder<String?>(
+                    valueListenable: model.password2ErrorNotifier,
+                    builder: (_, message, __) {
+                      return ErrorText(message);
+                    },
                   ),
                   const Spacer(),
                   ValueListenableBuilder<SignUpStatus>(
                     valueListenable: model.status,
                     builder: (context, status, widget) {
+                      void Function()? onPressed;
+                      switch (status) {
+                        case SignUpStatus.signUpEnabled:
+                          onPressed = () {
+                            model.signUp();
+                          };
+                          break;
+                        case SignUpStatus.signUpDisabled:
+                          onPressed = null;
+                          break;
+                        case SignUpStatus.busy:
+                          onPressed = null;
+                          break;
+                      }
+
                       return ElevatedButton(
-                        onPressed: status == SignUpStatus.correct
-                            ? () async {
-                                if (await model.signUp()) {
-                                  Navigator.of(context)
-                                      .pushNamedAndRemoveUntil('/home', (route) => false);
-                                }
-                              }
-                            : null,
-                        child: const Text('Sign up'),
+                        onPressed: onPressed,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            if (status == SignUpStatus.busy) ...[
+                              CircularProgressIndicator(
+                                color: Colors.white,
+                              ),
+                              SizedBox(width: 20),
+                            ],
+                            const Text('SignUp'),
+                          ],
+                        ),
                       );
                     },
                   ),
                   const SizedBox(height: 20),
                   OutlinedButton(
                     onPressed: () {
-                      // todo: this doesn't seem like a good solution. Wheather a route must be
-                      // placed at the bottom of the stack should be defined somewhere else,
-                      // probably
                       Navigator.pushNamedAndRemoveUntil(context, Routes.logIn, (_) => false);
                     },
                     child: const Text("Log in"),

@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       theme: myTheme.currentTheme,
       themeMode: myTheme.currentMode,
-      initialRoute: Routes.splash,
+      // initialRoute: Routes.splash,
       navigatorKey: navKey,
       onGenerateRoute: RouteGenerator.generateRoute,
     );

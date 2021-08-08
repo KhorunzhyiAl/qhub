@@ -12,9 +12,14 @@ class ClientModel {
     });
   }
 
+  Future<bool> signUp(String username, String password) async {
+    return Future.delayed(Duration(seconds: 2), () => false);
+  }
+
   void logOut() {
     status.value = ClientStatus.loggedOut;
   }
+
 
   /// Makes a log in request to the server. Sets the status to [ClientStatus.loggedIn] if case of
   /// success;

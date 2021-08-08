@@ -76,13 +76,35 @@ class LogInScreen extends StatelessWidget {
                   ValueListenableBuilder<LogInStatus>(
                     valueListenable: formModel.status,
                     builder: (_, status, __) {
+                      void Function()? onPressed;
+                      switch (status) {
+                        case LogInStatus.logInDisabled:
+                          onPressed = null;
+                          break;
+                        case LogInStatus.logInEnabled:
+                          onPressed = () {
+                            formModel.logIn();
+                          };
+                          break;
+                        case LogInStatus.busy:
+                          onPressed = null;
+                          break;
+                      }
+
                       return ElevatedButton(
-                        onPressed: status == LogInStatus.filled
-                            ? () {
-                                formModel.logIn();
-                              }
-                            : null,
-                        child: const Text('Log in'),
+                        onPressed: onPressed,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            if (status == LogInStatus.busy) ...[
+                              CircularProgressIndicator(
+                                color: Colors.white,
+                              ),
+                              SizedBox(width: 20),
+                            ],
+                            const Text('Log in'),
+                          ],
+                        ),
                       );
                     },
                   ),
