@@ -1,25 +1,25 @@
-import 'package:qhub/Domain/Services/ClientService.dart';
+import 'package:qhub/Domain/Service.dart';
 import 'package:flutter/foundation.dart';
-import 'package:qhub/Domain/Services/Enums/LogInStatus.dart';
+import 'package:qhub/Domain/Enums/LogInStatus.dart';
 import 'package:qhub/Domain/Locators/Locator.dart';
 
 class LogInFormModel {
-  ClientService clientModel = locator<ClientService>();
+  Service _service = locator<Service>();
 
   ValueNotifier<LogInStatus> status = ValueNotifier(LogInStatus.logInDisabled);
   ValueNotifier<String?> usernameErrorNotifier = ValueNotifier(null);
   ValueNotifier<String?> passwordErrorNotifier = ValueNotifier(null);
 
-  String? _username;
-  String? _password;
+  String _username = '';
+  String _password = '';
 
   set username(String text) {
-    _username = text.isEmpty ? null : text;
+    _username = text;
     _validateFields();
   }
 
   set password(String text) {
-    _password = text.isEmpty ? null : text;
+    _password = text;
     _validateFields();
   }
 
@@ -27,15 +27,15 @@ class LogInFormModel {
     if (status.value != LogInStatus.logInEnabled) {
       return;
     }
-    if (_username == null) {
+    if (_username.isEmpty) {
       usernameErrorNotifier.value = 'Username must not be empty';
     }
-    if (_password == null) {
+    if (_password.isEmpty) {
       passwordErrorNotifier.value = 'Password must not be empty';
     }
 
     status.value = LogInStatus.busy;
-    if (await clientModel.logInWithPassword(_username!, _password!)) {
+    if (await _service.logInWithPassword(_username, _password)) {
       passwordErrorNotifier.value = null;
     } else {
       passwordErrorNotifier.value = 'Incorrect username or password';
@@ -44,7 +44,7 @@ class LogInFormModel {
   }
 
   void _validateFields() {
-    if (_username != null && _password != null) {
+    if (_username.isNotEmpty && _password.isNotEmpty) {
       status.value = LogInStatus.logInEnabled;
       passwordErrorNotifier.value = null;
     } else {

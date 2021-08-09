@@ -1,15 +1,14 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:qhub/Domain/Services/Enums/LogInStatus.dart';
+import 'package:qhub/Domain/Enums/LogInStatus.dart';
 import 'package:qhub/Screens/Widgets/ErrorText.dart';
 
 import 'package:qhub/Screens/widgets/LineInputField.dart';
 import 'package:qhub/Domain/Navigation/Routes.dart';
-import 'package:qhub/Domain/Locators/Locator.dart';
 import 'package:qhub/Domain/Models/LogInFormModel.dart';
 
 class LogInScreen extends StatelessWidget {
-  final formModel = locator<LogInFormModel>();
+  final formModel = LogInFormModel();
   late final _usernameField;
   late final _passwordField;
 

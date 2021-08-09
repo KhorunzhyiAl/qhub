@@ -1,14 +1,12 @@
-import 'dart:async';
 import 'package:flutter/cupertino.dart';
-import 'package:qhub/Domain/Services/Enums/ClientStatus.dart';
+import 'package:qhub/Domain/Enums/ClientStatus.dart';
 
-class ClientService {
-  ValueNotifier<ClientStatus> status = ValueNotifier(ClientStatus.trying);
-  ValueNotifier<bool> isBusy = ValueNotifier(false);
+class Service {
+  ValueNotifier<ClientStatus> _status = ValueNotifier(ClientStatus.starting);
 
   void addStatusListener(void Function(ClientStatus status) f) {
-    status.addListener(() {
-      f(status.value);
+    _status.addListener(() {
+      f(_status.value);
     });
   }
 
@@ -17,31 +15,28 @@ class ClientService {
   }
 
   void logOut() {
-    status.value = ClientStatus.loggedOut;
+    _status.value = ClientStatus.loggedOut;
   }
-
 
   /// Makes a log in request to the server. Sets the status to [ClientStatus.loggedIn] if case of
   /// success;
   Future<bool> logInWithPassword(String username, String password) async {
-    isBusy.value = true;
     if (await Future.delayed(Duration(seconds: 2), () => false)) {
-      status.value = ClientStatus.loggedIn;
+      _status.value = ClientStatus.loggedIn;
       return true;
     }
-    isBusy.value = false;
     return false;
   }
 
   /// If there is a token, makes a request to verify it. Sets the status to [ClientStatus.loggedIn]
   /// if case of success;
-  Future<void> logInWithToken() async {
-    isBusy.value = true;
+  Future<bool> logInWithToken() async {
     if (await Future.delayed(Duration(seconds: 2), () => false)) {
-      status.value = ClientStatus.loggedIn;
-    } else if (status.value == ClientStatus.trying) {
-      status.value = ClientStatus.loggedOut;
+      _status.value = ClientStatus.loggedIn;
+      return true;
+    } else {
+      _status.value = ClientStatus.loggedOut;
+      return false;
     }
-    isBusy.value = false;
   }
 }
