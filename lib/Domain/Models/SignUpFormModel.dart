@@ -1,10 +1,14 @@
 import 'dart:async';
 
 import 'package:qhub/Domain/Enums/SignUpStatus.dart';
-import 'package:qhub/Domain/Service.dart';
+import 'package:qhub/Domain/Service/Client.dart';
 import 'package:flutter/foundation.dart';
+import 'package:qhub/Domain/Locators.dart';
+
 
 class SignUpFormModel {
+  final _client = locator<Client>(); 
+
   /// The following properties update every time [verifySignUpData] is called
   ValueNotifier<SignUpStatus> status = ValueNotifier(SignUpStatus.signUpDisabled);
   ValueNotifier<String?> usernameErrorNotifier = ValueNotifier(null);
@@ -42,7 +46,7 @@ class SignUpFormModel {
     _verifyPassword();
 
     status.value = SignUpStatus.busy;
-    bool res = await Service.signUp(_username, _password1);
+    bool res = await _client.signUp(_username, _password1);
     _updateStatus();
     return res;
   }

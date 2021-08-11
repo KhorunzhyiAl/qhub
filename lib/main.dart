@@ -2,15 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:qhub/Domain/Navigation/RouteGenerator.dart';
 import 'package:qhub/Config/MyTheme.dart';
 import 'package:qhub/Domain/Navigation/Routes.dart';
-import 'package:qhub/Domain/Service.dart';
+import 'package:qhub/Domain/Service/Client.dart';
 import 'package:qhub/Domain/Enums/ClientStatus.dart';
+import 'package:qhub/Domain/Locators.dart';
 
-late final Service _service;
 late final Future<bool> _loggedIn;
 String _initialRoute = Routes.splash;
 
 void main() {
-  _loggedIn = Service.logInWithToken();
+  initLocator();
+
+  final service = locator<Client>();
+  _loggedIn = service.logInWithToken();
   _loggedIn.then((value) {
     print('future finished. value = $value');
     _initialRoute = value ? Routes.home : Routes.logIn;
@@ -24,8 +27,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final navKey = GlobalKey<NavigatorState>();
     final theme = MyTheme();
+    final cilent = locator<Client>();
 
-    Service.addStatusListener((status) {
+    cilent.addStatusListener((status) {
       print('status changed. status = $status');
       switch (status) {
         case ClientStatus.loggedIn:

@@ -2,30 +2,35 @@ import 'package:cookie_jar/cookie_jar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:qhub/Domain/Enums/ClientStatus.dart';
 import 'package:dio/dio.dart';
-import 'package:dio_cookie_manager/dio_cookie_manager.dart';
+import 'package:qhub/Domain/Locators.dart';
 import 'package:qhub/Domain/Utils.dart';
+import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 
-class Service {
-  static ValueNotifier<ClientStatus> _status = ValueNotifier(ClientStatus.starting);
-  static final _cookieJar = CookieJar();
-  static late final Dio _dio = Dio()
+class Client {
+  final _cookieJar = CookieJar();
+  late final Dio dio;
+
+  ValueNotifier<ClientStatus> _status = ValueNotifier(ClientStatus.starting);
+
+  Client() {
+    dio = Dio()
       ..options.baseUrl = Utils.SERVER_ADDRESS
       ..options.sendTimeout = 5000
       ..options.receiveTimeout = 5000
       ..options.connectTimeout = 5000
       ..interceptors.add(CookieManager(_cookieJar));
+  }
 
-
-  static void addStatusListener(void Function(ClientStatus status) f) {
+  void addStatusListener(void Function(ClientStatus status) f) {
     _status.addListener(() {
       f(_status.value);
     });
   }
 
-  static Future<bool> signUp(String username, String password) async {
+  Future<bool> signUp(String username, String password) async {
     Response resp;
     try {
-      resp = await _dio.post(
+      resp = await dio.post(
         '/user/register',
         data: 'username=$username&password=$password',
         options: Options(headers: {
@@ -35,9 +40,9 @@ class Service {
     } catch (e) {
       print(e);
       _status.value = ClientStatus.connectionError;
-      
       return false;
     }
+
     Map<String, dynamic> respData = resp.data;
     bool success = respData['status'] == 'success';
 
@@ -47,10 +52,10 @@ class Service {
 
   /// Makes a log in request to the server. Sets the status to [ClientStatus.loggedIn] if case of
   /// success;
-  static Future<bool> logInWithPassword(String username, String password) async {
+  Future<bool> logInWithPassword(String username, String password) async {
     Response resp;
     try {
-      resp = await _dio.post(
+      resp = await dio.post(
         '/user/login',
         data: 'username=$username&password=$password',
         options: Options(headers: {
@@ -76,10 +81,10 @@ class Service {
 
   /// If there is a token, makes a request to verify it. Sets the status to [ClientStatus.loggedIn]
   /// in case of success;
-  static Future<bool> logInWithToken() async {
+  Future<bool> logInWithToken() async {
     Response resp;
     try {
-      resp = await _dio.get('/user/tokencheck');
+      resp = await dio.get('/user/tokencheck');
     } catch (e) {
       print(e);
       _status.value = ClientStatus.connectionError;
@@ -98,7 +103,7 @@ class Service {
     return success;
   }
 
-  static void logOut() {
+  void logOut() {
     _status.value = ClientStatus.loggedOut;
   }
 }

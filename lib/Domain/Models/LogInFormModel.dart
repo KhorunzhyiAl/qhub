@@ -1,8 +1,11 @@
-import 'package:qhub/Domain/Service.dart';
+import 'package:qhub/Domain/Service/Client.dart';
 import 'package:flutter/foundation.dart';
 import 'package:qhub/Domain/Enums/LogInStatus.dart';
+import 'package:qhub/Domain/Locators.dart';
+
 
 class LogInFormModel {
+  final _client = locator<Client>();
 
   ValueNotifier<LogInStatus> status = ValueNotifier(LogInStatus.logInDisabled);
   ValueNotifier<String?> usernameErrorNotifier = ValueNotifier(null);
@@ -33,7 +36,7 @@ class LogInFormModel {
     }
 
     status.value = LogInStatus.busy;
-    if (await Service.logInWithPassword(_username, _password)) {
+    if (await _client.logInWithPassword(_username, _password)) {
       passwordErrorNotifier.value = null;
     } else {
       passwordErrorNotifier.value = 'Incorrect username or password';
