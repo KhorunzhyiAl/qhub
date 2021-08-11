@@ -3,29 +3,26 @@ import 'package:flutter/cupertino.dart';
 import 'package:qhub/Domain/Enums/ClientStatus.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
+import 'package:qhub/Domain/Utils.dart';
 
 class Service {
-  ValueNotifier<ClientStatus> _status = ValueNotifier(ClientStatus.starting);
-
-  final _cookieJar = CookieJar();
-  late final Dio _dio;
-
-  Service(String serverAddress) {
-    _dio = Dio()
-      ..options.baseUrl = serverAddress
+  static ValueNotifier<ClientStatus> _status = ValueNotifier(ClientStatus.starting);
+  static final _cookieJar = CookieJar();
+  static late final Dio _dio = Dio()
+      ..options.baseUrl = Utils.SERVER_ADDRESS
       ..options.sendTimeout = 5000
       ..options.receiveTimeout = 5000
       ..options.connectTimeout = 5000
       ..interceptors.add(CookieManager(_cookieJar));
-  }
 
-  void addStatusListener(void Function(ClientStatus status) f) {
+
+  static void addStatusListener(void Function(ClientStatus status) f) {
     _status.addListener(() {
       f(_status.value);
     });
   }
 
-  Future<bool> signUp(String username, String password) async {
+  static Future<bool> signUp(String username, String password) async {
     Response resp;
     try {
       resp = await _dio.post(
@@ -50,7 +47,7 @@ class Service {
 
   /// Makes a log in request to the server. Sets the status to [ClientStatus.loggedIn] if case of
   /// success;
-  Future<bool> logInWithPassword(String username, String password) async {
+  static Future<bool> logInWithPassword(String username, String password) async {
     Response resp;
     try {
       resp = await _dio.post(
@@ -79,7 +76,7 @@ class Service {
 
   /// If there is a token, makes a request to verify it. Sets the status to [ClientStatus.loggedIn]
   /// in case of success;
-  Future<bool> logInWithToken() async {
+  static Future<bool> logInWithToken() async {
     Response resp;
     try {
       resp = await _dio.get('/user/tokencheck');
@@ -101,7 +98,7 @@ class Service {
     return success;
   }
 
-  void logOut() {
+  static void logOut() {
     _status.value = ClientStatus.loggedOut;
   }
 }
