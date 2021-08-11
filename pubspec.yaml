@@ -31,6 +31,9 @@ dependencies:
   get_it: ^7.2.0
   http: ^0.13.3
   provider: ^5.0.0
+  cookie_jar: ^3.0.1
+  dio: ^4.0.0
+  dio_cookie_manager:
 
 dev_dependencies:
   flutter_test:

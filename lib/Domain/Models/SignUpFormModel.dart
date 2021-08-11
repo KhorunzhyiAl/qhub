@@ -71,7 +71,7 @@ class SignUpFormModel {
     usernameErrorNotifier.value = null;
 
     var usernameCopy = _username.toString();
-    if (await Future<bool>.delayed(Duration(seconds: 2), () => true)) {
+    if (await Future<bool>.delayed(Duration(seconds: 2), () => false)) {
       if (_username == usernameCopy) {
         usernameErrorNotifier.value = 'Username is taken';
         status.value = SignUpStatus.signUpDisabled;

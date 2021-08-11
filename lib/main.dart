@@ -12,6 +12,7 @@ String _initialRoute = Routes.splash;
 
 void main() {
   initLocator();
+  
   _service = locator<Service>();
   _loggedIn = _service.logInWithToken();
   _loggedIn.then((value) {
@@ -26,25 +27,37 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final navKey = GlobalKey<NavigatorState>();
+    final theme = MyTheme();
 
     _service.addStatusListener((status) {
       print('status changed. status = $status');
       switch (status) {
         case ClientStatus.loggedIn:
+          _initialRoute = Routes.home; // Used only for hot reload, can be removed later
           navKey.currentState?.pushNamedAndRemoveUntil(Routes.home, (route) => false);
           break;
         case ClientStatus.loggedOut:
+          _initialRoute = Routes.logIn;
           navKey.currentState?.pushNamedAndRemoveUntil(Routes.logIn, (route) => false);
           break;
+        case ClientStatus.connectionError:
+          _initialRoute = Routes.error;
+          navKey.currentState?.pushNamedAndRemoveUntil(
+            Routes.error,
+            (route) => false,
+            arguments: 'Problems connecting to the server',
+          );
+          break;
         case ClientStatus.starting:
+          _initialRoute = Routes.splash;
           break;
       }
     });
 
     print('initial route = $_initialRoute');
     return MaterialApp(
-      theme: myTheme.currentTheme,
-      themeMode: myTheme.currentMode,
+      theme: theme.currentTheme,
+      themeMode: theme.currentMode,
       initialRoute: _initialRoute,
       navigatorKey: navKey,
       onGenerateRoute: RouteGenerator.generateRoute,

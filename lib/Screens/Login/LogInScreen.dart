@@ -34,7 +34,7 @@ class LogInScreen extends StatelessWidget {
     final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      backgroundColor: theme.backgroundColor,
+      backgroundColor: theme.colorScheme.background,
       body: Container(
         child: SingleChildScrollView(
           child: Container(
