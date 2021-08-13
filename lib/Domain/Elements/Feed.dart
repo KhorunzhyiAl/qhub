@@ -1,19 +1,20 @@
 import 'package:qhub/Domain/Elements/Post.dart';
 
 class Feed {
+  FeedIdentifier parameters;
   Stream<Post> posts;
-  String name;
 
   Feed({
-    required this.name,
+    required this.parameters,
     required this.posts,
   });
 }
 
-class FeedOptions {
-  final String name;
+/// All infromation needed to uniquely identify a feed, e.g. hub name, search parameters, etc.
+class FeedIdentifier {
+  final String hubName;
 
-  FeedOptions({
-    required this.name,
+  FeedIdentifier({
+    required this.hubName,
   });
 }

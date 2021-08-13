@@ -2,7 +2,6 @@ import 'package:cookie_jar/cookie_jar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:qhub/Domain/Enums/ClientStatus.dart';
 import 'package:dio/dio.dart';
-import 'package:qhub/Domain/Locators.dart';
 import 'package:qhub/Domain/Utils.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 
