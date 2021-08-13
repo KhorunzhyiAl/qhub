@@ -11,13 +11,15 @@ class ErrorScreen extends StatelessWidget {
 
     return Scaffold(
       body: Container(
-        color: Colors.transparent,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text('Error', style: theme.textTheme.headline1),
-            Text(message, style: theme.textTheme.caption),
-          ],
+        color: theme.colorScheme.background,
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text('Error', style: theme.textTheme.headline1),
+              Text(message, style: theme.textTheme.caption),
+            ],
+          ),
         ),
       ),
     );

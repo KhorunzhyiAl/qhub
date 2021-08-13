@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-final MyTheme myTheme = MyTheme();
-
 class MyTheme with ChangeNotifier {
   var _isLightTheme = true;
 
@@ -24,11 +22,27 @@ class MyTheme with ChangeNotifier {
   }
 
   ThemeData get light => ThemeData(
-        backgroundColor: Colors.white,
+        shadowColor: Colors.black.withAlpha(150),
+
+        colorScheme: ColorScheme(
+          primary: Colors.white,
+          primaryVariant: Colors.white.withAlpha(100),
+          secondary: Colors.grey.shade200,
+          secondaryVariant: Colors.grey.shade300,
+          surface: Colors.white,
+          background: Colors.white,
+          error: Colors.white,
+          onPrimary: Colors.black,
+          onSecondary: Colors.black54,
+          onBackground: Colors.black87,
+          onSurface: Colors.black87,
+          brightness: Brightness.light,
+          onError: Colors.red,
+        ),
 
         // Use for single line text input fields. I don't know the correct property for this.
         canvasColor: Colors.grey.shade200,
-        errorColor: Colors.red.shade700,
+        
 
         outlinedButtonTheme: OutlinedButtonThemeData(
           style: ButtonStyle(

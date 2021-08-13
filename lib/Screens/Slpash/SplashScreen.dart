@@ -1,17 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:qhub/Domain/Api/Client/ClientModel.dart';
-import 'package:qhub/Domain/Locators/Locator.dart';
 
 class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final clientModel = locator<ClientModel>();
-
-    clientModel.logInWithToken();
 
     return Scaffold(
-      backgroundColor: Theme.of(context).backgroundColor,
+      backgroundColor: Theme.of(context).colorScheme.background,
       body: Center(
         child: Container(
           color: Colors.transparent,
