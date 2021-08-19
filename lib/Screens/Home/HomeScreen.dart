@@ -10,25 +10,11 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
     return Scaffold(
-      appBar: AppBar(
-        shadowColor: theme.shadowColor,
-        backgroundColor: theme.colorScheme.primary,
-        leading: Container(
-          alignment: Alignment.center,
-          child: IconButton(
-            onPressed: () {},
-            icon: Icon(Icons.menu),
-            color: theme.colorScheme.onPrimary,
-          ),
-        ),
-        title: Text(
-          _feedModel.feedParameters.hubName,
-          style: theme.textTheme.headline1,
-        ),
-      ),
       body: Container(
         color: theme.colorScheme.background,
-        child: PostListWidget(_feedModel),
+        child: PostListWidget(
+          _feedModel,
+        ),
       ),
     );
   }

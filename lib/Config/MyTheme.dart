@@ -23,16 +23,18 @@ class MyTheme with ChangeNotifier {
 
   ThemeData get light => ThemeData(
         shadowColor: Colors.black.withAlpha(150),
+        splashColor: Colors.black.withAlpha(10),
+        highlightColor: Colors.black.withAlpha(15),
 
         colorScheme: ColorScheme(
-          primary: Colors.white,
-          primaryVariant: Colors.white.withAlpha(100),
+          primary: Colors.grey.shade200,
+          primaryVariant: Colors.white70,
           secondary: Colors.grey.shade200,
           secondaryVariant: Colors.grey.shade300,
           surface: Colors.white,
           background: Colors.white,
           error: Colors.white,
-          onPrimary: Colors.black,
+          onPrimary: Colors.grey.shade900,
           onSecondary: Colors.black54,
           onBackground: Colors.black87,
           onSurface: Colors.black87,
@@ -123,22 +125,22 @@ class MyTheme with ChangeNotifier {
           ),
           headline3: TextStyle(
             fontSize: 28,
-            fontWeight: FontWeight.w900,
+            fontWeight: FontWeight.w700,
             color: Colors.black,
           ),
           headline4: TextStyle(
             fontSize: 26,
-            fontWeight: FontWeight.w900,
+            fontWeight: FontWeight.w700,
             color: Colors.black,
           ),
           headline5: TextStyle(
             fontSize: 24,
-            fontWeight: FontWeight.w900,
+            fontWeight: FontWeight.w700,
             color: Colors.black,
           ),
           headline6: TextStyle(
             fontSize: 18,
-            fontWeight: FontWeight.w800,
+            fontWeight: FontWeight.w600,
             color: Colors.black,
           ),
           bodyText1: TextStyle(
