@@ -11,11 +11,10 @@ class PostWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (_postModel.post == null) {
+    if (!_postModel.post.loaded) {
       return _LoadingPostView();
     }
 
-    final post = _postModel.post!;
     final orientation = MediaQuery.of(context).orientation;
 
     switch (orientation) {

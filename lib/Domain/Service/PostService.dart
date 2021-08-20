@@ -23,7 +23,7 @@ class PostService {
 
   /// Requests the post from the server by the id, provided in the constructor, and updates the 
   /// value of [post].
-  void update() async {
+  Future<void> update() async {
     _post = Post(
       id: _id,
       title: 'title',

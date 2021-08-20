@@ -16,7 +16,7 @@ void main() {
   _loggedIn = service.logInWithToken();
   _loggedIn.then((value) {
     print('future finished. value = $value');
-    _initialRoute = value ? Routes.home : Routes.logIn;
+    _initialRoute = value ? Routes.feed : Routes.logIn;
   });
 
   runApp(MyApp());
@@ -33,8 +33,8 @@ class MyApp extends StatelessWidget {
       print('status changed. status = $status');
       switch (status) {
         case ClientStatus.loggedIn:
-          _initialRoute = Routes.home; // Used only for hot reload, can be removed later
-          navKey.currentState?.pushNamedAndRemoveUntil(Routes.home, (route) => false);
+          _initialRoute = Routes.feed; // Used only for hot reload, can be removed later
+          navKey.currentState?.pushNamedAndRemoveUntil(Routes.feed, (route) => false);
           break;
         case ClientStatus.loggedOut:
           _initialRoute = Routes.logIn;

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:qhub/Domain/Models/PostModel.dart';
 import 'package:qhub/Screens/Slpash/SplashScreen.dart';
 import 'package:qhub/Screens/login/LogInScreen.dart';
 import 'package:qhub/Screens/signup/SignUpScreen.dart';
 import 'package:qhub/Screens/error/ErrorScreen.dart';
 import 'package:qhub/Domain/Navigation/Routes.dart';
-import 'package:qhub/Screens/Home/HomeScreen.dart';
+import 'package:qhub/Screens/Feed/FeedScreen.dart';
+import 'package:qhub/Screens/Post/PostScreen.dart';
 
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -20,11 +22,14 @@ class RouteGenerator {
       case Routes.signUp:
         screen = SignUpScreen();
         break;
-      case Routes.home:
-        screen = HomeScreen();
+      case Routes.feed:
+        screen = FeedScreen();
         break;
       case Routes.error:
         screen = ErrorScreen(message: settings.arguments as String);
+        break;
+      case Routes.post:
+        screen = PostScreen(postModel: settings.arguments as PostModel);
         break;
       default:
         screen = ErrorScreen(message: "Route '${settings.name}' doesn't exist");
