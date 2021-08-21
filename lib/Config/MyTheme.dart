@@ -29,13 +29,13 @@ class MyTheme with ChangeNotifier {
         colorScheme: ColorScheme(
           primary: Colors.grey.shade200,
           primaryVariant: Colors.white70,
-          secondary: Colors.grey.shade200,
-          secondaryVariant: Colors.grey.shade300,
+          secondary: Colors.grey.shade300,
+          secondaryVariant: Colors.grey.shade400,
           surface: Colors.white,
           background: Colors.white,
           error: Colors.white,
           onPrimary: Colors.grey.shade900,
-          onSecondary: Colors.black54,
+          onSecondary: Colors.white70,
           onBackground: Colors.black87,
           onSurface: Colors.black87,
           brightness: Brightness.light,
@@ -91,6 +91,7 @@ class MyTheme with ChangeNotifier {
             )),
           ),
         ),
+        
         textButtonTheme: TextButtonThemeData(
           style: ButtonStyle(
             alignment: Alignment.center,
@@ -149,9 +150,9 @@ class MyTheme with ChangeNotifier {
             color: Colors.black,
           ),
           bodyText2: TextStyle(
-            fontSize: 19,
-            fontWeight: FontWeight.w300,
-            color: Colors.black,
+            fontSize: 20,
+            fontWeight: FontWeight.w200,
+            color: Colors.black87,
           ),
           caption: TextStyle(
             fontSize: 16,

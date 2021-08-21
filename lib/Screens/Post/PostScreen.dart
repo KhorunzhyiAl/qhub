@@ -4,10 +4,29 @@ import 'package:qhub/Screens/Post/Other/CommentsPage.dart';
 import 'package:qhub/Screens/Post/Other/PostPage.dart';
 import 'package:qhub/Screens/Widgets/PostInfo.dart';
 
-class PostScreen extends StatelessWidget {
+class PostScreen extends StatefulWidget {
   final PostModel postModel;
 
   PostScreen({required this.postModel});
+
+  @override
+  _PostScreenState createState() => _PostScreenState();
+}
+
+class _PostScreenState extends State<PostScreen> with TickerProviderStateMixin {
+  late final TabController _tabController;
+  late final PageController _pageController;
+
+  @override
+  void initState() {
+    _tabController = TabController(length: 2, vsync: this);
+    _pageController = PageController();
+
+    _tabController.addListener(_tabListener);
+    _pageController.addListener(_pageListener);
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,28 +42,47 @@ class PostScreen extends StatelessWidget {
               floating: true,
               shadowColor: theme.shadowColor,
               backgroundColor: theme.colorScheme.primary.withAlpha(240),
-              leading: Container(
-                alignment: Alignment.center,
-                child: IconButton(
-                  onPressed: () {},
-                  icon: Icon(Icons.menu),
+              leading: IconButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                icon: Icon(
+                  Icons.arrow_back,
                   color: theme.colorScheme.onPrimary,
                 ),
               ),
-              title: Text(
-                'todo',
-                style: theme.textTheme.headline1?.copyWith(color: theme.colorScheme.onPrimary),
+              bottom: TabBar(
+                controller: _tabController,
+                tabs: <Widget>[
+                  Tab(child: Text('Post', style: theme.textTheme.headline6)),
+                  Tab(child: Text('Comments', style: theme.textTheme.headline6)),
+                ],
               ),
             ),
           ];
         },
         body: PageView(
+          controller: _pageController,
           children: <Widget>[
-            PostPage(postModel),
-            CommentsPage(postModel),
+            PostPage(widget.postModel),
+            CommentsPage(widget.postModel),
           ],
         ),
+        
       ),
     );
+  }
+
+  void _tabListener() {
+    _pageController.animateToPage(
+      _tabController.index,
+      duration: Duration(milliseconds: 100),
+      curve: Curves.easeOutSine,
+    );
+  }
+
+  void _pageListener() {
+    if (_pageController.page != null && !_tabController.indexIsChanging)
+      _tabController.offset = _pageController.page! - _tabController.index;
   }
 }

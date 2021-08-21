@@ -32,8 +32,6 @@ class PostPage extends StatelessWidget {
                         'https://picsum.photos/700/700',
                         fit: BoxFit.cover,
                         loadingBuilder: (context, child, progress) {
-                          print(
-                              'received: ${progress?.cumulativeBytesLoaded}, expected: ${progress?.expectedTotalBytes}');
                           if (progress == null) {
                             return child;
                           }
@@ -52,12 +50,12 @@ class PostPage extends StatelessWidget {
                     style: theme.textTheme.bodyText1,
                     textAlign: TextAlign.left,
                   ),
+                  SizedBox(height: 40),
                 ],
               ),
             ),
           ),
         ),
-        // SliverList()
       ],
     );
   }
