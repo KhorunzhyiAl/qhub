@@ -5,7 +5,6 @@ import 'package:qhub/Screens/Widgets/UsernameLabel.dart';
 import 'package:qhub/Domain/Navigation/Routes.dart';
 import 'package:qhub/Screens/Widgets/PostInfo.dart';
 
-
 class PostViewPortrait extends StatelessWidget {
   final PostModel _postModel;
 
@@ -15,19 +14,18 @@ class PostViewPortrait extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return Material(
-      color: theme.colorScheme.background,
+    return Card(
       child: InkWell(
         onTap: () {
           Navigator.of(context).pushNamed(Routes.post, arguments: _postModel);
         },
         child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+          padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              if (_postModel.post.imageUri != null)
+              if (_postModel.post.imageUri != null) ...[
                 AspectRatio(
                   aspectRatio: 5 / 3,
                   child: ClipRRect(
@@ -38,10 +36,19 @@ class PostViewPortrait extends StatelessWidget {
                     ),
                   ),
                 ),
-              Text(_postModel.post.title, style: theme.textTheme.headline5),
-              SizedBox(height: 10),
-              PostInfo(postModel: _postModel),
-              SizedBox(height: 20),
+              ],
+
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                child: Column(
+                  children: [
+                    Text(_postModel.post.title, style: theme.textTheme.headline5),
+                    SizedBox(height: 10),
+                    PostInfo(postModel: _postModel),
+                    SizedBox(height: 20),
+                  ],
+                ),
+              ),
             ],
           ),
         ),

@@ -45,6 +45,14 @@ class MyTheme with ChangeNotifier {
         // Use for single line text input fields. I don't know the correct property for this.
         canvasColor: Colors.grey.shade200,
         
+        cardTheme: CardTheme(
+          color: Colors.grey.shade100,
+          elevation: 0,
+          margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(3),
+          )
+        ),
 
         outlinedButtonTheme: OutlinedButtonThemeData(
           style: ButtonStyle(

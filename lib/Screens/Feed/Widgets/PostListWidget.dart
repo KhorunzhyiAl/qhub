@@ -57,11 +57,6 @@ class _PostListWidgetSate extends State<PostListWidget> {
               return Column(
                 children: [
                   PostWidget(widget._feedModel.posts[index]),
-                  if (index < widget._feedModel.posts.length - 1)
-                    Divider(
-                      height: 5,
-                      color: theme.colorScheme.onBackground.withAlpha(50),
-                    ),
                 ],
               );
             },
