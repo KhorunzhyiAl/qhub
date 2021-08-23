@@ -52,10 +52,16 @@ class _PostScreenState extends State<PostScreen> with TickerProviderStateMixin {
                 ),
               ),
               bottom: TabBar(
+                indicatorColor: theme.colorScheme.onPrimary,
+                indicatorWeight: 3,
+                indicatorPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
                 controller: _tabController,
+
+                labelStyle: theme.textTheme.headline6,
+                labelColor: theme.colorScheme.onPrimary,
                 tabs: <Widget>[
-                  Tab(child: Text('Post', style: theme.textTheme.headline6)),
-                  Tab(child: Text('Comments', style: theme.textTheme.headline6)),
+                  Tab(text: 'Post'),
+                  Tab(text: 'Comments'),
                 ],
               ),
             ),
