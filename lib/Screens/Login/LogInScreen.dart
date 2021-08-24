@@ -21,7 +21,8 @@ class LogInScreen extends StatelessWidget {
     );
     _passwordField = LineInputField(
       name: 'Password',
-      isPassword: true,
+      obstructText: true,
+      eyeButton: true,
       onChanged: (text) {
         formModel.password = text;
       },

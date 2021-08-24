@@ -12,9 +12,9 @@ class Feed {
 
 /// All infromation needed to uniquely identify a feed, e.g. hub name, search parameters, etc.
 class FeedIdentifier {
-  final String hubName;
+  final String? hubName;
 
   FeedIdentifier({
-    required this.hubName,
+    this.hubName,
   });
 }

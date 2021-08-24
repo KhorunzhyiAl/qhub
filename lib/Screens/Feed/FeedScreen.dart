@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:qhub/Domain/Elements/Feed.dart';
 import 'package:qhub/Domain/Models/FeedModel.dart';
+import 'package:qhub/Domain/Models/PostFormModel.dart';
 import 'package:qhub/Screens/Feed/Widgets/PostListWidget.dart';
 import 'package:qhub/Screens/Widgets/FloatingButton/FloatingPopup.dart';
 import 'package:qhub/Screens/Widgets/FloatingButton/Other/FloatingPopupElement.dart';
+import 'package:qhub/Domain/Navigation/Routes.dart';
 
 class FeedScreen extends StatelessWidget {
   final _feedModel = FeedModel(FeedIdentifier(hubName: 'home'))..loadMore();
@@ -11,6 +13,7 @@ class FeedScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
+    var nav = Navigator.of(context);
 
     return Stack(
       children: [
@@ -25,19 +28,22 @@ class FeedScreen extends StatelessWidget {
         FloatingPopup(
           options: [
             FloatingPopupElement(
-              message: 'message 1',
+              message: 'home',
               icon: Icons.home,
               onPressed: () {},
             ),
             FloatingPopupElement(
-              message: 'message 2',
-              icon: Icons.home,
+              message: 'communities',
+              icon: Icons.list,
               onPressed: () {},
             ),
             FloatingPopupElement(
-              message: 'message 3',
-              icon: Icons.home,
-              onPressed: () {},
+              message: 'create post',
+              icon: Icons.create,
+              onPressed: () {
+                nav.pushNamed(Routes.createPost,
+                    arguments: PostFormModel(community: _feedModel.feedParameters.hubName));
+              },
             ),
           ],
         ),

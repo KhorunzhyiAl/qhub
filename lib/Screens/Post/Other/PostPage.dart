@@ -47,7 +47,7 @@ class PostPage extends StatelessWidget {
                   SizedBox(height: 40),
                   Text(
                     postModel.post.body,
-                    style: theme.textTheme.bodyText1,
+                    style: theme.textTheme.bodyText2,
                     textAlign: TextAlign.left,
                   ),
                   SizedBox(height: 40),

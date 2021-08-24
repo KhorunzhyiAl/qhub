@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:qhub/Domain/Models/PostFormModel.dart';
 import 'package:qhub/Domain/Models/PostModel.dart';
 import 'package:qhub/Screens/Slpash/SplashScreen.dart';
 import 'package:qhub/Screens/login/LogInScreen.dart';
@@ -7,6 +8,7 @@ import 'package:qhub/Screens/error/ErrorScreen.dart';
 import 'package:qhub/Domain/Navigation/Routes.dart';
 import 'package:qhub/Screens/Feed/FeedScreen.dart';
 import 'package:qhub/Screens/Post/PostScreen.dart';
+import 'package:qhub/Screens/CreatePostScreen/CreatePostScreen.dart';
 
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -30,6 +32,9 @@ class RouteGenerator {
         break;
       case Routes.post:
         screen = PostScreen(postModel: settings.arguments as PostModel);
+        break;
+        case Routes.createPost:
+        screen = CreatePostScreen(postFormModel: settings.arguments as PostFormModel);
         break;
       default:
         screen = ErrorScreen(message: "Route '${settings.name}' doesn't exist");

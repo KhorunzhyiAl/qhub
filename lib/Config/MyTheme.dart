@@ -94,8 +94,8 @@ class MyTheme with ChangeNotifier {
             }),
             textStyle: MaterialStateProperty.all(TextStyle(
               fontSize: 26,
-              fontWeight: FontWeight.w300,
-              letterSpacing: 5,
+              fontWeight: FontWeight.w500,
+              letterSpacing: 2,
             )),
           ),
         ),
@@ -106,11 +106,17 @@ class MyTheme with ChangeNotifier {
             animationDuration: Duration(milliseconds: 100),
             foregroundColor: MaterialStateProperty.resolveWith((states) {
               if (states.contains(MaterialState.pressed)) {
-                return Colors.black54;
+                return Colors.grey.shade700;
               }
               return Colors.black;
             }),
             overlayColor: MaterialStateProperty.all<Color?>(Colors.transparent),
+            // overlayColor: MaterialStateProperty.resolveWith((states) {
+            //   if (states.contains(MaterialState.pressed)) {
+            //     return Colors.black.withAlpha(30);
+            //   }
+            //   return Colors.transparent;
+            // })
           ),
         ),
 
@@ -123,44 +129,44 @@ class MyTheme with ChangeNotifier {
 
         textTheme: TextTheme(
           headline1: TextStyle(
-            fontSize: 32,
+            fontSize: 28,
             fontWeight: FontWeight.w900,
             color: Colors.black,
           ),
           headline2: TextStyle(
-            fontSize: 30,
-            fontWeight: FontWeight.w900,
+            fontSize: 25,
+            fontWeight: FontWeight.w800,
             color: Colors.black,
           ),
           headline3: TextStyle(
-            fontSize: 28,
-            fontWeight: FontWeight.w700,
+            fontSize: 21,
+            fontWeight: FontWeight.w600,
             color: Colors.black,
           ),
           headline4: TextStyle(
-            fontSize: 26,
-            fontWeight: FontWeight.w700,
+            fontSize: 20,
+            fontWeight: FontWeight.w600,
             color: Colors.black,
           ),
           headline5: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.w700,
+            fontSize: 18,
+            fontWeight: FontWeight.w400,
             color: Colors.black,
           ),
           headline6: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.w600,
+            fontSize: 16,
+            fontWeight: FontWeight.w400,
             color: Colors.black,
           ),
           bodyText1: TextStyle(
             fontSize: 20,
-            fontWeight: FontWeight.w400,
+            fontWeight: FontWeight.w600,
             color: Colors.black,
           ),
           bodyText2: TextStyle(
             fontSize: 20,
-            fontWeight: FontWeight.w200,
-            color: Colors.black87,
+            fontWeight: FontWeight.w400,
+            color: Colors.black,
           ),
           caption: TextStyle(
             fontSize: 16,

@@ -34,7 +34,7 @@ class PostViewLandscape extends StatelessWidget {
                     Expanded(
                       child: Text(
                         _postModel.post.title.substring(0, min(_postModel.post.title.length, 300)),
-                        style: theme.textTheme.headline5,
+                        style: theme.textTheme.headline3,
                       ),
                     ),
                     SizedBox(width: 40),

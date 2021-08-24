@@ -18,4 +18,11 @@ class PostModel extends ChangeNotifier {
     await _service.update();
     notifyListeners();
   }
+
+  Future<bool> upvote() async {
+    return true;
+  }
+  Future<bool> downvote() async {
+    return true;
+  }
 }

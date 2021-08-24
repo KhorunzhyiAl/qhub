@@ -5,4 +5,5 @@ class Routes {
   static const feed = '/feed';
   static const error = '/error';
   static const post = '/post';
+  static const createPost = '/createPost';
 }

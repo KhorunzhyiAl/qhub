@@ -30,7 +30,9 @@ class FloatingPopupElement extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           GestureDetector(
-            onTap: () => _onPressedCallbacks.forEach((e) => e.call()),
+            onTap: () {
+              _onPressedCallbacks.forEach((e) => e.call());
+            },
             child: Text(_message, style: theme.textTheme.caption),
           ),
           SizedBox(width: 15),
@@ -44,7 +46,10 @@ class FloatingPopupElement extends StatelessWidget {
             ),
             child: FloatingActionButton(
               heroTag: UniqueKey(),
-              onPressed: () => _onPressedCallbacks.forEach((e) => e.call()),
+              elevation: 0,
+              onPressed: () {
+                _onPressedCallbacks.forEach((e) => e.call());
+              },
               child: Icon(_icon),
               splashColor: theme.colorScheme.secondaryVariant,
             ),

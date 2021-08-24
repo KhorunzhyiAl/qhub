@@ -8,7 +8,8 @@ class _FieldData {
 
 class LineInputField extends StatefulWidget {
   final String name;
-  final bool isPassword;
+  final bool obstructText;
+  final bool eyeButton;
   final void Function(String)? onChanged;
   final void Function(String)? onSubmitted;
   final fieldData = _FieldData();
@@ -17,11 +18,12 @@ class LineInputField extends StatefulWidget {
 
   LineInputField({
     required this.name,
-    this.isPassword = false,
+    this.obstructText = false,
+    this.eyeButton = false,
     this.onChanged,
     this.onSubmitted,
   }) {
-    fieldData.obscureText = isPassword;
+    fieldData.obscureText = obstructText;
   }
 
   @override
@@ -77,7 +79,7 @@ class _LineInputFieldState extends State<LineInputField> {
             alignment: Alignment.centerRight,
             children: <Widget>[
               _textField(),
-              if (widget.isPassword)
+              if (widget.obstructText && widget.eyeButton)
                 Flipper(
                   child: _hideButton(),
                   flipDuration: const Duration(milliseconds: 200),

@@ -47,7 +47,7 @@ class _PostListWidgetSate extends State<PostListWidget> {
             ),
           ),
           title: Text(
-            widget._feedModel.feedParameters.hubName,
+            widget._feedModel.feedParameters.hubName ?? 'Home',
             style: theme.textTheme.headline1?.copyWith(color: theme.colorScheme.onPrimary),
           ),
         ),

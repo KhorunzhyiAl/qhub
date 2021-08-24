@@ -42,7 +42,7 @@ class PostViewPortrait extends StatelessWidget {
                 padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                 child: Column(
                   children: [
-                    Text(_postModel.post.title, style: theme.textTheme.headline5),
+                    Text(_postModel.post.title, style: theme.textTheme.headline3),
                     SizedBox(height: 10),
                     PostInfo(postModel: _postModel),
                     SizedBox(height: 20),

@@ -19,6 +19,9 @@ class FloatingPopup extends StatefulWidget {
 }
 
 class _FloatingPopupState extends State<FloatingPopup> with TickerProviderStateMixin {
+  static const _mainButtonSize = 55.0;
+  static const _mainMargin = EdgeInsets.all(20);
+
   late final AnimationController _ctrler;
   bool _toggled = false;
 
@@ -34,9 +37,6 @@ class _FloatingPopupState extends State<FloatingPopup> with TickerProviderStateM
 
   @override
   Widget build(BuildContext context) {
-    const mainButtonSize = 55.0;
-    const mainMargin = EdgeInsets.all(20);
-
     final theme = Theme.of(context);
 
     /// Animates fading of popup buttons
@@ -85,37 +85,28 @@ class _FloatingPopupState extends State<FloatingPopup> with TickerProviderStateM
                 ),
               ),
             ),
-
-            // a bit ugly
             FadeTransition(
               opacity: animPopupFading,
-              child: Container(
-                color: Colors.transparent,
-                height: (_toggled || _ctrler.isAnimating
-                    ? mainButtonSize + widget.options.length * FloatingPopupElement.totalDiameter
-                    : 0),
-                margin: mainMargin,
-                padding: EdgeInsets.all((mainButtonSize - FloatingPopupElement.diameter) / 2),
-                child: Stack(
-                  alignment: Alignment.bottomRight,
-                  children: [
-                    ...List<Widget>.generate(widget.options.length, (index) {
-                      return Positioned(
-                        bottom: (mainButtonSize + FloatingPopupElement.totalDiameter * index) *
-                            animPopupButtons.value,
-                        child: widget.options[index],
-                      );
-                    }),
-                  ],
+              child: SizedBox(
+                height: (_toggled || _ctrler.isAnimating ? null : 0),
+                child: Padding(
+                  padding: EdgeInsets.all((_mainButtonSize - FloatingPopupElement.diameter) / 2) + _mainMargin,
+                  child: Stack(
+                    alignment: Alignment.bottomRight,
+                    children: [
+                      ...List<Widget>.generate(widget.options.length, (index) {
+                        return _positionOption(index, animPopupButtons);
+                      }),
+                    ],
+                  ),
                 ),
               ),
             ),
-
             Container(
-              margin: mainMargin,
+              margin: _mainMargin,
               child: SizedBox(
-                height: mainButtonSize,
-                width: mainButtonSize,
+                height: _mainButtonSize,
+                width: _mainButtonSize,
                 child: FloatingActionButton(
                   onPressed: () {
                     setState(() {
@@ -138,6 +129,13 @@ class _FloatingPopupState extends State<FloatingPopup> with TickerProviderStateM
           ],
         );
       },
+    );
+  }
+
+  Positioned _positionOption(int index, Animation<double> anim) {
+    return Positioned(
+      bottom: (_mainButtonSize + FloatingPopupElement.totalDiameter * index) * anim.value,
+      child: widget.options[index],
     );
   }
 

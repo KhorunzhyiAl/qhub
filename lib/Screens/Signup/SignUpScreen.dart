@@ -24,7 +24,7 @@ class SignUpScreen extends StatelessWidget {
 
     _password1Field = LineInputField(
       name: 'Password',
-      isPassword: true,
+      obstructText: true,
       onChanged: (text) {
         model.password1 = text;
       },
@@ -32,7 +32,7 @@ class SignUpScreen extends StatelessWidget {
 
     _password2Field = LineInputField(
       name: 'Repeat password',
-      isPassword: true,
+      obstructText: true,
       onChanged: (text) {
         model.password2 = text;
       },
@@ -113,7 +113,7 @@ class SignUpScreen extends StatelessWidget {
                               ),
                               SizedBox(width: 20),
                             ],
-                            const Text('SignUp'),
+                            const Text('Sign up'),
                           ],
                         ),
                       );
