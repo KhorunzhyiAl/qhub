@@ -7,24 +7,21 @@ import 'package:qhub/Domain/Elements/Post.dart';
 /// extending [ChangeNotifier], and calling [notifyListeners] when: 
 ///   - adding more posts to the list
 ///   - updating the list (when calling [update] or [setParameters])
-/// 
-/// However, when the class gets larger, there will be much more changing members and listeners 
-/// should not be notified about all unrelated changes.
 class FeedModel extends ChangeNotifier {
   late FeedService _service;
   final List<Post> posts = [];
 
-  FeedIdentifier get feedParameters => _service.feed.parameters;
+  FeedParameters get feedParameters => _service.feed.parameters;
 
-  FeedModel(FeedIdentifier parameters) {
+  FeedModel(FeedParameters parameters) {
     _initService(parameters);
   }
 
   /// Sets the specified parameters and refreshes the list of posts
-  Future<void> setParameters(FeedIdentifier parameters) async {
+  Future<void> setParameters(FeedParameters parameters) async {
     posts.clear();
     _initService(parameters);
-    await _service.loadNext(5);
+    await _service.loadNext(100);
     notifyListeners();
   }
 
@@ -32,15 +29,15 @@ class FeedModel extends ChangeNotifier {
   Future<void> update() async {
     posts.clear();
     _initService(_service.feed.parameters);
-    await _service.loadNext(5);
+    await _service.loadNext(100);
     notifyListeners();
   }
 
   Future<void> loadMore() async {
-    await _service.loadNext(5);
+    await _service.loadNext(100);
   }
 
-  void _initService(FeedIdentifier parameters) {
+  void _initService(FeedParameters parameters) {
     _service = FeedService(parameters);
     _service.feed.posts.listen(_addPost);
   }

@@ -8,7 +8,7 @@ import 'package:qhub/Screens/Widgets/FloatingButton/Other/FloatingPopupElement.d
 import 'package:qhub/Domain/Navigation/Routes.dart';
 
 class FeedScreen extends StatelessWidget {
-  final _feedModel = FeedModel(FeedIdentifier(hubName: 'home'))..loadMore();
+  final _feedModel = FeedModel(FeedParameters(hubName: 'home'))..loadMore();
 
   @override
   Widget build(BuildContext context) {

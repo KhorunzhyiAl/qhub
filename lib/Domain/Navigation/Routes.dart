@@ -6,4 +6,5 @@ class Routes {
   static const error = '/error';
   static const post = '/post';
   static const createPost = '/createPost';
+  static const selectFeed = '/selectFeed';
 }

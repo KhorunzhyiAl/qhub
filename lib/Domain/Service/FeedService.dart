@@ -12,7 +12,7 @@ class FeedService {
 
   late final Feed feed;
 
-  FeedService(FeedIdentifier parameters) {
+  FeedService(FeedParameters parameters) {
     feed = Feed(
       parameters: parameters,
       posts: _postsController.stream,

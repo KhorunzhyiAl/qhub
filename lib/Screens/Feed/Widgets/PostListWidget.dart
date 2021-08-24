@@ -5,9 +5,8 @@ import 'package:qhub/Domain/Models/FeedModel.dart';
 
 class PostListWidget extends StatefulWidget {
   final FeedModel _feedModel;
-  final void Function(ScrollController)? onScroll;
 
-  PostListWidget(this._feedModel, {this.onScroll});
+  PostListWidget(this._feedModel);
 
   @override
   State<StatefulWidget> createState() => _PostListWidgetSate();
@@ -47,7 +46,7 @@ class _PostListWidgetSate extends State<PostListWidget> {
             ),
           ),
           title: Text(
-            widget._feedModel.feedParameters.hubName ?? 'Home',
+            widget._feedModel.feedParameters.hubName,
             style: theme.textTheme.headline1?.copyWith(color: theme.colorScheme.onPrimary),
           ),
         ),
@@ -73,7 +72,5 @@ class _PostListWidgetSate extends State<PostListWidget> {
       await widget._feedModel.loadMore();
       setState(() {});
     }
-
-    widget.onScroll?.call(_controller);
   }
 }

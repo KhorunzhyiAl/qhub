@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:qhub/Domain/Models/PostFormModel.dart';
+import 'package:qhub/Domain/Navigation/Routes.dart';
+import 'package:qhub/Domain/Elements/Feed.dart';
+import 'package:qhub/Screens/SelectFeedScreen/SelectFeedScreen.dart';
 
 class CreatePostScreen extends StatelessWidget {
   late final PostFormModel _postFormModel;
@@ -22,19 +25,27 @@ class CreatePostScreen extends StatelessWidget {
             backwardsCompatibility: false,
             leading: IconButton(
               icon: Icon(Icons.arrow_back),
-              onPressed: () {},
-            ),
-            title: OutlinedButton(
               onPressed: () {
-                
+                nav.pop();
               },
-              child: Row(
-                children: [
-                  Text('Select a community'),
-                  Spacer(),
-                  Icon(Icons.arrow_drop_down),
-                ],
-              ),
+            ),
+            title: ValueListenableBuilder<String?>(
+              valueListenable: _postFormModel.communityValNotifier,
+              builder: (_, value, child) {
+                return OutlinedButton(
+                  onPressed: () async {
+                    final selected = await nav.pushNamed<FeedParameters>(Routes.selectFeed);
+                    _postFormModel.community = selected?.hubName;
+                  },
+                  child: Row(
+                    children: [
+                      Text(value ?? 'Select a community'),
+                      Spacer(),
+                      Icon(Icons.arrow_drop_down),
+                    ],
+                  ),
+                );
+              },
             ),
             actions: [
               IconButton(
@@ -50,6 +61,7 @@ class CreatePostScreen extends StatelessWidget {
           SliverToBoxAdapter(
             child: Column(
               children: [
+                SizedBox(height: 5),
                 Card(
                   child: TextField(
                     style: theme.textTheme.headline2,
