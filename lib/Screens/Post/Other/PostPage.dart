@@ -3,7 +3,7 @@ import 'package:qhub/Domain/Models/PostModel.dart';
 import 'package:qhub/Screens/Widgets/PostInfo.dart';
 
 class PostPage extends StatelessWidget {
-  PostModel postModel;
+  final PostModel postModel;
 
   PostPage(this.postModel);
 

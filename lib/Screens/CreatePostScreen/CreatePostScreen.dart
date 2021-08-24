@@ -25,7 +25,9 @@ class CreatePostScreen extends StatelessWidget {
               onPressed: () {},
             ),
             title: OutlinedButton(
-              onPressed: () {},
+              onPressed: () {
+                
+              },
               child: Row(
                 children: [
                   Text('Select a community'),
