@@ -91,13 +91,21 @@ class _FeedScreenState extends State<FeedScreen> with SingleTickerProviderStateM
                           return SliverList(
                             delegate: SliverChildBuilderDelegate(
                               (context, index) {
-                                return Column(
-                                  children: [
-                                    PostWidget(posts[index]),
-                                  ],
-                                );
+                                if (index == posts.length) {
+                                  return Container(
+                                    height: 100,
+                                    child: Center(
+                                      child: CircularProgressIndicator(
+                                        color: theme.colorScheme.onBackground,
+                                        backgroundColor: Colors.transparent,
+                                      ),
+                                    ),
+                                  );
+                                }
+                                return PostWidget(posts[index]);
                               },
-                              childCount: posts.length,
+                              /// The last element is loading indicator
+                              childCount: posts.length + 1,
                             ),
                           );
                         },
