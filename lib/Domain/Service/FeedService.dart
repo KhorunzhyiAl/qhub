@@ -7,29 +7,27 @@ import 'package:qhub/Domain/Elements/Feed.dart';
 import 'package:qhub/Domain/Elements/Post.dart';
 
 class FeedService {
+  // TODO: client must be provided in the constructor (probably)
   final _dio = locator<Client>().dio;
-  final _postsController = StreamController<Post>();
+  var _loadMoreBusy = false;
 
-  late final Feed feed;
+  final FeedParameters parameters;
+  final posts = <Post>[];
 
-  FeedService(FeedParameters parameters) {
-    feed = Feed(
-      parameters: parameters,
-      posts: _postsController.stream,
-    );
-  }
+  /// Creates a feed with the specified parameters. To load posts, call [loadNext]
+  FeedService(this.parameters);
 
-  /// Starts loading next [n] posts and returns true if no error occurred.
-  ///
-  /// First, performs a request to the server to get a [Response] containing the posts, then as it
-  /// converts the data to [Post]s, adds them one by one to the stream - [feed.posts].
-  ///
-  /// TODO: In case of an error: add it to the stream, throw or return?
-  Future<void> loadNext([int n = 100]) async {
+  /// Requests next [n] posts from server and adds them to [feed.posts]
+  Future<bool> loadNext([int n = 100]) async {
+    if (_loadMoreBusy) return false;
+    _loadMoreBusy = true;
+
     final rand = Random.secure();
 
+    await Future.delayed(Duration(seconds: 2));
+
     for (int i = 0; i < n; ++i) {
-      _postsController.add(Post(
+      posts.add(Post(
         id: '$i',
         title:
             """Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam""",
@@ -45,5 +43,8 @@ The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for t
         imageUri: rand.nextBool() ? null : 'imageid',
       ));
     }
+
+    _loadMoreBusy = false;
+    return true;
   }
 }

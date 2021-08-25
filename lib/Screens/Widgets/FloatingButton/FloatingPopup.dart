@@ -36,6 +36,12 @@ class _FloatingPopupState extends State<FloatingPopup> with TickerProviderStateM
   }
 
   @override
+  void dispose() {
+    _ctrler.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 

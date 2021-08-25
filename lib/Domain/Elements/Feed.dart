@@ -2,7 +2,7 @@ import 'package:qhub/Domain/Elements/Post.dart';
 
 class Feed {
   FeedParameters parameters;
-  Stream<Post> posts;
+  List<Post> posts;
 
   Feed({
     required this.parameters,
