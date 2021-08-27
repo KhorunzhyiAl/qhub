@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:qhub/Domain/Models/PostModel.dart';
+import 'package:qhub/Domain/Feed/PostModel.dart';
 import 'package:qhub/Screens/Post/Other/CommentsPage.dart';
 import 'package:qhub/Screens/Post/Other/PostPage.dart';
 import 'package:qhub/Screens/Widgets/FloatingButton/FloatingPopup.dart';

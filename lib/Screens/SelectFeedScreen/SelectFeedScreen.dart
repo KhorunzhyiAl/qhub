@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:qhub/Domain/Models/FeedListModel.dart';
+import 'package:qhub/Domain/FeedList/FeedListModel.dart';
 import 'package:qhub/Screens/SelectFeedScreen/Other/FeedWidget.dart';
 import 'package:qhub/Screens/SelectFeedScreen/Other/SeparatorWidget.dart';
 

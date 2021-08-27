@@ -1,7 +1,6 @@
-import 'package:qhub/Domain/Elements/Feed.dart';
+import 'package:qhub/Domain/Feed/Feed.dart';
 
 /// Provides a list of feeds (hub, blog or a custom feed) that user is subscribed to.
-///
 class FeedListModel {
   final blogs = <FeedParameters>[];
   final hubs = <FeedParameters>[];
@@ -9,7 +8,6 @@ class FeedListModel {
   late final List<FeedParameters> allFeeds;
 
   FeedListModel() {
-    // initialize the lists
     blogs.addAll([
       FeedParameters(hubName: 'blogA'),
       FeedParameters(hubName: 'blogB'),

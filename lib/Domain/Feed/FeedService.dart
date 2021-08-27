@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:qhub/Domain/Service/Client.dart';
+import 'package:qhub/Domain/Client/Client.dart';
 import 'package:qhub/Domain/Locators.dart';
-import 'package:qhub/Domain/Elements/Feed.dart';
-import 'package:qhub/Domain/Elements/Post.dart';
+import 'package:qhub/Domain/Feed/Feed.dart';
+import 'package:qhub/Domain/Feed/Post.dart';
 
 class FeedService {
   // TODO: client must be provided in the constructor (probably)
@@ -47,4 +47,6 @@ The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for t
     _loadMoreBusy = false;
     return true;
   }
+
+  
 }

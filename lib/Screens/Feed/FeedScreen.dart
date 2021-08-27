@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:qhub/Domain/Elements/Feed.dart';
-import 'package:qhub/Domain/Models/FeedModel.dart';
-import 'package:qhub/Domain/Models/PostFormModel.dart';
-import 'package:qhub/Domain/Elements/Post.dart';
+import 'package:qhub/Domain/Feed/Feed.dart';
+import 'package:qhub/Domain/Feed/FeedModel.dart';
+import 'package:qhub/Domain/SubmitPost/PostFormModel.dart';
+import 'package:qhub/Domain/Feed/Post.dart';
 import 'package:qhub/Screens/Widgets/PostWidget/PostWidget.dart';
 import 'package:qhub/Screens/Widgets/FloatingButton/FloatingPopup.dart';
 import 'package:qhub/Screens/Widgets/FloatingButton/Other/FloatingPopupElement.dart';

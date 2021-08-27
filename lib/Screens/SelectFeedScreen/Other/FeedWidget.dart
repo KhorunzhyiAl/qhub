@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:qhub/Domain/Elements/Feed.dart';
+import 'package:qhub/Domain/Feed/Feed.dart';
 
 class FeedWidget extends StatelessWidget {
   FeedParameters _feed;

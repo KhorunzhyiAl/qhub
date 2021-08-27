@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:qhub/Domain/Elements/Post.dart';
+import 'package:qhub/Domain/Feed/Post.dart';
 
 /// Model for creating or editing a post. Provides validators for input
 class PostFormModel {

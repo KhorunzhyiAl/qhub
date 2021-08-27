@@ -1,6 +1,6 @@
 import 'package:qhub/Domain/Locators.dart';
-import 'package:qhub/Domain/Service/Client.dart';
-import 'package:qhub/Domain/Elements/Post.dart';
+import 'package:qhub/Domain/Client/Client.dart';
+import 'package:qhub/Domain/Feed/Post.dart';
 
 /// Used for performing operations on a post: load (update), upvote/downvote, etc.
 /// To update the data, call [update] and access [post] when the update completes.

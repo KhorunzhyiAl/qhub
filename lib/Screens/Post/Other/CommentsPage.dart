@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:qhub/Domain/Models/PostModel.dart';
+import 'package:qhub/Domain/Feed/PostModel.dart';
 
 class CommentsPage extends StatelessWidget {
   final PostModel postModel;

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:qhub/Domain/Models/PostFormModel.dart';
+import 'package:qhub/Domain/SubmitPost/PostFormModel.dart';
 import 'package:qhub/Domain/Navigation/Routes.dart';
-import 'package:qhub/Domain/Elements/Feed.dart';
+import 'package:qhub/Domain/Feed/Feed.dart';
 import 'package:qhub/Screens/SelectFeedScreen/SelectFeedScreen.dart';
 
 class CreatePostScreen extends StatelessWidget {

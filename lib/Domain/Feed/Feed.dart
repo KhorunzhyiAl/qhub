@@ -1,4 +1,4 @@
-import 'package:qhub/Domain/Elements/Post.dart';
+import 'package:qhub/Domain/Feed/Post.dart';
 
 class Feed {
   FeedParameters parameters;

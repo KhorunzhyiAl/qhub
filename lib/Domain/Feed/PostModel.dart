@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
-import 'package:qhub/Domain/Elements/Post.dart';
-import 'package:qhub/Domain/Service/PostService.dart';
+import 'package:qhub/Domain/Feed/Post.dart';
+import 'package:qhub/Domain/Feed/PostService.dart';
 
 class PostModel extends ChangeNotifier {
   PostService _service;

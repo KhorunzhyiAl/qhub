@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:qhub/Domain/Enums/SignUpStatus.dart';
-import 'package:qhub/Domain/Service/Client.dart';
+import 'package:qhub/Domain/Auth/SignUpStatus.dart';
+import 'package:qhub/Domain/Client/Client.dart';
 import 'package:flutter/foundation.dart';
 import 'package:qhub/Domain/Locators.dart';
 

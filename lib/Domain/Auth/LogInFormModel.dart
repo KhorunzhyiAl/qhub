@@ -1,6 +1,6 @@
-import 'package:qhub/Domain/Service/Client.dart';
+import 'package:qhub/Domain/Client/Client.dart';
 import 'package:flutter/foundation.dart';
-import 'package:qhub/Domain/Enums/LogInStatus.dart';
+import 'package:qhub/Domain/Auth/LogInStatus.dart';
 import 'package:qhub/Domain/Locators.dart';
 
 

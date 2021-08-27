@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:qhub/Domain/Navigation/RouteGenerator.dart';
 import 'package:qhub/Config/MyTheme.dart';
 import 'package:qhub/Domain/Navigation/Routes.dart';
-import 'package:qhub/Domain/Service/Client.dart';
-import 'package:qhub/Domain/Enums/ClientStatus.dart';
+import 'package:qhub/Domain/Client/Client.dart';
+import 'package:qhub/Domain/Client/ClientStatus.dart';
 import 'package:qhub/Domain/Locators.dart';
 
 late final Future<bool> _loggedIn;
@@ -12,10 +12,14 @@ String _initialRoute = Routes.splash;
 void main() {
   initLocator();
 
+  // Run logInWithToken as early as possible (while the UI is still loading). 
+  // - if completes with *success* before the UI is loaded, set [_initialRoute] to Feed screen;
+  // - if completes with *failure* before the UI is loaded, set [_initialRoute] to logIn screen;
+  // - if the UI loads first, the value of [_initialRoute] doesn't matter and the screen is selected
+  //   the normal way, by listening to client status ([Client.addStatusListener]).
   final service = locator<Client>();
   _loggedIn = service.logInWithToken();
   _loggedIn.then((value) {
-    print('future finished. value = $value');
     _initialRoute = value ? Routes.feed : Routes.logIn;
   });
 
@@ -27,10 +31,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final navKey = GlobalKey<NavigatorState>();
     final theme = MyTheme();
-    final cilent = locator<Client>();
+    final client = locator<Client>();
 
-    cilent.addStatusListener((status) {
-      print('status changed. status = $status');
+    
+    client.addStatusListener((status) {
       switch (status) {
         case ClientStatus.loggedIn:
           _initialRoute = Routes.feed; // Used only for hot reload, can be removed later

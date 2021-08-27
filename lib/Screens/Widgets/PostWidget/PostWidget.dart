@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:qhub/Domain/Models/PostModel.dart';
-import 'package:qhub/Domain/Elements/Post.dart';
+import 'package:qhub/Domain/Feed/PostModel.dart';
+import 'package:qhub/Domain/Feed/Post.dart';
 import 'package:qhub/Screens/Widgets/PostWidget/Utils/PostWidgetPortrait.dart';
 import 'package:qhub/Screens/Widgets/PostWidget/Utils/PostWidgetLandscape.dart';
 

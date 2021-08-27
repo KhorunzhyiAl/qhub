@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
 
-import 'package:qhub/Domain/Models/PostModel.dart';
+import 'package:qhub/Domain/Feed/PostModel.dart';
 import 'package:qhub/Domain/Navigation/Routes.dart';
 import 'package:qhub/Screens/Widgets/PostInfo.dart';
 
