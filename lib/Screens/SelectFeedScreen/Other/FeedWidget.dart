@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:qhub/Domain/Feed/Feed.dart';
+import 'package:qhub/Domain/Feed/FeedQuery.dart';
 
 class FeedWidget extends StatelessWidget {
-  FeedParameters _feed;
-  void Function(FeedParameters)? onSelected;
+  FeedQuery _feed;
+  void Function(FeedQuery)? onSelected;
 
-  FeedWidget(FeedParameters feed, {this.onSelected}) : _feed = feed;
+  FeedWidget(FeedQuery feed, {this.onSelected}) : _feed = feed;
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +27,18 @@ class FeedWidget extends StatelessWidget {
                 aspectRatio: 1,
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(3),
-                  child: Image.network('https://picsum.photos/200'),
+                  child: Image.network(
+                    'https://picsum.photos/200',
+                    loadingBuilder: (_, __, ___) {
+                      return Container(color: Colors.grey);
+                    },
+                    errorBuilder: (_, __, ___) {
+                      return Container(
+                        color: Colors.grey,
+                        child: Icon(Icons.image, color: Colors.white),
+                      );
+                    },
+                  ),
                 ),
               ),
               SizedBox(width: 15),

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:qhub/Domain/Feed/Feed.dart';
 
 import 'package:qhub/Domain/SubmitPost/PostFormModel.dart';
 import 'package:qhub/Domain/Feed/PostModel.dart';
@@ -12,6 +11,7 @@ import 'package:qhub/Domain/Navigation/Routes.dart';
 import 'package:qhub/Screens/Feed/FeedScreen.dart';
 import 'package:qhub/Screens/Post/PostScreen.dart';
 import 'package:qhub/Screens/CreatePostScreen/CreatePostScreen.dart';
+import 'package:qhub/Domain/Feed/FeedQuery.dart';
 
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -40,7 +40,7 @@ class RouteGenerator {
         screen = CreatePostScreen(postFormModel: settings.arguments as PostFormModel);
         break;
       case Routes.selectFeed:
-        return MaterialPageRoute<FeedParameters>(builder: (_) => SelectHubScreen());
+        return MaterialPageRoute<FeedQuery>(builder: (_) => SelectHubScreen());
       default:
         screen = ErrorScreen(message: "Route '${settings.name}' doesn't exist");
     }

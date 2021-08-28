@@ -13,6 +13,15 @@ class UserAvatar extends StatelessWidget {
         imageUri,
         height: 35,
         width: 35,
+        loadingBuilder: (_, __, ___) {
+          return Container(color: Colors.grey);
+        },
+        errorBuilder: (_, __, ___) {
+          return Container(
+            color: Colors.grey,
+            child: Icon(Icons.person, color: Colors.white),
+          );
+        },
       ),
     );
   }

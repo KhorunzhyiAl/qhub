@@ -32,11 +32,19 @@ class PostViewPortrait extends StatelessWidget {
                     child: Image.network(
                       'https://picsum.photos/700',
                       fit: BoxFit.cover,
+                      loadingBuilder: (_, __, ___) {
+                        return Container(color: Colors.grey);
+                      },
+                      errorBuilder: (_, __, ___) {
+                        return Container(
+                          color: Colors.grey,
+                          child: Icon(Icons.image, color: Colors.white),
+                        );
+                      },
                     ),
                   ),
                 ),
               ],
-
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                 child: Column(

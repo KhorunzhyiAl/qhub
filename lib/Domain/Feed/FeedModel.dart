@@ -1,58 +1,86 @@
-import 'package:qhub/Domain/Feed/FeedService.dart';
-import 'package:qhub/Domain/Feed/Feed.dart';
+import 'dart:collection';
+
+import 'package:flutter/cupertino.dart';
 import 'package:qhub/Domain/Feed/Post.dart';
 import 'package:qhub/Other/PropertyNotifier.dart';
+import 'package:qhub/Domain/Feed/FeedQuery.dart';
 
-/// Contains [PropertyNotifier]s for feed data and functionality to interact with the feed.
-/// 
-/// The [posts] list is lazy-loaded. Use [loadMore] posts to load the next batch of posts when 
-/// approaching the end of the current list. 
+/// Contains [ValueNotifier]s for the list of posts and feed parameters and functionality to
+/// interact with the feed.
+///
+/// The [posts] list is lazy-loaded. Use [loadMore] posts to load the next batch of posts when
+/// approaching the end of the current list. [postsNotifier] will notify its listeners when
+/// [loadMore] finishes.
+class FeedModel {
+  final _posts = <Post>[];
+  bool _isLoadingPosts = false;
 
-// P.S. The reason for using [PropertyNotifier] (custom class) instead of [ValueNotifier] is 
-// because the values are being mutated instead of changed entirely, which doesn't trigger 
-// [ValueNotifier]'s [notifyListeners] so I need to be able to call [notifyListeners] explicitly.
-class FeedModel {  
-  FeedService _service;
+  // The reason for using [PropertyNotifier] (custom class) instead of [ValueNotifier] is
+  // because the values are being mutated instead of changed entirely, which doesn't trigger
+  // [ValueNotifier]'s [notifyListeners]. [PropertyNotifier] lets me call [notifyListeners]
+  // explicitly.
+  // Made it private with a getter to hide [PropertyNotifier] (the getter returns [ValueNotifier])
+  late final PropertyNotifier<UnmodifiableListView<Post>> _postsNotifier;
 
   /// For usage in [ValueListenableBuilder] or [ValueListenableProvider]. To create a new feed with
   /// different parameters, call [setParameters]. The list of posts [posts] becomes empty after this
   /// this value changes because it's a new feed now.
-  late final PropertyNotifier<FeedParameters> parameters;
-  /// Contains the currently loaded posts. Call [loadMore] and the value will be updated when the 
+  final ValueNotifier<FeedQuery> parametersNotifier;
+
+  /// Contains the currently loaded posts. Call [loadMore] and the value will be updated when the
   /// loading finishes.
-  late final PropertyNotifier<List<Post>> posts;
+  ValueNotifier<UnmodifiableListView<Post>> get postsNotifier => _postsNotifier;
 
-  /// Creates a feed model with the specified [parameters]. The [posts] list is initially empty; 
+  /// Creates a feed model with the specified [parameters]. The [posts] list is initially empty;
   /// call [loadMore] to load the first batch of posts.
-  FeedModel(FeedParameters parameters) : _service = FeedService(parameters) {
-    posts = PropertyNotifier<List<Post>>(_service.posts);
-    this.parameters = PropertyNotifier<FeedParameters>(_service.parameters);
+  FeedModel(FeedQuery parameters) : parametersNotifier = PropertyNotifier(parameters) {
+    _postsNotifier = PropertyNotifier<UnmodifiableListView<Post>>(UnmodifiableListView(_posts));
   }
 
-  /// Sets the specified parameters and clears the list of posts ([posts])
-  Future<void> setParameters(FeedParameters parameters) async {
-    _initService(parameters);
+  /// Sets the specified parameters and clears [posts]
+  void setParameters(FeedQuery parameters) {
+    this.parametersNotifier.value = parameters;
+    _posts.clear();
+    _postsNotifier.notifyListeners();
   }
 
-  /// Reloads the list of posts preserving the parameters.
-  Future<void> update([int loadPosts = 0]) async {
-    
-    posts.notifyListeners();
+  /// Reloads the list of posts preserving the parameters. [loadPosts] - the amount of posts to load
+  /// after updating (default is 100)
+  Future<void> update([int loadPosts = 100]) async {
+    _posts.clear();
+    if (loadPosts > 0) await _loadMore(loadPosts);
   }
 
-  Future<bool> loadMore() async {
-    bool result = await _service.loadNext(10);
-
-    if (!result) return false;
-
-    print('loadMore notifies listeners');
-    posts.notifyListeners(); 
-    return result;
+  /// Starts loading the next batch of posts. When finished, [postsNotifier] notifies its listeners.
+  Future<void> loadMore() async {
+    await _loadMore(100, _posts.length);
+    _postsNotifier.notifyListeners();
   }
 
-  void _initService(FeedParameters parameters) {
-    _service = FeedService(parameters);
-    this.parameters.value = _service.parameters;
-    posts.value = _service.posts;
+  /// Adds new posts to the list but doesn't call notifyListeners.
+  Future<void> _loadMore(int amount, [int offset = 0]) async {
+    if (_isLoadingPosts) return;
+
+    _isLoadingPosts = true;
+    await Future.delayed(Duration(seconds: 2));
+    _isLoadingPosts = false;
+
+    for (int i = 0; i < amount; ++i) {
+      _posts.add(Post(
+        id: '$i',
+        title:
+            """Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam""",
+        body:
+            """Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.
+
+The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from "de Finibus Bonorum et Malorum" by Cicero are also reproduced in their exact original form, accompanied by English versions from the 1914 translation by H. Rackham.
+""",
+        author: 'author',
+        upvotes: 10,
+        downvotes: 2,
+        hubName: 'hubname',
+        imageUri: i % 3 == 0 ? null : 'imageid',
+      ));
+    }
   }
 }

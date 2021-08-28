@@ -1,29 +1,30 @@
-import 'package:qhub/Domain/Feed/Feed.dart';
+import 'package:qhub/Domain/Feed/FeedQuery.dart';
+
 
 /// Provides a list of feeds (hub, blog or a custom feed) that user is subscribed to.
 class FeedListModel {
-  final blogs = <FeedParameters>[];
-  final hubs = <FeedParameters>[];
-  final customFeeds = <FeedParameters>[];
-  late final List<FeedParameters> allFeeds;
+  final blogs = <FeedQuery>[];
+  final hubs = <FeedQuery>[];
+  final customFeeds = <FeedQuery>[];
+  late final List<FeedQuery> allFeeds;
 
   FeedListModel() {
     blogs.addAll([
-      FeedParameters(hubName: 'blogA'),
-      FeedParameters(hubName: 'blogB'),
-      FeedParameters(hubName: 'blogC'),
+      FeedQuery(hubName: 'blogA'),
+      FeedQuery(hubName: 'blogB'),
+      FeedQuery(hubName: 'blogC'),
     ]);
     hubs.addAll([
-      FeedParameters(hubName: 'programming'),
-      FeedParameters(hubName: 'questions'),
-      FeedParameters(hubName: 'anime'),
-      FeedParameters(hubName: 'games'),
-      FeedParameters(hubName: 'something'),
-      FeedParameters(hubName: 'movies'),
+      FeedQuery(hubName: 'programming'),
+      FeedQuery(hubName: 'questions'),
+      FeedQuery(hubName: 'anime'),
+      FeedQuery(hubName: 'games'),
+      FeedQuery(hubName: 'something'),
+      FeedQuery(hubName: 'movies'),
     ]);
     customFeeds.addAll([
-      FeedParameters(hubName: 'myCustomFeed1'),
-      FeedParameters(hubName: 'myCustomFeed2'),
+      FeedQuery(hubName: 'myCustomFeed1'),
+      FeedQuery(hubName: 'myCustomFeed2'),
     ]);
 
     allFeeds = blogs + hubs + customFeeds;

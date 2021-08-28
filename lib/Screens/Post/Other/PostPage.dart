@@ -31,11 +31,15 @@ class PostPage extends StatelessWidget {
                       child: Image.network(
                         'https://picsum.photos/700/700',
                         fit: BoxFit.cover,
-                        loadingBuilder: (context, child, progress) {
-                          if (progress == null) {
-                            return child;
-                          }
-                          return Container(color: Colors.blue, height: 100, width: 100);
+                        loadingBuilder: (_, __, ___) {
+                          return Container(height: 300, color: Colors.grey);
+                        },
+                        errorBuilder: (_, __, ___) {
+                          return Container(
+                            height: 300,
+                            color: Colors.grey,
+                            child: Icon(Icons.image, color: Colors.white),
+                          );
                         },
                       ),
                     ),

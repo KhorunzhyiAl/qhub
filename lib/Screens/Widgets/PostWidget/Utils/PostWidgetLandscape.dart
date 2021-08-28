@@ -48,12 +48,13 @@ class PostViewLandscape extends StatelessWidget {
                             child: Image.network(
                               'https://picsum.photos/600',
                               fit: BoxFit.cover,
+                              loadingBuilder: (_, __, ___) {
+                                return Container(color: Colors.grey);
+                              },
                               errorBuilder: (_, __, ___) {
                                 return Container(
-                                  color: Colors.blue,
-                                  child: Center(
-                                    child: Text(':('),
-                                  ),
+                                  color: Colors.grey,
+                                  child: Icon(Icons.image, color: Colors.white),
                                 );
                               },
                             ),
@@ -66,7 +67,7 @@ class PostViewLandscape extends StatelessWidget {
                 PostInfo(postModel: _postModel),
               ],
             ),
-            
+
             // ),
           ),
         ),

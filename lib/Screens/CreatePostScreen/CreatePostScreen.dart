@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:qhub/Domain/SubmitPost/PostFormModel.dart';
 import 'package:qhub/Domain/Navigation/Routes.dart';
-import 'package:qhub/Domain/Feed/Feed.dart';
-import 'package:qhub/Screens/SelectFeedScreen/SelectFeedScreen.dart';
+import 'package:qhub/Domain/Feed/FeedQuery.dart';
 
 class CreatePostScreen extends StatelessWidget {
   late final PostFormModel _postFormModel;
@@ -34,7 +33,7 @@ class CreatePostScreen extends StatelessWidget {
               builder: (_, value, child) {
                 return OutlinedButton(
                   onPressed: () async {
-                    final selected = await nav.pushNamed<FeedParameters>(Routes.selectFeed);
+                    final selected = await nav.pushNamed<FeedQuery>(Routes.selectFeed);
                     _postFormModel.community = selected?.hubName;
                   },
                   child: Row(
