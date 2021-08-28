@@ -1,5 +1,6 @@
 import 'dart:collection';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:qhub/Domain/Feed/FeedModel.dart';
 import 'package:qhub/Domain/SubmitPost/PostFormModel.dart';
@@ -60,6 +61,7 @@ class _FeedScreenState extends State<FeedScreen> with SingleTickerProviderStateM
           body: Container(
             color: theme.colorScheme.background,
             child: CustomScrollView(
+              physics: BouncingScrollPhysics(),
               controller: widget._controller,
               slivers: [
                 ValueListenableBuilder<FeedQuery>(
@@ -83,6 +85,14 @@ class _FeedScreenState extends State<FeedScreen> with SingleTickerProviderStateM
                             theme.textTheme.headline1?.copyWith(color: theme.colorScheme.onPrimary),
                       ),
                     );
+                  },
+                ),
+                CupertinoSliverRefreshControl(
+                  
+                  onRefresh: () async {
+                    print('start update');
+                    await widget._feedModel.update();
+                    print('update finished');
                   },
                 ),
                 ValueListenableBuilder<UnmodifiableListView<Post>>(

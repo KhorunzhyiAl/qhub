@@ -1,4 +1,5 @@
 import 'dart:collection';
+import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:qhub/Domain/Feed/Post.dart';
@@ -47,26 +48,31 @@ class FeedModel {
   /// Reloads the list of posts preserving the parameters. [loadPosts] - the amount of posts to load
   /// after updating (default is 100)
   Future<void> update([int loadPosts = 100]) async {
+    final newPosts = await _loadMore(loadPosts);
     _posts.clear();
-    if (loadPosts > 0) await _loadMore(loadPosts);
+    _posts.addAll(newPosts);
+    _postsNotifier.notifyListeners();
   }
 
   /// Starts loading the next batch of posts. When finished, [postsNotifier] notifies its listeners.
   Future<void> loadMore() async {
-    await _loadMore(100, _posts.length);
+    _posts.addAll(await _loadMore(100, _posts.length));
     _postsNotifier.notifyListeners();
   }
 
-  /// Adds new posts to the list but doesn't call notifyListeners.
-  Future<void> _loadMore(int amount, [int offset = 0]) async {
-    if (_isLoadingPosts) return;
+  /// Loads and returns a list of [amount] posts with the [offset]
+  Future<List<Post>> _loadMore(int amount, [int offset = 0]) async {
+    final result = <Post>[];
+
+    if (_isLoadingPosts || amount <= 0) return result;
 
     _isLoadingPosts = true;
     await Future.delayed(Duration(seconds: 2));
     _isLoadingPosts = false;
 
+    final ra = Random.secure();
     for (int i = 0; i < amount; ++i) {
-      _posts.add(Post(
+      result.add(Post(
         id: '$i',
         title:
             """Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam""",
@@ -79,8 +85,10 @@ The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for t
         upvotes: 10,
         downvotes: 2,
         hubName: 'hubname',
-        imageUri: i % 3 == 0 ? null : 'imageid',
+        imageUri: ra.nextBool() ? null : 'imageid',
       ));
     }
+
+    return result;
   }
 }
