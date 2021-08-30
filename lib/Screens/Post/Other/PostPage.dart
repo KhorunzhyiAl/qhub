@@ -1,4 +1,7 @@
+import 'package:dartz/dartz.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:qhub/Domain/Feed/Post.dart';
 import 'package:qhub/Domain/Feed/PostModel.dart';
 import 'package:qhub/Screens/Widgets/PostInfo.dart';
 
@@ -11,28 +14,82 @@ class PostPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
+    return AnimatedBuilder(
+      animation: postModel,
+      builder: (_, child) {
+        return postModel.post.fold(
+          () => _loading(context),
+          (loaded) => loaded.fold(
+            () => _loadedNone(context),
+            (postData) => _loadedPost(context, postData),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _loading(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Container(
+      color: theme.colorScheme.background,
+      child: Center(
+        child: CircularProgressIndicator(
+          color: theme.colorScheme.onBackground,
+          backgroundColor: Colors.transparent,
+        ),
+      ),
+    );
+  }
+
+  /// The [Future] (from [postModel.post]) is completed with an empty [Option].
+  Widget _loadedNone(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Container(
+      color: theme.colorScheme.background,
+      child: Center(
+        child: Text('Failed to load the post', style: theme.textTheme.headline3),
+      ),
+    );
+  }
+
+  /// The [Future] (from [postModel.post]) is completed with an [Option] containing [Post],
+  Widget _loadedPost(BuildContext context, Post postData) {
+    final theme = Theme.of(context);
+
     return CustomScrollView(
+      physics: BouncingScrollPhysics(),
       slivers: [
+        CupertinoSliverRefreshControl(
+          onRefresh: () async {
+            await postModel.update();
+          },
+        ),
         SliverPadding(
           padding: EdgeInsets.symmetric(horizontal: 10),
           sliver: SliverToBoxAdapter(
             child: Container(
               color: theme.colorScheme.background,
-              // constraints: BoxConstraints(
-              //   minHeight: MediaQuery.of(context).size.height,
-              // ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
-                  if (postModel.post.imageUri != null) ...[
+                  if (postData.imageUri != null) ...[
                     SizedBox(height: 10),
                     ClipRRect(
                       borderRadius: BorderRadius.circular(3),
                       child: Image.network(
                         'https://picsum.photos/700/700',
                         fit: BoxFit.cover,
-                        loadingBuilder: (_, __, ___) {
-                          return Container(height: 300, color: Colors.grey);
+                        frameBuilder: (_, child, __, ___) {
+                          return child;
+                        },
+                        loadingBuilder: (_, child, chunk) {
+                          return Container(
+                            height: MediaQuery.of(context).size.width - 20,
+                            color: Colors.grey,
+                            child: child,
+                          );
                         },
                         errorBuilder: (_, __, ___) {
                           return Container(
@@ -45,12 +102,12 @@ class PostPage extends StatelessWidget {
                     ),
                     SizedBox(height: 10),
                   ],
-                  Text(postModel.post.title, style: theme.textTheme.headline1),
+                  Text(postData.title, style: theme.textTheme.headline1),
                   SizedBox(height: 10),
                   PostInfo(postModel: postModel),
                   SizedBox(height: 40),
                   Text(
-                    postModel.post.body,
+                    postData.body,
                     style: theme.textTheme.bodyText2,
                     textAlign: TextAlign.left,
                   ),

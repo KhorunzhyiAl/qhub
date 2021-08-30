@@ -13,10 +13,18 @@ class UserAvatar extends StatelessWidget {
         imageUri,
         height: 35,
         width: 35,
-        loadingBuilder: (_, __, ___) {
-          return Container(color: Colors.grey);
+        fit: BoxFit.cover,
+        frameBuilder: (_, child, __, ___) {
+          return child;
+        },
+        loadingBuilder: (_, child, chunk) {
+          return Container(
+            color: Colors.grey,
+            child: child,
+          );
         },
         errorBuilder: (_, __, ___) {
+          print('user avatar error builder');
           return Container(
             color: Colors.grey,
             child: Icon(Icons.person, color: Colors.white),

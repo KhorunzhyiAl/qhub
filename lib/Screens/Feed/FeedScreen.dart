@@ -88,11 +88,8 @@ class _FeedScreenState extends State<FeedScreen> with SingleTickerProviderStateM
                   },
                 ),
                 CupertinoSliverRefreshControl(
-                  
                   onRefresh: () async {
-                    print('start update');
                     await widget._feedModel.update();
-                    print('update finished');
                   },
                 ),
                 ValueListenableBuilder<UnmodifiableListView<Post>>(

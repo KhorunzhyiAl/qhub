@@ -29,8 +29,14 @@ class FeedWidget extends StatelessWidget {
                   borderRadius: BorderRadius.circular(3),
                   child: Image.network(
                     'https://picsum.photos/200',
-                    loadingBuilder: (_, __, ___) {
-                      return Container(color: Colors.grey);
+                    frameBuilder: (_, child, __, ___) {
+                      return child;
+                    },
+                    loadingBuilder: (_, child, chunk) {
+                      return Container(
+                        color: Colors.grey,
+                        child: child,
+                      );
                     },
                     errorBuilder: (_, __, ___) {
                       return Container(
