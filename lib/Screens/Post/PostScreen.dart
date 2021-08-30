@@ -38,7 +38,7 @@ class _PostScreenState extends State<PostScreen> with TickerProviderStateMixin {
     return Stack(
       children: [
         Container(
-          color: theme.colorScheme.background,
+          color: theme.colorScheme.surface,
           child: NestedScrollView(
             headerSliverBuilder: (context, innerBoxIsScrolled) {
               return [

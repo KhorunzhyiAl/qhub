@@ -77,7 +77,7 @@ class PostViewPortrait extends StatelessWidget {
             AspectRatio(
               aspectRatio: 5 / 3,
               child: ClipRRect(
-                borderRadius: BorderRadius.circular(3),
+                borderRadius: BorderRadius.circular(2),
                 child: Image.network(
                   'https://picsum.photos/700',
                   fit: BoxFit.cover,

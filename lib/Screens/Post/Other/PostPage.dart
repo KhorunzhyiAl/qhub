@@ -70,14 +70,14 @@ class PostPage extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: 10),
           sliver: SliverToBoxAdapter(
             child: Container(
-              color: theme.colorScheme.background,
+              color: Colors.transparent,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
                   if (postData.imageUri != null) ...[
                     SizedBox(height: 10),
                     ClipRRect(
-                      borderRadius: BorderRadius.circular(3),
+                      borderRadius: BorderRadius.circular(2),
                       child: Image.network(
                         'https://picsum.photos/700/700',
                         fit: BoxFit.cover,

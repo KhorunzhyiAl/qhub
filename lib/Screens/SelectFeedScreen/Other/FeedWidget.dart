@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:qhub/Domain/Feed/FeedQuery.dart';
 
 class FeedWidget extends StatelessWidget {
-  FeedQuery _feed;
-  void Function(FeedQuery)? onSelected;
+  final FeedQuery _feed;
+  final void Function(FeedQuery)? onSelected;
 
   FeedWidget(FeedQuery feed, {this.onSelected}) : _feed = feed;
 
@@ -11,16 +11,16 @@ class FeedWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return Material(
-      color: Colors.transparent,
+    return Card(
+      margin: EdgeInsets.symmetric(vertical: 2, horizontal: 5),
       child: InkWell(
         onTap: () {
           onSelected?.call(_feed);
         },
         child: Container(
           color: Colors.transparent,
-          height: 50,
-          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+          height: 40,
+          padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
           child: Row(
             children: [
               AspectRatio(
@@ -48,7 +48,7 @@ class FeedWidget extends StatelessWidget {
                 ),
               ),
               SizedBox(width: 15),
-              Text(_feed.hubName),
+              Text(_feed.hubName, style: theme.textTheme.headline6,),
             ],
           ),
         ),

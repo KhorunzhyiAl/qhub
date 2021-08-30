@@ -81,7 +81,7 @@ class _FloatingPopupState extends State<FloatingPopup> with TickerProviderStateM
                   });
                 },
                 child: Container(
-                  color: theme.colorScheme.background.withOpacity(0.95 * animFast.value),
+                  color: theme.colorScheme.surface.withOpacity(0.95 * animFast.value),
                   alignment: Alignment.bottomRight,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.end,

@@ -27,16 +27,16 @@ class MyTheme with ChangeNotifier {
         highlightColor: Colors.black.withAlpha(15),
 
         colorScheme: ColorScheme(
-          primary: Colors.grey.shade200,
-          primaryVariant: Colors.white70,
+          primary: Colors.white,
+          primaryVariant: Colors.grey.shade200,
           secondary: Colors.black,
           secondaryVariant: Colors.grey.shade700,
-          surface: Colors.grey.shade100,
-          background: Colors.white,
+          surface: Colors.white,
+          background: Colors.grey.shade100,
           error: Colors.white,
           onPrimary: Colors.grey.shade900,
           onSecondary: Colors.white,
-          onBackground: Colors.black87,
+          onBackground: Colors.grey.shade700,
           onSurface: Colors.black87,
           brightness: Brightness.light,
           onError: Colors.red,
@@ -46,11 +46,11 @@ class MyTheme with ChangeNotifier {
         canvasColor: Colors.grey.shade200,
         
         cardTheme: CardTheme(
-          color: Colors.grey.shade100,
+          color: Colors.white,
           elevation: 0,
-          margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+          margin: EdgeInsets.symmetric(horizontal: 5, vertical: 3),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(3),
+            borderRadius: BorderRadius.circular(2),
           )
         ),
 
