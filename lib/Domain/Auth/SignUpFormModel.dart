@@ -1,128 +1,147 @@
 import 'dart:async';
 
-import 'package:qhub/Domain/Auth/SignUpStatus.dart';
+import 'package:dartz/dartz.dart';
 import 'package:qhub/Domain/Client/Client.dart';
 import 'package:flutter/foundation.dart';
 import 'package:qhub/Domain/Locators.dart';
 
+enum SignUpStatus {
+  enabled,
+  disabled,
+  busy,
+}
 
 class SignUpFormModel {
-  final _client = locator<Client>(); 
+  final _client = locator<Client>();
 
-  /// The following properties update every time [verifySignUpData] is called
-  ValueNotifier<SignUpStatus> status = ValueNotifier(SignUpStatus.signUpDisabled);
-  ValueNotifier<String?> usernameErrorNotifier = ValueNotifier(null);
-  ValueNotifier<String?> password1ErrorNotifier = ValueNotifier(null);
-  ValueNotifier<String?> password2ErrorNotifier = ValueNotifier(null);
+  ValueNotifier<SignUpStatus> status = ValueNotifier(SignUpStatus.disabled);
+  ValueNotifier<Option<String>> usernameErrorNotifier = ValueNotifier(None());
+  ValueNotifier<Option<String>> password1ErrorNotifier = ValueNotifier(None());
+  ValueNotifier<Option<String>> password2ErrorNotifier = ValueNotifier(None());
 
   String _username = '';
-  set username(String text) {
-    _username = text;
-    _verifyUsername();
-    _updateStatus();
+  set username(String t) {
+    _username = t;
+    touchedUsername = true;
   }
 
   String _password1 = '';
-  set password1(String text) {
-    _password1 = text;
-    _verifyPassword();
-    _updateStatus();
+  set password1(String t) {
+    _password1 = t;
+    touchedPassword1 = true;
   }
 
   String _password2 = '';
-  set password2(String text) {
-    _password2 = text;
-    _verifyPassword();
-    _updateStatus();
+  set password2(String t) {
+    _password2 = t;
+    touchedPassword2 = true;
   }
+
+  bool touchedUsername = false;
+  bool touchedPassword1 = false;
+  bool touchedPassword2 = false;
 
   /// Makes a sign up request to the server. Returns true if successful.
   Future<bool> signUp() async {
-    if (status.value != SignUpStatus.signUpEnabled) {
-      return false;
-    }
-
-    _verifyUsername();
-    _verifyPassword();
+    if (status.value != SignUpStatus.enabled) return false;
 
     status.value = SignUpStatus.busy;
+
+    bool correct = true;
+    correct &= _verifyUsername();
+    correct &= _verifyPassword();
+
+    if (!correct) return false;
+
+    // TODO: Instead of a bool this should return an error telling what went wrong. At least a
+    // username taken error.
     bool res = await _client.signUp(_username, _password1);
-    _updateStatus();
+
+    status.value = SignUpStatus.enabled;
+
     return res;
   }
 
-  void _verifyUsername() async {
+  void verifyFields() async {
+    bool correct = true;
+    correct &= _verifyUsername();
+    correct &= _verifyPassword();
+
+    if (correct) {
+      status.value = SignUpStatus.enabled;
+    } else {
+      status.value = SignUpStatus.disabled;
+    }
+
+    if (!(await _verifyUsernameNotTaken())) {
+      status.value = SignUpStatus.disabled;
+    }
+  }
+
+  bool _verifyUsername() {
     if (_username.isEmpty) {
-      usernameErrorNotifier.value = 'Must not be empty';
-      return;
+      usernameErrorNotifier.value = Some('Must not be empty');
+      return false;
     }
+
     if (_username.length > 20) {
-      usernameErrorNotifier.value = 'Must contain 30 or less characters';
-      return;
+      usernameErrorNotifier.value = Some('Must contain 30 or less characters');
+      return false;
     }
+
     if (_username.length < 2) {
-      usernameErrorNotifier.value = 'Must contain 2 or more characters';
-      return;
+      usernameErrorNotifier.value = Some('Must contain 2 or more characters');
+      return false;
     }
+
     if (_username.contains(' ')) {
-      usernameErrorNotifier.value = 'Must not contain spaces';
-      return;
+      usernameErrorNotifier.value = Some('Must not contain spaces');
+      return false;
     }
 
-    usernameErrorNotifier.value = null;
+    usernameErrorNotifier.value = None();
 
+    return true;
+  }
+
+  Future<bool> _verifyUsernameNotTaken() async {
     var usernameCopy = _username.toString();
     if (await Future<bool>.delayed(Duration(seconds: 2), () => false)) {
+      // Username might change by the time the response arrives, in which case the warning will not
+      // be relevant.
       if (_username == usernameCopy) {
-        usernameErrorNotifier.value = 'Username is taken';
-        status.value = SignUpStatus.signUpDisabled;
+        usernameErrorNotifier.value = Some('Username is taken');
+        status.value = SignUpStatus.disabled;
+        return false;
       }
-      return;
     }
+    return true;
   }
 
-  void _verifyPassword() {
-    // MAIN PASSWORD CHECKS
-
+  bool _verifyPassword() {
     if (_password1.isEmpty) {
-      password1ErrorNotifier.value = 'Must not be empty';
-      return;
+      password1ErrorNotifier.value = Some('Must not be empty');
+      return false;
     }
 
-    // password length >= 5
     if (_password1.length < 5) {
-      password1ErrorNotifier.value = 'Password must contain 5 or more characters';
-      return;
+      password1ErrorNotifier.value = Some('Password must contain 5 or more characters');
+      return false;
     }
-    password1ErrorNotifier.value = null;
-
-    // REPEAT PASSWORD CHECKS
+    password1ErrorNotifier.value = None();
 
     if (_password2.isEmpty) {
-      password2ErrorNotifier.value = 'Must not be empty';
-      return;
+      password2ErrorNotifier.value = Some('Must not be empty');
+      return false;
     }
-    // Passwords match
+
     if (_password1 != _password2) {
-      password2ErrorNotifier.value = 'Passwords do not match';
-      return;
+      password2ErrorNotifier.value = Some('Passwords do not match');
+      return false;
     }
 
-    password2ErrorNotifier.value = null;
-  }
+    password2ErrorNotifier.value = None();
 
-  void _updateStatus() {
-    if (usernameErrorNotifier.value == null &&
-        password1ErrorNotifier.value == null &&
-        password2ErrorNotifier.value == null &&
-        _username.isNotEmpty &&
-        _password1.isNotEmpty &&
-        _password2.isNotEmpty) {
-      print('username: $_username, password: $_password1, password2: $_password2');
-      status.value = SignUpStatus.signUpEnabled;
-      return;
-    } else {
-      status.value = SignUpStatus.signUpDisabled;
-    }
+    return true;
   }
 }

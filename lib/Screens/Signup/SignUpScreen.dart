@@ -1,6 +1,6 @@
 import 'dart:math';
+import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
-import 'package:qhub/Domain/Auth/SignUpStatus.dart';
 import 'package:qhub/Domain/Navigation/Routes.dart';
 
 import 'package:qhub/Domain/Auth/SignUpFormModel.dart';
@@ -9,35 +9,6 @@ import 'package:qhub/Screens/Widgets/ErrorText.dart';
 
 class SignUpScreen extends StatelessWidget {
   final model = SignUpFormModel();
-
-  late final _usernameField;
-  late final _password1Field;
-  late final _password2Field;
-
-  SignUpScreen() {
-    _usernameField = LineInputField(
-      name: 'Username',
-      onChanged: (text) {
-        model.username = text;
-      },
-    );
-
-    _password1Field = LineInputField(
-      name: 'Password',
-      obstructText: true,
-      onChanged: (text) {
-        model.password1 = text;
-      },
-    );
-
-    _password2Field = LineInputField(
-      name: 'Repeat password',
-      obstructText: true,
-      onChanged: (text) {
-        model.password2 = text;
-      },
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,27 +31,56 @@ class SignUpScreen extends StatelessWidget {
                   const Spacer(),
                   Text('Sign up', style: theme.textTheme.headline1),
                   const SizedBox(height: 40),
-                  _usernameField,
-                  ValueListenableBuilder<String?>(
+                  LineInputField(
+                    name: 'Username',
+                    onChanged: (text) {
+                      model.username = text;
+                      model.verifyFields();
+                    },
+                  ),
+                  ValueListenableBuilder<Option<String>>(
                     valueListenable: model.usernameErrorNotifier,
                     builder: (_, message, __) {
-                      return ErrorText(message);
+                      return message.fold(
+                        () => ErrorText(null),
+                        (a) => ErrorText(model.touchedUsername ? a : null),
+                      );
                     },
                   ),
                   const SizedBox(height: 40),
-                  _password1Field,
-                  ValueListenableBuilder<String?>(
+                  LineInputField(
+                    name: 'Password',
+                    obstructText: true,
+                    onChanged: (text) {
+                      model.password1 = text;
+                      model.verifyFields();
+                    },
+                  ),
+                  ValueListenableBuilder<Option<String>>(
                     valueListenable: model.password1ErrorNotifier,
                     builder: (_, message, __) {
-                      return ErrorText(message);
+                      return message.fold(
+                        () => ErrorText(null),
+                        (a) => ErrorText(model.touchedPassword1 ? a : null),
+                      );
                     },
                   ),
                   const SizedBox(height: 40),
-                  _password2Field,
-                  ValueListenableBuilder<String?>(
+                  LineInputField(
+                    name: 'Repeat password',
+                    obstructText: true,
+                    onChanged: (text) {
+                      model.password2 = text;
+                      model.verifyFields();
+                    },
+                  ),
+                  ValueListenableBuilder<Option<String>>(
                     valueListenable: model.password2ErrorNotifier,
                     builder: (_, message, __) {
-                      return ErrorText(message);
+                      return message.fold(
+                        () => ErrorText(null),
+                        (a) => ErrorText(model.touchedPassword2 ? a : null),
+                      );
                     },
                   ),
                   const Spacer(),
@@ -89,12 +89,12 @@ class SignUpScreen extends StatelessWidget {
                     builder: (context, status, widget) {
                       void Function()? onPressed;
                       switch (status) {
-                        case SignUpStatus.signUpEnabled:
+                        case SignUpStatus.enabled:
                           onPressed = () {
                             model.signUp();
                           };
                           break;
-                        case SignUpStatus.signUpDisabled:
+                        case SignUpStatus.disabled:
                           onPressed = null;
                           break;
                         case SignUpStatus.busy:
@@ -108,9 +108,7 @@ class SignUpScreen extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             if (status == SignUpStatus.busy) ...[
-                              CircularProgressIndicator(
-                                color: Colors.white,
-                              ),
+                              CircularProgressIndicator(),
                               SizedBox(width: 20),
                             ],
                             const Text('Sign up'),
