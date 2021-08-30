@@ -49,7 +49,7 @@ class Client {
     return success;
   }
 
-  /// Makes a log in request to the server. Sets the status to [ClientStatus.loggedIn] if case of
+  /// Makes a log in request to the server. Sets the status to [ClientStatus.loggedIn] in case of
   /// success;
   Future<bool> logInWithPassword(String username, String password) async {
     Response resp;

@@ -1,6 +1,6 @@
 import 'dart:math';
+import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
-import 'package:qhub/Domain/Auth/LogInStatus.dart';
 import 'package:qhub/Screens/Widgets/ErrorText.dart';
 
 import 'package:qhub/Screens/widgets/LineInputField.dart';
@@ -9,25 +9,6 @@ import 'package:qhub/Domain/Auth/LogInFormModel.dart';
 
 class LogInScreen extends StatelessWidget {
   final formModel = LogInFormModel();
-  late final _usernameField;
-  late final _passwordField;
-
-  LogInScreen() {
-    _usernameField = LineInputField(
-      name: 'Username',
-      onChanged: (text) {
-        formModel.username = text;
-      },
-    );
-    _passwordField = LineInputField(
-      name: 'Password',
-      obstructText: true,
-      eyeButton: true,
-      onChanged: (text) {
-        formModel.password = text;
-      },
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,19 +31,50 @@ class LogInScreen extends StatelessWidget {
                   const Spacer(),
                   Text('Log in', style: theme.textTheme.headline1),
                   const SizedBox(height: 40),
-                  _usernameField,
-                  ValueListenableBuilder<String?>(
+                  // _usernameField,
+                  LineInputField(
+                    name: 'Username',
+                    onChanged: (text) {
+                      formModel.username = text;
+                      formModel.validateFields();
+                    },
+                  ),
+                  ValueListenableBuilder<Option<String>>(
                     valueListenable: formModel.usernameErrorNotifier,
-                    builder: (context, message, child) {
-                      return ErrorText(message);
+                    builder: (context, error, child) {
+                      return error.fold(
+                        () => ErrorText(null),
+                        (a) => ErrorText(formModel.touchedUsername ? a : null),
+                      );
                     },
                   ),
                   const SizedBox(height: 40),
-                  _passwordField,
-                  ValueListenableBuilder<String?>(
+                  // _passwordField,
+                  LineInputField(
+                    name: 'Password',
+                    obstructText: true,
+                    eyeButton: true,
+                    onChanged: (text) {
+                      formModel.password = text;
+                      formModel.validateFields();
+                    },
+                  ),
+                  ValueListenableBuilder<Option<String>>(
                     valueListenable: formModel.passwordErrorNotifier,
-                    builder: (context, message, child) {
-                      return ErrorText(message);
+                    builder: (context, error, child) {
+                      return error.fold(
+                        () => ErrorText(null),
+                        (a) => ErrorText(formModel.touchedPassword ? a : null),
+                      );
+                    },
+                  ),
+                  ValueListenableBuilder<Option<String>>(
+                    valueListenable: formModel.logInErrorNotifier,
+                    builder: (context, error, child) {
+                      return error.fold(
+                        () => ErrorText(null),
+                        (a) => ErrorText(a),
+                      );
                     },
                   ),
                   Container(
@@ -78,15 +90,15 @@ class LogInScreen extends StatelessWidget {
                     builder: (_, status, __) {
                       void Function()? onPressed;
                       switch (status) {
-                        case LogInStatus.logInDisabled:
+                        case LogInStatus.disabled:
                           onPressed = null;
                           break;
-                        case LogInStatus.logInEnabled:
+                        case LogInStatus.enabled:
                           onPressed = () {
                             formModel.logIn();
                           };
                           break;
-                        case LogInStatus.busy:
+                        case LogInStatus.loading:
                           onPressed = null;
                           break;
                       }
@@ -96,7 +108,7 @@ class LogInScreen extends StatelessWidget {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            if (status == LogInStatus.busy) ...[
+                            if (status == LogInStatus.loading) ...[
                               CircularProgressIndicator(
                                 color: Colors.white,
                               ),

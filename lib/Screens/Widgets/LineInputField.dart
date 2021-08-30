@@ -1,20 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:qhub/Screens/widgets/Flipper.dart';
 
-class _FieldData {
-  var text = '';
-  var obscureText = false;
-}
-
 class LineInputField extends StatefulWidget {
   final String name;
   final bool obstructText;
   final bool eyeButton;
   final void Function(String)? onChanged;
   final void Function(String)? onSubmitted;
-  final fieldData = _FieldData();
-
-  String get text => fieldData.text;
 
   LineInputField({
     required this.name,
@@ -22,25 +14,27 @@ class LineInputField extends StatefulWidget {
     this.eyeButton = false,
     this.onChanged,
     this.onSubmitted,
-  }) {
-    fieldData.obscureText = obstructText;
-  }
+  });
 
   @override
   _LineInputFieldState createState() => _LineInputFieldState();
 }
 
 class _LineInputFieldState extends State<LineInputField> {
+  bool obstructText = false;
+  late final Key _visibilityOffKey;
+  late final Key _visibliityKey;
+
   IconButton _hideButton() {
     return IconButton(
-      key: UniqueKey(),
+      key: obstructText ? _visibilityOffKey : _visibliityKey,
       onPressed: () {
         setState(() {
-          widget.fieldData.obscureText = !widget.fieldData.obscureText;
+          obstructText = !obstructText;
         });
       },
       padding: const EdgeInsets.symmetric(horizontal: 20),
-      icon: Icon(widget.fieldData.obscureText ? Icons.visibility_off : Icons.visibility),
+      icon: Icon(obstructText ? Icons.visibility_off : Icons.visibility),
     );
   }
 
@@ -49,7 +43,7 @@ class _LineInputFieldState extends State<LineInputField> {
     return TextField(
       autofocus: true,
       style: theme.textTheme.bodyText1,
-      obscureText: widget.fieldData.obscureText,
+      obscureText: obstructText,
       onChanged: widget.onChanged,
       onSubmitted: widget.onSubmitted,
       decoration: InputDecoration(
@@ -64,6 +58,15 @@ class _LineInputFieldState extends State<LineInputField> {
         ),
       ),
     );
+  }
+
+  @override
+  initState() {
+    obstructText = widget.obstructText;
+    _visibliityKey = UniqueKey();
+    _visibilityOffKey = UniqueKey();
+    
+    super.initState();
   }
 
   @override
