@@ -17,15 +17,10 @@ class PostScreen extends StatefulWidget {
 
 class _PostScreenState extends State<PostScreen> with TickerProviderStateMixin {
   late final TabController _tabController;
-  late final PageController _pageController;
 
   @override
   void initState() {
     _tabController = TabController(length: 2, vsync: this);
-    _pageController = PageController();
-
-    _tabController.addListener(_tabListener);
-    _pageController.addListener(_pageListener);
 
     super.initState();
   }
@@ -71,8 +66,8 @@ class _PostScreenState extends State<PostScreen> with TickerProviderStateMixin {
                 ),
               ];
             },
-            body: PageView(
-              controller: _pageController,
+            body: TabBarView(
+              controller: _tabController,
               children: <Widget>[
                 PostPage(widget.postModel),
                 CommentsPage(widget.postModel),
@@ -108,18 +103,5 @@ class _PostScreenState extends State<PostScreen> with TickerProviderStateMixin {
         ),
       ],
     );
-  }
-
-  void _tabListener() {
-    _pageController.animateToPage(
-      _tabController.index,
-      duration: Duration(milliseconds: 100),
-      curve: Curves.easeOutSine,
-    );
-  }
-
-  void _pageListener() {
-    if (_pageController.page != null && !_tabController.indexIsChanging)
-      _tabController.offset = _pageController.page! - _tabController.index;
   }
 }
