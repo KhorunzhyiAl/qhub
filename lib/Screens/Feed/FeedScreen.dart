@@ -1,4 +1,5 @@
 import 'dart:collection';
+import 'package:dartz/dartz.dart' as dartz;
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -147,9 +148,12 @@ class _FeedScreenState extends State<FeedScreen> with SingleTickerProviderStateM
               message: 'create post',
               icon: Icons.create,
               onPressed: () {
-                nav.pushNamed(Routes.createPost,
-                    arguments: PostFormModel(
-                        community: widget._feedModel.parametersNotifier.value.hubName));
+                nav.pushNamed(
+                  Routes.createPost,
+                  arguments: PostFormModel(
+                    community: dartz.Some(widget._feedModel.parametersNotifier.value.hubName),
+                  ),
+                );
               },
             ),
           ],

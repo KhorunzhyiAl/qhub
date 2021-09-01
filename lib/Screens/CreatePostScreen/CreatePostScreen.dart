@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:dartz/dartz.dart' as dartz;
+
 import 'package:qhub/Domain/SubmitPost/PostFormModel.dart';
 import 'package:qhub/Domain/Navigation/Routes.dart';
 import 'package:qhub/Domain/Feed/FeedQuery.dart';
@@ -28,17 +30,21 @@ class CreatePostScreen extends StatelessWidget {
                 nav.pop();
               },
             ),
-            title: ValueListenableBuilder<String?>(
-              valueListenable: _postFormModel.communityValNotifier,
+            title: ValueListenableBuilder<dartz.Option<String>>(
+              valueListenable: _postFormModel.community,
               builder: (_, value, child) {
                 return OutlinedButton(
                   onPressed: () async {
                     final selected = await nav.pushNamed<FeedQuery>(Routes.selectFeed);
-                    _postFormModel.community = selected?.hubName;
+                    if (selected != null)
+                      _postFormModel.community.value = dartz.Some(selected.hubName);
                   },
                   child: Row(
                     children: [
-                      Text(value ?? 'Select a community'),
+                      Text(value.fold(
+                        () => 'Select a community',
+                        (a) => a,
+                      )),
                       Spacer(),
                       Icon(Icons.arrow_drop_down),
                     ],

@@ -1,49 +1,30 @@
+import 'package:dartz/dartz.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:qhub/Domain/Feed/Post.dart';
 
 /// Model for creating or editing a post. Provides validators for input
 class PostFormModel {
-  final communityValNotifier = ValueNotifier<String?>(null);
-  final imagePathValNotifier = ValueNotifier<String?>(null);
-  final titleValNotifier = ValueNotifier<String>('');
-  final bodyValNotifier = ValueNotifier<String>('');
+  final ValueNotifier<Option<String>> community;
+  final ValueNotifier<Option<String>> imagePath;
+  final ValueNotifier<String> title;
+  final ValueNotifier<String> body;
 
+  ValueListenable<Option<String>> get communityListenable => community;
 
-
-  String? get community => communityValNotifier.value;
-  String? get imagePath => imagePathValNotifier.value;
-  String get title => titleValNotifier.value;
-  String get body => bodyValNotifier.value;
-
-  set community(String? t) {
-    communityValNotifier.value = t ?? communityValNotifier.value;
-  }
-
-  set imagePath(String? t) {
-    imagePathValNotifier.value = t;
-  }
-
-  set title(String t) {
-    titleValNotifier.value = t;
-  }
-
-  set body(String t) {
-    bodyValNotifier.value = t;
-  }
-
-  PostFormModel({String? community}) {
-    this.communityValNotifier.value = community;
-  }
+  PostFormModel({Option<String> community = const None()})
+      : community = ValueNotifier(community),
+        imagePath = ValueNotifier(None()),
+        title = ValueNotifier(''),
+        body = ValueNotifier('');
 
   /// Constructs a model for editing an existing post. Verifies if the post is editable (user is the
   /// author)
-  /// TODO: how to deal with imagePath?
-  PostFormModel.edit(Post post) {
-    communityValNotifier.value = post.hubName;
-    imagePathValNotifier.value = post.imageUri;
-    titleValNotifier.value = post.title;
-    bodyValNotifier.value = post.body;
-  }
+  PostFormModel.edit(Post post)
+      : community = ValueNotifier(Some(post.community)),
+        imagePath = ValueNotifier(post.imageUri),
+        title = ValueNotifier(post.title),
+        body = ValueNotifier(post.body);
 
   Future<bool> submit() async {
     return Future<bool>.delayed(Duration(milliseconds: 1000), () => true);

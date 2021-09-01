@@ -1,6 +1,7 @@
 import 'dart:collection';
 import 'dart:math';
 
+import 'package:dartz/dartz.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:qhub/Domain/Feed/Post.dart';
 import 'package:qhub/Other/PropertyNotifier.dart';
@@ -16,11 +17,6 @@ class FeedModel {
   final _posts = <Post>[];
   bool _isLoadingPosts = false;
 
-  // The reason for using [PropertyNotifier] (custom class) instead of [ValueNotifier] is
-  // because the values are being mutated instead of changed entirely, which doesn't trigger
-  // [ValueNotifier]'s [notifyListeners]. [PropertyNotifier] lets me call [notifyListeners]
-  // explicitly.
-  // Made it private with a getter to hide [PropertyNotifier] (the getter returns [ValueNotifier])
   late final PropertyNotifier<UnmodifiableListView<Post>> _postsNotifier;
 
   /// For usage in [ValueListenableBuilder] or [ValueListenableProvider]. To create a new feed with
@@ -84,8 +80,8 @@ The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for t
         author: 'author',
         upvotes: 10,
         downvotes: 2,
-        hubName: 'hubname',
-        imageUri: ra.nextBool() ? null : 'imageid',
+        community: 'hubname',
+        imageUri: ra.nextBool() ? None() : Some('imageid'),
       ));
     }
 

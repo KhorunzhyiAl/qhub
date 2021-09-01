@@ -70,8 +70,8 @@ The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for t
       author: 'author',
       upvotes: 10,
       downvotes: 2,
-      hubName: 'hubname',
-      imageUri: 'imageid',
+      community: 'hubname',
+      imageUri: Some('imageid'),
     );
 
     return Some(result);

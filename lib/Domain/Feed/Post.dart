@@ -1,3 +1,5 @@
+import 'package:dartz/dartz.dart';
+
 class Post {
   final String id;
   final String title;
@@ -5,8 +7,8 @@ class Post {
   final String author;
   final int upvotes;
   final int downvotes;
-  final String hubName;
-  final String? imageUri;
+  final String community;
+  final Option<String> imageUri;
 
   Post({
     required this.id,
@@ -15,7 +17,7 @@ class Post {
     required this.author,
     required this.upvotes,
     required this.downvotes,
-    required this.hubName,
-    this.imageUri,
+    required this.community,
+    this.imageUri = const None(),
   });
 }
