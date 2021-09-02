@@ -35,10 +35,14 @@ dependencies:
   dio: ^4.0.0
   dio_cookie_manager:
   dartz: ^0.10.0
+  freezed_annotation:
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+  freezed:
+  build_runner:
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
