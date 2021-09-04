@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:qhub/Domain/Client/Client.dart';
+import 'package:qhub/Domain/Core/FlashbarController.dart';
 import 'package:qhub/Domain/Feed/Post.dart';
 import 'package:qhub/Domain/Locators.dart';
 
@@ -9,6 +10,7 @@ import 'package:qhub/Domain/Locators.dart';
 class PostFormModel {
   final _titleErrorNotifier = ValueNotifier<Option<String>>(None());
   ValueListenable<Option<String>> get titleError => _titleErrorNotifier;
+  final popup = locator<FlashbarController>();
 
 
   final ValueNotifier<Option<String>> community;
@@ -38,7 +40,8 @@ class PostFormModel {
     }
     _titleErrorNotifier.value = None();
 
-    if (community.value.isNone()) {
+    if (community.value.isSome()) {
+      popup.send('Community not selected');
       return None();
     }
 

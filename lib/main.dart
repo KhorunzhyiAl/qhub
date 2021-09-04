@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:qhub/Domain/Core/FlashbarController.dart';
 import 'package:qhub/Domain/Navigation/RouteGenerator.dart';
 import 'package:qhub/Config/MyTheme.dart';
 import 'package:qhub/Domain/Navigation/Routes.dart';
 import 'package:qhub/Domain/Client/Client.dart';
 import 'package:qhub/Domain/Client/ClientStatus.dart';
 import 'package:qhub/Domain/Locators.dart';
+import 'package:qhub/Screens/Widgets/Flashbar/Flashbar.dart';
 
 late final Future<bool> _loggedIn;
 String _initialRoute = Routes.splash;
@@ -12,7 +14,7 @@ String _initialRoute = Routes.splash;
 void main() {
   initLocator();
 
-  // Run logInWithToken as early as possible (while the UI is still loading). 
+  // Run logInWithToken as early as possible (while the UI is still loading).
   // - if completes with *success* before the UI is loaded, set [_initialRoute] to Feed screen;
   // - if completes with *failure* before the UI is loaded, set [_initialRoute] to logIn screen;
   // - if the UI loads first, the value of [_initialRoute] doesn't matter and the screen is selected
@@ -33,7 +35,6 @@ class MyApp extends StatelessWidget {
     final theme = MyTheme();
     final client = locator<Client>();
 
-    
     client.addStatusListener((status) {
       switch (status) {
         case ClientStatus.loggedIn:
@@ -65,6 +66,16 @@ class MyApp extends StatelessWidget {
       initialRoute: _initialRoute,
       navigatorKey: navKey,
       onGenerateRoute: RouteGenerator.generateRoute,
+      builder: (context, child) {
+        if (child == null) return SizedBox.shrink();
+
+        return Stack(
+          children: [
+            child,
+            Flashbar(locator<FlashbarController>()),
+          ],
+        );
+      },
     );
   }
 }

@@ -87,7 +87,7 @@ class PostViewLandscape extends StatelessWidget {
                 ),
               ),
               SizedBox(width: 40),
-              if (postData.imageUri != null)
+              if (postData.imageUri.isSome())
                 LimitedBox(
                   maxHeight: 100,
                   child: AspectRatio(

@@ -41,7 +41,6 @@ class _LineInputFieldState extends State<LineInputField> {
   TextField _textField() {
     var theme = Theme.of(context);
     return TextField(
-      autofocus: true,
       style: theme.textTheme.bodyText1,
       obscureText: obstructText,
       onChanged: widget.onChanged,

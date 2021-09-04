@@ -73,7 +73,7 @@ class PostViewPortrait extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          if (postData.imageUri != null) ...[
+          if (postData.imageUri.isSome()) ...[
             AspectRatio(
               aspectRatio: 5 / 3,
               child: ClipRRect(
