@@ -1,8 +1,11 @@
 import 'dart:async';
 
 import 'package:dartz/dartz.dart';
-import 'package:qhub/Domain/Client/Client.dart';
+import 'package:qhub/Domain/Core/Api.dart';
+import 'package:qhub/Domain/Core/Client/Client.dart';
 import 'package:flutter/foundation.dart';
+import 'package:qhub/Domain/Core/Failure.dart';
+import 'package:qhub/Domain/Core/FlashbarController.dart';
 import 'package:qhub/Domain/Locators.dart';
 
 enum SignUpStatus {
@@ -13,6 +16,7 @@ enum SignUpStatus {
 
 class SignUpFormModel {
   final _client = locator<Client>();
+  final _flashbar = locator<FlashbarController>();
 
   ValueNotifier<SignUpStatus> status = ValueNotifier(SignUpStatus.disabled);
   ValueNotifier<Option<String>> usernameErrorNotifier = ValueNotifier(None());
@@ -42,8 +46,8 @@ class SignUpFormModel {
   bool touchedPassword2 = false;
 
   /// Makes a sign up request to the server. Returns true if successful.
-  Future<bool> signUp() async {
-    if (status.value != SignUpStatus.enabled) return false;
+  Future<Either<Failure, Unit>> signUp() async {
+    if (status.value != SignUpStatus.enabled) return Left(Failure.empty());
 
     status.value = SignUpStatus.busy;
 
@@ -51,15 +55,34 @@ class SignUpFormModel {
     correct &= _verifyUsername();
     correct &= _verifyPassword();
 
-    if (!correct) return false;
+    if (!correct) return Left(Failure.empty());
 
-    // TODO: Instead of a bool this should return an error telling what went wrong. At least a
-    // username taken error.
-    bool res = await _client.signUp(_username, _password1);
-
+    final res = await _client.signUp(_username, _password1);
     status.value = SignUpStatus.enabled;
 
-    return res;
+    return res.fold(
+      (l) {
+        switch (l.type) {
+          case FailureType.signUpUsernameTaken:
+            usernameErrorNotifier.value = Some('Username is taken');
+            break;
+          case FailureType.signUpIncorrectUsernameFormat:
+            usernameErrorNotifier.value = Some(
+              "Username is not allowed (You shouldn't get this message, in theory)",
+            );
+            break;
+          case FailureType.signUpIncorrectPasswordFormat:
+            usernameErrorNotifier.value = Some(
+              "Password is not allowed (You shouldn't get this message, in theory)",
+            );
+            break;
+          default:
+            _flashbar.send(l);
+        }
+        return Left(l);
+      },
+      (r) => Right(unit),
+    );
   }
 
   void verifyFields() async {
@@ -73,9 +96,7 @@ class SignUpFormModel {
       status.value = SignUpStatus.disabled;
     }
 
-    if (!(await _verifyUsernameNotTaken())) {
-      status.value = SignUpStatus.disabled;
-    }
+    await _verifyUsernameNotTaken();
   }
 
   bool _verifyUsername() {
@@ -104,18 +125,12 @@ class SignUpFormModel {
     return true;
   }
 
-  Future<bool> _verifyUsernameNotTaken() async {
-    var usernameCopy = _username.toString();
-    if (await Future<bool>.delayed(Duration(seconds: 2), () => false)) {
-      // Username might change by the time the response arrives, in which case the warning will not
-      // be relevant.
-      if (_username == usernameCopy) {
-        usernameErrorNotifier.value = Some('Username is taken');
-        status.value = SignUpStatus.disabled;
-        return false;
-      }
+  Future<void> _verifyUsernameNotTaken() async {
+    final success = await verifyUsernameNotTaken(_username);
+    if (!success) {
+      usernameErrorNotifier.value = Some('Username is taken');
+      status.value = SignUpStatus.disabled;
     }
-    return true;
   }
 
   bool _verifyPassword() {

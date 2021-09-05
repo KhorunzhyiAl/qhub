@@ -1,6 +1,8 @@
 import 'package:dartz/dartz.dart';
-import 'package:qhub/Domain/Client/Client.dart';
+import 'package:qhub/Domain/Core/Client/Client.dart';
 import 'package:flutter/foundation.dart';
+import 'package:qhub/Domain/Core/Failure.dart';
+import 'package:qhub/Domain/Core/FlashbarController.dart';
 import 'package:qhub/Domain/Locators.dart';
 
 enum LogInStatus {
@@ -11,7 +13,7 @@ enum LogInStatus {
 
 class LogInFormModel {
   final _client = locator<Client>();
-
+  final _flashbar = locator<FlashbarController>();
 
   ValueNotifier<LogInStatus> status = ValueNotifier(LogInStatus.disabled);
 
@@ -40,11 +42,17 @@ class LogInFormModel {
     if (status.value != LogInStatus.enabled) return false;
 
     status.value = LogInStatus.loading;
-    if (await _client.logInWithPassword(_username, _password)) {
-      logInErrorNotifier.value = None();
-    } else {
-      logInErrorNotifier.value = Some('Incorrect username or password');
-    }
+
+    final res = await _client.logInWithPassword(_username, _password);
+    print('log in with password. res = ${res.toString()}');
+    res.fold(
+      (l) {
+        _flashbar.send(l);
+      },
+      (r) {
+        logInErrorNotifier.value = None();
+      },
+    );
     status.value = LogInStatus.enabled;
 
     return true;

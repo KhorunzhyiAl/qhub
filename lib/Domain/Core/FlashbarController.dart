@@ -4,11 +4,11 @@ import 'package:flutter/foundation.dart';
 import 'package:qhub/Domain/Core/Failure.dart';
 
 class FlashbarController {
-  final _message = ValueNotifier<Failure>(Failure(message: None()));
+  // TODO: maybe this should provid only the message string? (Problems )
+  final _message = ValueNotifier<Failure>(Failure(type: FailureType.any, message: None()));
   ValueListenable<Failure> get message => _message;
 
-  void send(String text) {
-    _message.value = Failure(message: Some(text));
+  void send(Failure failure) {
+    _message.value = failure;
   }
 }
-

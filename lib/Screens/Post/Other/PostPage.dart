@@ -12,8 +12,6 @@ class PostPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     return AnimatedBuilder(
       animation: postModel,
       builder: (_, child) {
@@ -74,7 +72,7 @@ class PostPage extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
-                  if (postData.imageUri != null) ...[
+                  if (postData.imageUri.isSome()) ...[
                     SizedBox(height: 10),
                     ClipRRect(
                       borderRadius: BorderRadius.circular(2),

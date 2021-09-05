@@ -1,4 +1,3 @@
-import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:qhub/Domain/Feed/Post.dart';
 
@@ -13,8 +12,6 @@ class PostViewPortrait extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     return Card(
       child: InkWell(
         onTap: () {

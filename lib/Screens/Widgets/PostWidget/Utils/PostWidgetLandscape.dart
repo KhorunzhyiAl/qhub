@@ -1,4 +1,3 @@
-import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:qhub/Domain/Feed/Post.dart';
 import 'dart:math';
@@ -14,8 +13,6 @@ class PostViewLandscape extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     return Container(
       width: 600,
       child: Card(

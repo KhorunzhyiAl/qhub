@@ -1,17 +1,17 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
-import 'package:qhub/Domain/Client/Client.dart';
+import 'package:qhub/Domain/Core/Failure.dart';
 import 'package:qhub/Domain/Core/FlashbarController.dart';
 import 'package:qhub/Domain/Feed/Post.dart';
 import 'package:qhub/Domain/Locators.dart';
+import 'package:qhub/Domain/Core/Api.dart';
 
 /// Model for creating or editing a post. Provides validators for input
 class PostFormModel {
   final _titleErrorNotifier = ValueNotifier<Option<String>>(None());
   ValueListenable<Option<String>> get titleError => _titleErrorNotifier;
   final popup = locator<FlashbarController>();
-
 
   final ValueNotifier<Option<String>> community;
   final ValueNotifier<Option<String>> imagePath;
@@ -34,30 +34,22 @@ class PostFormModel {
 
   /// Attempts to submit the post and completes with its id.
   Future<Option<String>> submit() async {
-    if (title.value.isEmpty) {
-      _titleErrorNotifier.value = Some('Title is empty');
-      return None();
-    }
-    _titleErrorNotifier.value = None();
+    final res = await submitPost(
+      community: community.value.fold(() => '', (a) => a),
+      title: title.value,
+      body: body.value,
+    );
 
-    if (community.value.isSome()) {
-      popup.send('Community not selected');
-      return None();
-    }
-
-    final dio = locator.get<Client>().dio;
-
-    final resp = await dio.post('/global', data: {
-      'hub': community.value.foldRight('', (a, previous) => a),
-      'title': title.value,
-      'content': body.value,
-      'image': '',
-      'image_title': '',
-      'image_description': '',
-    });
-
-    Map<String, dynamic> data = resp.data;
-
-    return Some((data['id'] as int).toString());
+    return res.fold(
+      (l) {
+        if (l.type == FailureType.submitPostTitleEmpty) {
+          _titleErrorNotifier.value = l.message;
+          return None();
+        }
+        popup.send(l);
+        return None();
+      },
+      (r) => Some(r),
+    );
   }
 }

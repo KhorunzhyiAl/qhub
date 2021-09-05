@@ -1,14 +1,15 @@
+import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
+import 'package:qhub/Domain/Core/Failure.dart';
 import 'package:qhub/Domain/Core/FlashbarController.dart';
 import 'package:qhub/Domain/Navigation/RouteGenerator.dart';
 import 'package:qhub/Config/MyTheme.dart';
 import 'package:qhub/Domain/Navigation/Routes.dart';
-import 'package:qhub/Domain/Client/Client.dart';
-import 'package:qhub/Domain/Client/ClientStatus.dart';
+import 'package:qhub/Domain/Core/Client/Client.dart';
 import 'package:qhub/Domain/Locators.dart';
 import 'package:qhub/Screens/Widgets/Flashbar/Flashbar.dart';
 
-late final Future<bool> _loggedIn;
+late final Future<Either<Failure, Unit>> _loggedIn;
 String _initialRoute = Routes.splash;
 
 void main() {
@@ -22,7 +23,14 @@ void main() {
   final service = locator<Client>();
   _loggedIn = service.logInWithToken();
   _loggedIn.then((value) {
-    _initialRoute = value ? Routes.feed : Routes.logIn;
+    value.fold(
+      (l) {
+        _initialRoute = Routes.feed;
+      },
+      (r) {
+        _initialRoute = Routes.feed;
+      },
+    );
   });
 
   runApp(MyApp());
