@@ -20,9 +20,9 @@ class Client {
   Client() {
     dio = Dio()
       ..options.baseUrl = Utils.SERVER_ADDRESS
-      ..options.sendTimeout = 5000
-      ..options.receiveTimeout = 5000
-      ..options.connectTimeout = 5000
+      ..options.sendTimeout = 2000
+      ..options.receiveTimeout = 2000
+      ..options.connectTimeout = 2000
       ..interceptors.add(CookieManager(_cookieJar));
   }
 
@@ -42,12 +42,15 @@ class Client {
           Headers.contentTypeHeader: 'application/x-www-form-urlencoded',
         }),
       );
-    } catch (e) {
+    } on DioError catch (e) {
       _status.value = ClientStatus.connectionError;
       return Left(Failure(
         type: FailureType.noConnection,
-        message: Some("Couldn't connect to the server"),
+        message: Some("Couldn't perform the request"),
       ));
+    } catch (e) {
+      print("[logInWithPassword] error: $e");
+      return Left(Failure.empty());
     }
 
     Map<String, dynamic> respData = resp.data;
@@ -69,12 +72,15 @@ class Client {
           Headers.contentTypeHeader: 'application/x-www-form-urlencoded',
         }),
       );
-    } catch (e) {
+    } on DioError catch (e) {
       _status.value = ClientStatus.connectionError;
       return Left(Failure(
         type: FailureType.noConnection,
-        message: Some("Couldn't connect to the server"),
+        message: Some("Couldn't perform the request"),
       ));
+    } catch (e) {
+      print("[logInWithPassword] error: $e");
+      return Left(Failure.empty());
     }
 
     Map<String, dynamic> respData = resp.data;
@@ -97,12 +103,15 @@ class Client {
     Response resp;
     try {
       resp = await dio.get('/user/tokencheck');
-    } catch (e) {
+    } on DioError catch (e) {
       _status.value = ClientStatus.connectionError;
       return Left(Failure(
         type: FailureType.noConnection,
-        message: Some("Couldn't connect to the server"),
+        message: Some("Couldn't perform the request"),
       ));
+    } catch (e) {
+      print("[logInWithPassword] error: $e");
+      return Left(Failure.empty());
     }
 
     Map<String, dynamic> respData = resp.data;
@@ -115,6 +124,15 @@ class Client {
     }
 
     return Right(unit);
+  }
+
+  /// Tries to reconnect to the server repeateadly every second until succeeds.
+  void tryReconnect() async {
+    while (true) {
+      final res = await logInWithToken();
+      if (res.isLeft()) await Future.delayed(Duration(seconds: 1));
+      else return;
+    }
   }
 
   void logOut() {

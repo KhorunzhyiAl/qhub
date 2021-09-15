@@ -43,7 +43,7 @@ class PostModel extends ChangeNotifier {
         _id = id {
     update();
   }
-
+ 
   Future<bool> upvote() async {
     return true;
   }

@@ -43,7 +43,7 @@ class MyApp extends StatelessWidget {
     final theme = MyTheme();
     final client = locator<Client>();
 
-    client.addStatusListener((status) {
+    client.addStatusListener((status) async {
       switch (status) {
         case ClientStatus.loggedIn:
           _initialRoute = Routes.feed; // Used only for hot reload, can be removed later
@@ -58,14 +58,16 @@ class MyApp extends StatelessWidget {
           navKey.currentState?.pushNamedAndRemoveUntil(
             Routes.error,
             (route) => false,
-            arguments: 'Problems connecting to the server',
+            arguments: 'Problems connecting to the server. \nTrying to reconnect...',
           );
+          client.tryReconnect();
           break;
         case ClientStatus.starting:
           _initialRoute = Routes.splash;
           break;
       }
     });
+
 
     print('initial route = $_initialRoute');
     return MaterialApp(

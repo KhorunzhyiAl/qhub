@@ -20,4 +20,15 @@ class Post {
     required this.community,
     this.imageUri = const None(),
   });
+
+  Post.empty()
+      : id = '',
+        title = '',
+        body = '',
+        author = '',
+        upvotes = 0,
+        downvotes = 0,
+        community = '',
+        imageUri = None();
 }
+

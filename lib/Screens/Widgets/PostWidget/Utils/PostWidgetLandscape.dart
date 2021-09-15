@@ -4,6 +4,7 @@ import 'dart:math';
 
 import 'package:qhub/Domain/Feed/PostModel.dart';
 import 'package:qhub/Domain/Navigation/Routes.dart';
+import 'package:qhub/Domain/Utils.dart';
 import 'package:qhub/Screens/Widgets/PostInfo.dart';
 
 class PostViewLandscape extends StatelessWidget {
@@ -92,7 +93,7 @@ class PostViewLandscape extends StatelessWidget {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(2),
                       child: Image.network(
-                        'https://picsum.photos/600',
+                        postData.imageUri.fold(() => '', (a) => Utils.createImageUrl(a)),
                         fit: BoxFit.cover,
                         frameBuilder: (_, child, __, ___) {
                           return child;

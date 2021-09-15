@@ -5,6 +5,7 @@ import 'package:qhub/Domain/Feed/PostModel.dart';
 import 'package:qhub/Domain/SubmitPost/PostFormModel.dart';
 import 'package:qhub/Domain/Navigation/Routes.dart';
 import 'package:qhub/Domain/Feed/FeedQuery.dart';
+import 'package:qhub/Screens/CreatePostScreen/Other/AddImageWidget.dart';
 import 'package:qhub/Screens/Widgets/ErrorText.dart';
 import 'package:qhub/Screens/Widgets/OverlayLoading/OverlayLoading.dart';
 
@@ -92,6 +93,7 @@ class CreatePostScreen extends StatelessWidget {
                 child: Column(
                   children: [
                     SizedBox(height: 5),
+                    AddImageWidget(_postFormModel.imageUploader),
                     Card(
                       child: TextField(
                         style: theme.textTheme.headline2,

@@ -6,21 +6,23 @@ import 'package:qhub/Domain/Core/FlashbarController.dart';
 import 'package:qhub/Domain/Feed/Post.dart';
 import 'package:qhub/Domain/Locators.dart';
 import 'package:qhub/Domain/Core/Api.dart';
+import 'package:qhub/Domain/SubmitPost/UploadImageModel.dart';
 
 /// Model for creating or editing a post. Provides validators for input
 class PostFormModel {
   final _titleErrorNotifier = ValueNotifier<Option<String>>(None());
-  ValueListenable<Option<String>> get titleError => _titleErrorNotifier;
-  final popup = locator<FlashbarController>();
+  final _popup = locator<FlashbarController>();
+
 
   final ValueNotifier<Option<String>> community;
-  final ValueNotifier<Option<String>> imagePath;
   final ValueNotifier<String> title;
   final ValueNotifier<String> body;
+  final imageUploader = UploadImageModel();
+
+  ValueListenable<Option<String>> get titleError => _titleErrorNotifier;
 
   PostFormModel({Option<String> community = const None()})
       : community = ValueNotifier(community),
-        imagePath = ValueNotifier(None()),
         title = ValueNotifier(''),
         body = ValueNotifier('');
 
@@ -28,16 +30,21 @@ class PostFormModel {
   /// author)
   PostFormModel.edit(Post post)
       : community = ValueNotifier(Some(post.community)),
-        imagePath = ValueNotifier(post.imageUri),
         title = ValueNotifier(post.title),
         body = ValueNotifier(post.body);
 
-  /// Attempts to submit the post and completes with its id.
+  /// Completes with the id of the post if succeeded.
   Future<Option<String>> submit() async {
+    if (imageUploader.uploadStatus.value == UploadImageStatus.uploading) {
+      _popup.send(Failure(type: FailureType.any, message: Some('Image is still being uploaded')));
+      return None();
+    }
+
     final res = await submitPost(
       community: community.value.fold(() => '', (a) => a),
       title: title.value,
       body: body.value,
+      imageUri: imageUploader.uploadedImageUri.fold(() => '', (a) => a),
     );
 
     return res.fold(
@@ -46,10 +53,12 @@ class PostFormModel {
           _titleErrorNotifier.value = l.message;
           return None();
         }
-        popup.send(l);
+        _popup.send(l);
         return None();
       },
       (r) => Some(r),
     );
   }
+
+  void _initListeners() {}
 }

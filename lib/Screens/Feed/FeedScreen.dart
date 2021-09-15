@@ -36,7 +36,9 @@ class _FeedScreenState extends State<FeedScreen> with SingleTickerProviderStateM
   }
 
   void _scrollListener() {
-    if (!isLoadingMore && widget._controller.position.extentAfter < 500) {
+    if (!isLoadingMore &&
+        widget._controller.position.extentAfter < 500 &&
+        !widget._feedModel.noMorePosts) {
       widget._feedModel.loadMore();
       isLoadingMore = true;
     }
@@ -45,7 +47,7 @@ class _FeedScreenState extends State<FeedScreen> with SingleTickerProviderStateM
   void _setFeedParameters(FeedQuery? params) async {
     await widget._controller.animateTo(
       0,
-      duration: Duration(milliseconds: 10),
+      duration: Duration(milliseconds: 50),
       curve: Curves.linear,
     );
     if (params != null) widget._feedModel.setParameters(params);
@@ -98,12 +100,45 @@ class _FeedScreenState extends State<FeedScreen> with SingleTickerProviderStateM
                   builder: (_, posts, __) {
                     isLoadingMore = false;
 
-                    if (posts.length == 0) widget._feedModel.loadMore();
+                    if (posts.length == 0 && !widget._feedModel.noMorePosts)
+                      widget._feedModel.loadMore();
 
                     return SliverList(
                       delegate: SliverChildBuilderDelegate(
                         (context, index) {
+                          print(
+                              'post builder for feed. noMorePosts = ${widget._feedModel.noMorePosts}');
                           if (index == posts.length) {
+                            if (widget._feedModel.noMorePosts) {
+                              return Container(
+                                height: 150,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      "======= That's it =======",
+                                      style: theme.textTheme.headline5,
+                                    ),
+                                    SizedBox(height: 10),
+                                    OutlinedButton(
+                                      onPressed: () async {
+                                        await widget._controller.animateTo(
+                                          0,
+                                          duration: Duration(milliseconds: 80),
+                                          curve: Curves.linear,
+                                        );
+                                        widget._feedModel.clearThenUpdate();
+                                      },
+                                      child: Container(
+                                        width: 150,
+                                        alignment: Alignment.center,
+                                        child: Text('Refresh', style: theme.textTheme.headline5),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }
                             return Container(
                               height: 100,
                               child: Center(
@@ -117,7 +152,7 @@ class _FeedScreenState extends State<FeedScreen> with SingleTickerProviderStateM
                           return PostWidget(posts[index]);
                         },
 
-                        /// The last element is loading indicator
+                        /// The last element is loading indicator or a message
                         childCount: posts.length + 1,
                       ),
                     );

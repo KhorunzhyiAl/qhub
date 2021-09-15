@@ -3,6 +3,7 @@ import 'package:qhub/Domain/Feed/Post.dart';
 
 import 'package:qhub/Domain/Feed/PostModel.dart';
 import 'package:qhub/Domain/Navigation/Routes.dart';
+import 'package:qhub/Domain/Utils.dart';
 import 'package:qhub/Screens/Widgets/PostInfo.dart';
 
 class PostViewPortrait extends StatelessWidget {
@@ -76,7 +77,7 @@ class PostViewPortrait extends StatelessWidget {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(2),
                 child: Image.network(
-                  'https://picsum.photos/700',
+                  postData.imageUri.fold(() => '', (a) => Utils.createImageUrl(a)),
                   fit: BoxFit.cover,
                   frameBuilder: (_, child, __, ___) {
                     return child;
@@ -100,6 +101,7 @@ class PostViewPortrait extends StatelessWidget {
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(postData.title, style: theme.textTheme.headline3),
                 SizedBox(height: 10),

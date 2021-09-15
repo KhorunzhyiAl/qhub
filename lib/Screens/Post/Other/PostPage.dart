@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:qhub/Domain/Feed/Post.dart';
 import 'package:qhub/Domain/Feed/PostModel.dart';
+import 'package:qhub/Domain/Utils.dart';
 import 'package:qhub/Screens/Widgets/PostInfo.dart';
 
 class PostPage extends StatelessWidget {
@@ -77,7 +78,7 @@ class PostPage extends StatelessWidget {
                     ClipRRect(
                       borderRadius: BorderRadius.circular(2),
                       child: Image.network(
-                        'https://picsum.photos/700/700',
+                        postData.imageUri.fold(() => '', (a) => Utils.createImageUrl(a)),
                         fit: BoxFit.cover,
                         frameBuilder: (_, child, __, ___) {
                           return child;
@@ -89,7 +90,8 @@ class PostPage extends StatelessWidget {
                             child: child,
                           );
                         },
-                        errorBuilder: (_, __, ___) {
+                        errorBuilder: (_, exeption, __) {
+                          print('[postPage.dart] failed to load image: $exeption');
                           return Container(
                             height: 300,
                             color: Colors.grey,

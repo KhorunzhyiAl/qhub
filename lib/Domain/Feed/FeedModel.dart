@@ -4,7 +4,9 @@ import 'dart:math';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:qhub/Domain/Core/Api.dart';
+import 'package:qhub/Domain/Core/FlashbarController.dart';
 import 'package:qhub/Domain/Feed/Post.dart';
+import 'package:qhub/Domain/Locators.dart';
 import 'package:qhub/Other/PropertyNotifier.dart';
 import 'package:qhub/Domain/Feed/FeedQuery.dart';
 
@@ -17,6 +19,9 @@ import 'package:qhub/Domain/Feed/FeedQuery.dart';
 class FeedModel {
   final _posts = <Post>[];
   bool _isLoadingPosts = false;
+  final _flashbar = locator<FlashbarController>();
+  bool _noMorePosts = false;
+  bool _connectionFailed = false;
 
   late final PropertyNotifier<UnmodifiableListView<Post>> _postsNotifier;
 
@@ -29,6 +34,9 @@ class FeedModel {
   /// loading finishes.
   ValueNotifier<UnmodifiableListView<Post>> get postsNotifier => _postsNotifier;
 
+  /// all posts for the feed have been loaded. Stop spamming [loadMore], please
+  bool get noMorePosts => _noMorePosts;
+
   /// Creates a feed model with the specified [parameters]. The [posts] list is initially empty;
   /// call [loadMore] to load the first batch of posts.
   FeedModel(FeedQuery parameters) : parametersNotifier = PropertyNotifier(parameters) {
@@ -38,6 +46,7 @@ class FeedModel {
   /// Sets the specified parameters and clears [posts]
   void setParameters(FeedQuery parameters) {
     this.parametersNotifier.value = parameters;
+    _noMorePosts = false;
     _posts.clear();
     _postsNotifier.notifyListeners();
   }
@@ -45,9 +54,19 @@ class FeedModel {
   /// Reloads the list of posts preserving the parameters. [loadPosts] - the amount of posts to load
   /// after updating (default is 100)
   Future<void> update([int loadPosts = 100]) async {
+    _noMorePosts = false;
     final newPosts = await _loadMore(loadPosts);
     _posts.clear();
     _posts.addAll(newPosts);
+    _postsNotifier.notifyListeners();
+  }
+
+  /// Clears the list of posts first, only then starts loading the new ones (unlike [update])
+  Future<void> clearThenUpdate([int loadPosts = 100]) async {
+    _noMorePosts = false;
+    _posts.clear();
+    _postsNotifier.notifyListeners();
+    _posts.addAll(await _loadMore(loadPosts));
     _postsNotifier.notifyListeners();
   }
 
@@ -59,12 +78,21 @@ class FeedModel {
 
   /// Loads and returns a list of [amount] posts with the [offset]
   Future<List<Post>> _loadMore(int amount, [int offset = 0]) async {
-    final result = <Post>[];
-
-    if (_isLoadingPosts || amount <= 0) return result;
+    if (_isLoadingPosts || amount <= 0) return [];
 
     _isLoadingPosts = true;
-    result.addAll(await loadMorePosts(amount, offset));
+
+    final resOrFailure = await loadMorePosts(amount, offset);
+    final result = resOrFailure.fold(
+      (l) {
+        return <Post>[];
+      },
+      (r) {
+        if (r.length < amount) _noMorePosts = true;
+        return r;
+      },
+    );
+
     _isLoadingPosts = false;
 
     return result;
