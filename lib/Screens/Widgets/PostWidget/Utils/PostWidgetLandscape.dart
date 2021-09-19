@@ -59,7 +59,7 @@ class PostViewLandscape extends StatelessWidget {
       color: Colors.transparent,
       child: Center(
         child: Text(
-          'Failed to load the post',
+          'Failed to load post',
           style: theme.textTheme.headline3,
         ),
       ),
@@ -80,40 +80,46 @@ class PostViewLandscape extends StatelessWidget {
             children: <Widget>[
               Expanded(
                 child: Text(
-                  postData.title.substring(0, min(postData.title.length, 300)),
+                  postData.title.substring(0, min(postData.title.length, 300)) +
+                      (postData.title.length >= 300 ? '...' : ''),
                   style: theme.textTheme.headline3,
                 ),
               ),
               SizedBox(width: 40),
-              if (postData.imageUri.isSome())
-                LimitedBox(
+              postData.imageUri.fold(
+                () => SizedBox.shrink(),
+                (a) => LimitedBox(
                   maxHeight: 100,
                   child: AspectRatio(
                     aspectRatio: 4 / 3,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(2),
-                      child: Image.network(
-                        postData.imageUri.fold(() => '', (a) => Utils.createImageUrl(a)),
-                        fit: BoxFit.cover,
-                        frameBuilder: (_, child, __, ___) {
-                          return child;
-                        },
-                        loadingBuilder: (_, child, chunk) {
-                          return Container(
-                            color: Colors.grey,
-                            child: child,
-                          );
-                        },
-                        errorBuilder: (_, __, ___) {
-                          return Container(
-                            color: Colors.grey,
-                            child: Icon(Icons.image, color: Colors.white),
-                          );
-                        },
+                    child: Hero(
+                      tag: a,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(2),
+                        child: Image.network(
+                          Utils.createImageUrl(a),
+                          fit: BoxFit.cover,
+                          frameBuilder: (_, child, __, ___) {
+                            return child;
+                          },
+                          loadingBuilder: (_, child, chunk) {
+                            return Container(
+                              color: Colors.grey,
+                              child: child,
+                            );
+                          },
+                          errorBuilder: (_, __, ___) {
+                            return Container(
+                              color: Colors.grey,
+                              child: Icon(Icons.image, color: Colors.white),
+                            );
+                          },
+                        ),
                       ),
                     ),
                   ),
                 ),
+              ),
             ],
           ),
           SizedBox(height: 20),

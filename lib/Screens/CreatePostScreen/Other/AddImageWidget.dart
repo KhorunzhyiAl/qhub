@@ -111,7 +111,13 @@ class AddImageWidget extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: 10),
           child: Row(
             children: [
-              Text(_imageName.foldRight('', (a, previous) => a), style: theme.textTheme.headline6),
+              Expanded(
+                child: Text(
+                  _imageName.foldRight('', (a, previous) => a),
+                  style: theme.textTheme.headline6,
+                  overflow: TextOverflow.fade,
+                ),
+              ),
               Spacer(),
               IconButton(
                 onPressed: () {

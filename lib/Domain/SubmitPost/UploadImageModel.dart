@@ -48,5 +48,6 @@ class UploadImageModel {
   void cancel() {
     _cancelToken.cancel();
     _statusNotifier.value = UploadImageStatus.notSelected;
+    _uploadedImageUri = None();
   }
 }

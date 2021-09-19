@@ -107,7 +107,12 @@ Future<Either<Failure, Post>> loadPost(String id) async {
       upvotes: 10,
       downvotes: 2,
       community: resp['hub'],
-      imageUri: imageOption.fold(() => None(), (a) => Some(a.substring(7))), // just- ...
+      imageUri: imageOption.fold(
+        () => None(),
+        (a) {
+          return (a.length == 7) ? None() : Some(a.substring(7)); // just- ...
+        },
+      ), 
     );
 
     return Right(result);
@@ -140,7 +145,12 @@ Future<Either<Failure, List<Post>>> loadMorePosts(int amount, [int offset = 0]) 
         upvotes: 10,
         downvotes: 2,
         community: postData['hub'],
-        imageUri: imageOption.fold(() => None(), (a) => Some(a.substring(7))), // just- ...
+        imageUri: imageOption.fold(
+        () => None(),
+        (a) {
+          return (a.length == 7) ? None() : Some(a.substring(7)); // just- ...
+        },
+      ), 
       ));
     }
 

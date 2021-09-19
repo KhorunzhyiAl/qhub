@@ -103,19 +103,23 @@ class LogInScreen extends StatelessWidget {
                           break;
                       }
 
-                      return ElevatedButton(
-                        onPressed: onPressed,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            if (status == LogInStatus.loading) ...[
-                              CircularProgressIndicator(
-                                color: Colors.white,
-                              ),
-                              SizedBox(width: 20),
+                      return SizedBox(
+                        height: 60,
+                        child: ElevatedButton(
+                          onPressed: onPressed,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              if (status == LogInStatus.loading) ...[
+                                AspectRatio(
+                                  aspectRatio: 1,
+                                  child: CircularProgressIndicator(),
+                                ),
+                              ] else ...[
+                                const Text('Log in'),
+                              ],
                             ],
-                            const Text('Log in'),
-                          ],
+                          ),
                         ),
                       );
                     },

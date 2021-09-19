@@ -102,17 +102,23 @@ class SignUpScreen extends StatelessWidget {
                           break;
                       }
 
-                      return ElevatedButton(
-                        onPressed: onPressed,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            if (status == SignUpStatus.busy) ...[
-                              CircularProgressIndicator(),
-                              SizedBox(width: 20),
+                      return SizedBox(
+                        height: 60,
+                        child: ElevatedButton(
+                          onPressed: onPressed,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              if (status == SignUpStatus.busy) ...[
+                                AspectRatio(
+                                  aspectRatio: 1,
+                                  child: CircularProgressIndicator(),
+                                ),
+                              ] else ...[
+                                const Text('Sign up'),
+                              ],
                             ],
-                            const Text('Sign up'),
-                          ],
+                          ),
                         ),
                       );
                     },

@@ -73,35 +73,43 @@ class PostPage extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
-                  if (postData.imageUri.isSome()) ...[
-                    SizedBox(height: 10),
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(2),
-                      child: Image.network(
-                        postData.imageUri.fold(() => '', (a) => Utils.createImageUrl(a)),
-                        fit: BoxFit.cover,
-                        frameBuilder: (_, child, __, ___) {
-                          return child;
-                        },
-                        loadingBuilder: (_, child, chunk) {
-                          return Container(
-                            height: MediaQuery.of(context).size.width - 20,
-                            color: Colors.grey,
-                            child: child,
-                          );
-                        },
-                        errorBuilder: (_, exeption, __) {
-                          print('[postPage.dart] failed to load image: $exeption');
-                          return Container(
-                            height: 300,
-                            color: Colors.grey,
-                            child: Icon(Icons.image, color: Colors.white),
-                          );
-                        },
+                  ...postData.imageUri.fold(
+                    () => [SizedBox.shrink()],
+                    (a) => [
+                      SizedBox(height: 10),
+                      Hero(
+                        tag: a,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(2),
+                          child: Image.network(
+                            Utils.createImageUrl(a),
+                            fit: null,
+                            loadingBuilder: (_, child, chunk) {
+                              if (chunk == null) {
+                                return Container(
+                                  child: child,
+                                );
+                              }
+                              return Container(
+                                height: MediaQuery.of(context).size.width - 20,
+                                color: Colors.grey,
+                                child: child,
+                              );
+                            },
+                            errorBuilder: (_, exeption, __) {
+                              print('[postPage.dart] failed to load image: $exeption');
+                              return Container(
+                                height: 300,
+                                color: Colors.grey,
+                                child: Icon(Icons.image, color: Colors.white),
+                              );
+                            },
+                          ),
+                        ),
                       ),
-                    ),
-                    SizedBox(height: 10),
-                  ],
+                      SizedBox(height: 10),
+                    ],
+                  ),
                   Text(postData.title, style: theme.textTheme.headline1),
                   SizedBox(height: 10),
                   PostInfo(postModel: postModel),

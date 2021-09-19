@@ -37,6 +37,8 @@ dependencies:
   dartz: ^0.10.0
   freezed_annotation:
   file_picker: ^4.0.2
+  path_provider:
+  sqflite: ^2.0.0+4
 
 dev_dependencies:
   flutter_test:

@@ -71,33 +71,37 @@ class PostViewPortrait extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          if (postData.imageUri.isSome()) ...[
-            AspectRatio(
+          postData.imageUri.fold(
+            () => SizedBox.shrink(),
+            (a) => AspectRatio(
               aspectRatio: 5 / 3,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(2),
-                child: Image.network(
-                  postData.imageUri.fold(() => '', (a) => Utils.createImageUrl(a)),
-                  fit: BoxFit.cover,
-                  frameBuilder: (_, child, __, ___) {
-                    return child;
-                  },
-                  loadingBuilder: (_, child, chunk) {
-                    return Container(
-                      color: Colors.grey,
-                      child: child,
-                    );
-                  },
-                  errorBuilder: (_, __, ___) {
-                    return Container(
-                      color: Colors.grey,
-                      child: Icon(Icons.image, color: Colors.white),
-                    );
-                  },
+              child: Hero(
+                tag: a,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(2),
+                  child: Image.network(
+                    Utils.createImageUrl(a),
+                    fit: BoxFit.cover,
+                    frameBuilder: (_, child, __, ___) {
+                      return child;
+                    },
+                    loadingBuilder: (_, child, chunk) {
+                      return Container(
+                        color: Colors.grey,
+                        child: child,
+                      );
+                    },
+                    errorBuilder: (_, __, ___) {
+                      return Container(
+                        color: Colors.grey,
+                        child: Icon(Icons.image, color: Colors.white),
+                      );
+                    },
+                  ),
                 ),
               ),
             ),
-          ],
+          ),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
             child: Column(

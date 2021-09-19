@@ -1,5 +1,6 @@
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dartz/dartz.dart';
+import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:qhub/Domain/Core/Client/ClientStatus.dart';
 import 'package:dio/dio.dart';
@@ -7,23 +8,23 @@ import 'package:qhub/Domain/Core/Failure.dart';
 import 'package:qhub/Domain/Core/FlashbarController.dart';
 import 'package:qhub/Domain/Locators.dart';
 import 'package:qhub/Domain/Utils.dart';
-import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 
 export 'package:qhub/Domain/Core/Client/ClientStatus.dart';
 
 class Client {
-  final _cookieJar = CookieJar();
   late final Dio dio;
+  final _flashbar = locator<FlashbarController>();
 
   ValueNotifier<ClientStatus> _status = ValueNotifier(ClientStatus.starting);
 
-  Client() {
+  Client(CookieJar cookieJar) {
+
     dio = Dio()
       ..options.baseUrl = Utils.SERVER_ADDRESS
-      ..options.sendTimeout = 2000
-      ..options.receiveTimeout = 2000
-      ..options.connectTimeout = 2000
-      ..interceptors.add(CookieManager(_cookieJar));
+      ..options.sendTimeout = 5000
+      ..options.receiveTimeout = 5000
+      ..options.connectTimeout = 5000
+      ..interceptors.add(CookieManager(cookieJar));
   }
 
   void addStatusListener(void Function(ClientStatus status) f) {
@@ -46,7 +47,7 @@ class Client {
       _status.value = ClientStatus.connectionError;
       return Left(Failure(
         type: FailureType.noConnection,
-        message: Some("Couldn't perform the request"),
+        message: Some('Connection problems'),
       ));
     } catch (e) {
       print("[logInWithPassword] error: $e");
@@ -88,6 +89,7 @@ class Client {
 
     if (success) {
       _status.value = ClientStatus.loggedIn;
+
       return Right(unit);
     } else {
       return Left(Failure(
@@ -107,7 +109,7 @@ class Client {
       _status.value = ClientStatus.connectionError;
       return Left(Failure(
         type: FailureType.noConnection,
-        message: Some("Couldn't perform the request"),
+        message: Some("Couldn't connect"),
       ));
     } catch (e) {
       print("[logInWithPassword] error: $e");
@@ -115,7 +117,8 @@ class Client {
     }
 
     Map<String, dynamic> respData = resp.data;
-    bool success = respData['status'] == 'success';
+    print('log in with token. Response: $respData');
+    bool success = respData['valid'] == 1;
 
     if (success) {
       _status.value = ClientStatus.loggedIn;
@@ -129,9 +132,13 @@ class Client {
   /// Tries to reconnect to the server repeateadly every second until succeeds.
   void tryReconnect() async {
     while (true) {
+      print("[Client.dart] reconnecting");
       final res = await logInWithToken();
-      if (res.isLeft()) await Future.delayed(Duration(seconds: 1));
-      else return;
+      await Future.delayed(Duration(milliseconds: 1000));
+      if (res.isRight()) {
+        _flashbar.send(Failure.any('Connection restored'));
+        return;
+      }
     }
   }
 

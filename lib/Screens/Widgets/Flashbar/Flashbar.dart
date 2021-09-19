@@ -19,7 +19,6 @@ class _FlashbarState extends State<Flashbar> with SingleTickerProviderStateMixin
   late final Animation<double> animFade;
   Failure? last;
   late final Widget flashbarWidget;
-  late final OverlayEntry overlay;
   final double fadeStarts = 0.9;
 
   @override
@@ -45,7 +44,6 @@ class _FlashbarState extends State<Flashbar> with SingleTickerProviderStateMixin
 
   @override
   void dispose() {
-    overlay.dispose();
     super.dispose();
   }
 
