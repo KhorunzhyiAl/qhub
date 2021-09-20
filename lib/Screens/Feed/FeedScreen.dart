@@ -1,4 +1,5 @@
 import 'dart:collection';
+import 'dart:math';
 import 'package:dartz/dartz.dart' as dartz;
 
 import 'package:flutter/cupertino.dart';
@@ -94,6 +95,40 @@ class _FeedScreenState extends State<FeedScreen> with SingleTickerProviderStateM
                   onRefresh: () async {
                     await widget._feedModel.update();
                   },
+                  builder: (
+                    context,
+                    refreshState,
+                    pulledExtent,
+                    refreshTriggerPullDistance,
+                    refreshIndicatorExtent,
+                  ) {
+                    final percentageComplete =
+                        (pulledExtent / refreshTriggerPullDistance).clamp(0.0, 1.0);
+                    final showLoading = refreshState != RefreshIndicatorMode.drag;
+                    final isDone = refreshState == RefreshIndicatorMode.done ||
+                        refreshState == RefreshIndicatorMode.inactive;
+
+                    return Center(
+                      child: Stack(
+                        clipBehavior: Clip.none,
+                        alignment: Alignment.center,
+                        children: <Widget>[
+                          Positioned(
+                            width: 30,
+                            height: 30,
+                            child: CircularProgressIndicator(
+                              value: showLoading ? null : percentageComplete,
+                              color: isDone
+                                  ? theme.colorScheme.onBackground.withOpacity(percentageComplete)
+                                  : theme.colorScheme.onBackground,
+                              backgroundColor: Colors.transparent,
+                              strokeWidth: isDone ? percentageComplete * 4.0 : 4.0,
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
                 ),
                 ValueListenableBuilder<UnmodifiableListView<Post>>(
                   valueListenable: widget._feedModel.postsNotifier,
@@ -106,12 +141,10 @@ class _FeedScreenState extends State<FeedScreen> with SingleTickerProviderStateM
                     return SliverList(
                       delegate: SliverChildBuilderDelegate(
                         (context, index) {
-                          print(
-                              'post builder for feed. noMorePosts = ${widget._feedModel.noMorePosts}');
                           if (index == posts.length) {
                             if (widget._feedModel.noMorePosts) {
                               return Container(
-                                height: 150,
+                                height: 200,
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
@@ -119,7 +152,7 @@ class _FeedScreenState extends State<FeedScreen> with SingleTickerProviderStateM
                                       "======= That's it =======",
                                       style: theme.textTheme.headline5,
                                     ),
-                                    SizedBox(height: 10),
+                                    SizedBox(height: 20),
                                     OutlinedButton(
                                       onPressed: () async {
                                         await widget._controller.animateTo(
@@ -142,9 +175,13 @@ class _FeedScreenState extends State<FeedScreen> with SingleTickerProviderStateM
                             return Container(
                               height: 100,
                               child: Center(
-                                child: CircularProgressIndicator(
-                                  color: theme.colorScheme.onBackground,
-                                  backgroundColor: Colors.transparent,
+                                child: SizedBox(
+                                  width: 30,
+                                  height: 30,
+                                  child: CircularProgressIndicator(
+                                    color: theme.colorScheme.onBackground,
+                                    backgroundColor: Colors.transparent,
+                                  ),
                                 ),
                               ),
                             );
