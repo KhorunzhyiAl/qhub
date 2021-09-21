@@ -8,11 +8,11 @@ import 'package:qhub/Domain/Core/FlashbarController.dart';
 import 'package:qhub/Domain/Navigation/RouteGenerator.dart';
 import 'package:qhub/Config/MyTheme.dart';
 import 'package:qhub/Domain/Navigation/Routes.dart';
-import 'package:qhub/Domain/Locators.dart';
 import 'package:qhub/Screens/Widgets/Flashbar/Flashbar.dart';
+import 'package:qhub/Domain/Locators.dart';
 
 void main(List<String> args) async {
-  initLocator();
+  
 
   runApp(MyApp());
 }
@@ -35,6 +35,8 @@ class _MyAppState extends State<MyApp> {
   }
 
   void initClient() async {
+    locator.registerSingleton<FlashbarController>(FlashbarController());
+
     final appDocDir = await getApplicationDocumentsDirectory();
     final cookieJar = PersistCookieJar(storage: FileStorage(appDocDir.path + '/cookies'));
     Client cli = Client(cookieJar);

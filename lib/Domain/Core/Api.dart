@@ -104,15 +104,15 @@ Future<Either<Failure, Post>> loadPost(String id) async {
       title: resp['title'],
       body: resp['content'],
       author: resp['author'],
-      upvotes: 10,
-      downvotes: 2,
+      upvotes: resp['morevotes'],
+      downvotes: resp['lessvotes'],
       community: resp['hub'],
       imageUri: imageOption.fold(
         () => None(),
         (a) {
           return (a.length == 7) ? None() : Some(a.substring(7)); // just- ...
         },
-      ), 
+      ),
     );
 
     return Right(result);
@@ -142,15 +142,15 @@ Future<Either<Failure, List<Post>>> loadMorePosts(int amount, [int offset = 0]) 
         title: postData['title'],
         body: postData['content'],
         author: postData['author'],
-        upvotes: 10,
-        downvotes: 2,
+        upvotes: postData['morevotes'],
+        downvotes: postData['lessvotes'],
         community: postData['hub'],
         imageUri: imageOption.fold(
-        () => None(),
-        (a) {
-          return (a.length == 7) ? None() : Some(a.substring(7)); // just- ...
-        },
-      ), 
+          () => None(),
+          (a) {
+            return (a.length == 7) ? None() : Some(a.substring(7)); // just- ...
+          },
+        ),
       ));
     }
 
@@ -170,5 +170,31 @@ Future<bool> verifyUsernameNotTaken(String username) async {
       return false;
     }
   }
+  return true;
+}
+
+Future<bool> upvotePost(String postID) async {
+  try {
+    final resp = await _dio.post('/postvote/$postID/1');
+    final data = resp.data as Map<String, dynamic>;
+    print('data = $data');
+  } catch (e) {
+    print('[upvotePost] e');
+    return false;
+  }
+
+  return true;
+}
+
+Future<bool> downvotePost(String postID) async {
+  try {
+    final resp = await _dio.post('/postvote/$postID/-1');
+    final data = resp.data as Map<String, dynamic>;
+    print('data = $data');
+  } catch (e) {
+    print('[downvotePost] e');
+    return false;
+  }
+
   return true;
 }

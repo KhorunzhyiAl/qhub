@@ -6,6 +6,7 @@ import 'package:qhub/Domain/Core/FlashbarController.dart';
 import 'package:qhub/Domain/Feed/Post.dart';
 import 'package:dartz/dartz.dart';
 import 'package:qhub/Domain/Locators.dart';
+import 'package:qhub/Domain/Core/Api.dart' as api;
 
 /// Represents a post and provides a way to interact with it.
 class PostModel extends ChangeNotifier {
@@ -43,13 +44,41 @@ class PostModel extends ChangeNotifier {
         _id = id {
     update();
   }
- 
+
   Future<bool> upvote() async {
-    return true;
+    // First change the data locally and noify, so that user sees the result instantly.
+    _post = _post.fold(
+      () => _post,
+      (a) => a.fold(
+        () => _post,
+        (a) => Some(Some(a.upvoted())),
+      ),
+    );
+    notifyListeners();
+
+    // Then, when the request finished, update the values according to the server (to show the
+    // relevant info even if the upvote didn't count for some reason).
+    final res = await api.upvotePost(_id);
+    update();
+    return res;
   }
 
   Future<bool> downvote() async {
-    return true;
+    // First change the data locally and noify, so that user sees the result instantly.
+    _post = _post.fold(
+      () => _post,
+      (a) => a.fold(
+        () => _post,
+        (a) => Some(Some(a.downvoted())),
+      ),
+    );
+    notifyListeners();
+
+    // Then, when the request finished, update the values according to the server (to show the
+    // relevant info even if the upvote didn't count for some reason).
+    final res = await api.upvotePost(_id);
+    update();
+    return res;
   }
 
   Future<void> update() async {

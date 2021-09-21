@@ -30,5 +30,31 @@ class Post {
         downvotes = 0,
         community = '',
         imageUri = None();
+  
+  Post upvoted() {
+    return Post(
+      id: this.id,
+      title: this.title,
+      body: this.body,
+      author: this.author,
+      upvotes: this.upvotes + 1,
+      downvotes: this.downvotes,
+      community: this.community,
+      imageUri: this.imageUri,
+    );
+  }
+
+  Post downvoted() {
+    return Post(
+      id: this.id,
+      title: this.title,
+      body: this.body,
+      author: this.author,
+      upvotes: this.upvotes,
+      downvotes: this.downvotes + 1,
+      community: this.community,
+      imageUri: this.imageUri,
+    );
+  }
 }
 

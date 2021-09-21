@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:qhub/Domain/Feed/Post.dart';
 import 'package:qhub/Domain/Feed/PostModel.dart';
@@ -13,6 +12,8 @@ class PostInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 40,
+      alignment: Alignment.centerLeft,
+      color: Colors.transparent,
       child: AnimatedBuilder(
         animation: postModel,
         builder: (context, child) {
@@ -49,11 +50,44 @@ class PostInfo extends StatelessWidget {
   }
 
   Widget _loadedPost(BuildContext context, Post postData) {
+    final theme = Theme.of(context);
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
         UserLabel(username: postData.author),
+        Spacer(),
+        TextButton(
+          onPressed: () {
+            postModel.upvote();
+          },
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Icon(Icons.add, size: 18),
+              Icon(Icons.add, size: 18),
+              SizedBox(width: 10),
+              Text(postData.upvotes.toString(), style: theme.textTheme.headline6),
+            ],
+          ),
+        ),
+        SizedBox(width: 25),
+        TextButton(
+          onPressed: () {
+            postModel.downvote();
+          },
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Icon(Icons.remove, size: 18),
+              Icon(Icons.remove, size: 18),
+              SizedBox(width: 10),
+              Text(postData.downvotes.toString(), style: theme.textTheme.headline6),
+            ],
+          ),
+        ),
       ],
     );
   }
