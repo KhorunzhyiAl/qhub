@@ -10,5 +10,5 @@ Remaking my old Qt/C++ app on Flutter.
 - Select hub page
 - Create posts
 - Upvote/downvote
-- Saving user cookies 
+- Saving user session
 - Light/dark themes
