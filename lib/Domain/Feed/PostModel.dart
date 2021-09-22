@@ -76,7 +76,7 @@ class PostModel extends ChangeNotifier {
 
     // Then, when the request finished, update the values according to the server (to show the
     // relevant info even if the upvote didn't count for some reason).
-    final res = await api.upvotePost(_id);
+    final res = await api.downvotePost(_id);
     update();
     return res;
   }

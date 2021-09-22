@@ -14,11 +14,11 @@ export 'package:qhub/Domain/Core/Client/ClientStatus.dart';
 class Client {
   late final Dio dio;
   final _flashbar = locator<FlashbarController>();
+  final CookieJar _cookieJar;
 
   ValueNotifier<ClientStatus> _status = ValueNotifier(ClientStatus.starting);
 
-  Client(CookieJar cookieJar) {
-
+  Client(CookieJar cookieJar) : _cookieJar = cookieJar {
     dio = Dio()
       ..options.baseUrl = Utils.SERVER_ADDRESS
       ..options.sendTimeout = 5000
@@ -144,5 +144,6 @@ class Client {
 
   void logOut() {
     _status.value = ClientStatus.loggedOut;
+    _cookieJar.deleteAll();
   }
 }

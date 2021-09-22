@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:qhub/Domain/Feed/FeedModel.dart';
 import 'package:qhub/Domain/SubmitPost/PostFormModel.dart';
 import 'package:qhub/Domain/Feed/Post.dart';
+import 'package:qhub/Screens/Widgets/Drawer/Drawer.dart';
 import 'package:qhub/Screens/Widgets/PostWidget/PostWidget.dart';
 import 'package:qhub/Screens/Widgets/FloatingButton/FloatingPopup.dart';
 import 'package:qhub/Screens/Widgets/FloatingButton/Other/FloatingPopupElement.dart';
@@ -23,6 +24,7 @@ class FeedScreen extends StatefulWidget {
 
 class _FeedScreenState extends State<FeedScreen> with SingleTickerProviderStateMixin {
   var isLoadingMore = false;
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
@@ -62,6 +64,8 @@ class _FeedScreenState extends State<FeedScreen> with SingleTickerProviderStateM
     return Stack(
       children: [
         Scaffold(
+          key: _scaffoldKey,
+          drawer: MyDrawer(),
           body: Container(
             color: theme.colorScheme.background,
             child: CustomScrollView(
@@ -78,7 +82,9 @@ class _FeedScreenState extends State<FeedScreen> with SingleTickerProviderStateM
                       leading: Container(
                         alignment: Alignment.center,
                         child: IconButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            _scaffoldKey.currentState?.openDrawer();
+                          },
                           icon: Icon(Icons.menu),
                           color: theme.colorScheme.onPrimary,
                         ),
@@ -145,30 +151,22 @@ class _FeedScreenState extends State<FeedScreen> with SingleTickerProviderStateM
                             if (widget._feedModel.noMorePosts) {
                               return Container(
                                 height: 200,
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      "======= That's it =======",
-                                      style: theme.textTheme.headline5,
-                                    ),
-                                    SizedBox(height: 20),
-                                    OutlinedButton(
-                                      onPressed: () async {
-                                        await widget._controller.animateTo(
-                                          0,
-                                          duration: Duration(milliseconds: 80),
-                                          curve: Curves.linear,
-                                        );
-                                        widget._feedModel.clearThenUpdate();
-                                      },
-                                      child: Container(
-                                        width: 150,
-                                        alignment: Alignment.center,
-                                        child: Text('Refresh', style: theme.textTheme.headline5),
-                                      ),
-                                    ),
-                                  ],
+                                alignment: Alignment.center,
+                                child: OutlinedButton(
+                                  onPressed: () async {
+                                    await widget._controller.animateTo(
+                                      0,
+                                      duration: Duration(milliseconds: 80),
+                                      curve: Curves.linear,
+                                    );
+                                    widget._feedModel.clearThenUpdate();
+                                  },
+                                  child: Container(
+                                    width: 150,
+                                    height: 50,
+                                    alignment: Alignment.center,
+                                    child: Text('Refresh', style: theme.textTheme.headline5),
+                                  ),
                                 ),
                               );
                             }

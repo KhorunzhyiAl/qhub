@@ -12,8 +12,6 @@ import 'package:qhub/Screens/Widgets/Flashbar/Flashbar.dart';
 import 'package:qhub/Domain/Locators.dart';
 
 void main(List<String> args) async {
-  
-
   runApp(MyApp());
 }
 
@@ -26,17 +24,18 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   bool loaded = false;
+  final theme = MyTheme();
 
   @override
   void initState() {
     super.initState();
 
+    locator.registerSingleton<FlashbarController>(FlashbarController());
+    locator.registerSingleton<MyTheme>(theme);
     initClient();
   }
 
   void initClient() async {
-    locator.registerSingleton<FlashbarController>(FlashbarController());
-
     final appDocDir = await getApplicationDocumentsDirectory();
     final cookieJar = PersistCookieJar(storage: FileStorage(appDocDir.path + '/cookies'));
     Client cli = Client(cookieJar);
@@ -64,22 +63,25 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = MyTheme();
-
-    return MaterialApp(
-      theme: theme.currentTheme,
-      themeMode: theme.currentMode,
-      initialRoute: Routes.splash,
-      navigatorKey: widget.navKey,
-      onGenerateRoute: RouteGenerator.generateRoute,
+    return AnimatedBuilder(
+      animation: theme,
       builder: (context, child) {
-        if (child == null) return SizedBox.shrink();
+        return MaterialApp(
+          theme: theme.currentTheme,
+          themeMode: theme.currentThemeMode,
+          initialRoute: Routes.splash,
+          navigatorKey: widget.navKey,
+          onGenerateRoute: RouteGenerator.generateRoute,
+          builder: (context, child) {
+            if (child == null) return SizedBox.shrink();
 
-        return Stack(
-          children: [
-            child,
-            Flashbar(locator<FlashbarController>()),
-          ],
+            return Stack(
+              children: [
+                child,
+                Flashbar(locator<FlashbarController>()),
+              ],
+            );
+          },
         );
       },
     );
