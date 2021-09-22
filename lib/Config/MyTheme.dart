@@ -1,4 +1,6 @@
+import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
+import 'package:qhub/Domain/Core/Storage.dart';
 
 class MyThemes {
   static const light = "light";
@@ -6,7 +8,26 @@ class MyThemes {
 }
 
 class MyTheme with ChangeNotifier {
+  static const defaultTheme = MyThemes.light;
   var _currentThemeName = MyThemes.light;
+
+  MyTheme() {
+    _initTheme();
+  }
+
+  void _initTheme() async {
+    _currentThemeName = (await retrieveThemeName()).fold(
+      () {
+        print('[MyTheme.dart] retrieved theme, got none');
+        return defaultTheme;
+      },
+      (a) {
+        print('[MyTheme.dart] retrieved theme, got $a');
+        return a;
+      },
+    );
+    notifyListeners();
+  }
 
   String get currentThemeName => _currentThemeName;
 
@@ -35,13 +56,18 @@ class MyTheme with ChangeNotifier {
   void toggleTheme() {
     switch (_currentThemeName) {
       case MyThemes.light:
-        _currentThemeName = MyThemes.dark;
+        _setTheme(MyThemes.dark);
         break;
       case MyThemes.dark:
-        _currentThemeName = MyThemes.light;
+        _setTheme(MyThemes.light);
         break;
     }
+  }
+
+  void _setTheme(String name) {
+    _currentThemeName = name;
     notifyListeners();
+    saveThemeName(name);
   }
 
   ThemeData light = ThemeData(

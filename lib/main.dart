@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:qhub/Domain/Core/Client/Client.dart';
 import 'package:qhub/Domain/Core/FlashbarController.dart';
+import 'package:qhub/Domain/Core/Storage.dart';
 import 'package:qhub/Domain/Navigation/RouteGenerator.dart';
 import 'package:qhub/Config/MyTheme.dart';
 import 'package:qhub/Domain/Navigation/Routes.dart';
@@ -12,6 +13,7 @@ import 'package:qhub/Screens/Widgets/Flashbar/Flashbar.dart';
 import 'package:qhub/Domain/Locators.dart';
 
 void main(List<String> args) async {
+  initStorage();
   runApp(MyApp());
 }
 
