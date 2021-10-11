@@ -1,8 +1,8 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:qhub/Domain/Core/Failure.dart';
-import 'package:qhub/Domain/Core/FlashbarController.dart';
+import 'package:qhub/domain/core/failure.dart';
+import 'package:qhub/domain/core/flashbar_controller.dart';
 
 class Flashbar extends StatefulWidget {
   final FlashbarController controller;

@@ -1,5 +1,5 @@
 import 'package:dartz/dartz.dart';
-import 'package:qhub/Domain/Feed/Post.dart';
+import 'package:qhub/domain/feed/post.dart';
 import 'package:sqflite/sqflite.dart';
 
 /// Don't use this. Use [_db] to safely get an instance.

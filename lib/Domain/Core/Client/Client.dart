@@ -2,14 +2,14 @@ import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:qhub/Domain/Core/Client/ClientStatus.dart';
+import 'package:qhub/domain/core/client/client_status.dart';
 import 'package:dio/dio.dart';
-import 'package:qhub/Domain/Core/Failure.dart';
-import 'package:qhub/Domain/Core/FlashbarController.dart';
-import 'package:qhub/Domain/Locators.dart';
-import 'package:qhub/Domain/Utils.dart';
+import 'package:qhub/domain/core/failure.dart';
+import 'package:qhub/domain/core/flashbar_controller.dart';
+import 'package:qhub/domain/locators.dart';
+import 'package:qhub/domain/utils.dart';
 
-export 'package:qhub/Domain/Core/Client/ClientStatus.dart';
+export 'package:qhub/domain/core/client/client_status.dart';
 
 class Client {
   late final Dio dio;

@@ -3,14 +3,14 @@ import 'dart:io';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:qhub/Domain/Core/Client/Client.dart';
-import 'package:qhub/Domain/Core/FlashbarController.dart';
-import 'package:qhub/Domain/Core/Storage.dart';
-import 'package:qhub/Domain/Navigation/RouteGenerator.dart';
-import 'package:qhub/Config/MyTheme.dart';
-import 'package:qhub/Domain/Navigation/Routes.dart';
-import 'package:qhub/Screens/Widgets/Flashbar/Flashbar.dart';
-import 'package:qhub/Domain/Locators.dart';
+import 'package:qhub/domain/core/client/client.dart';
+import 'package:qhub/domain/core/flashbar_controller.dart';
+import 'package:qhub/domain/core/storage.dart';
+import 'package:qhub/domain/navigation/route_generator.dart';
+import 'package:qhub/config/my_theme.dart';
+import 'package:qhub/domain/navigation/routes.dart';
+import 'package:qhub/screens/widgets/flashbar/flashbar.dart';
+import 'package:qhub/domain/locators.dart';
 
 void main(List<String> args) async {
   initStorage();

@@ -4,10 +4,10 @@ import 'dart:typed_data';
 
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
-import 'package:qhub/Domain/Core/Client/Client.dart';
-import 'package:qhub/Domain/Core/Failure.dart';
-import 'package:qhub/Domain/Feed/Post.dart';
-import 'package:qhub/Domain/Locators.dart';
+import 'package:qhub/domain/core/client/client.dart';
+import 'package:qhub/domain/core/failure.dart';
+import 'package:qhub/domain/feed/post.dart';
+import 'package:qhub/domain/locators.dart';
 
 final _dio = locator.get<Client>().dio;
 

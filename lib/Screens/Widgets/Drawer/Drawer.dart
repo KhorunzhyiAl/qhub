@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:qhub/Domain/Locators.dart';
-import 'package:qhub/Domain/Core/Client/Client.dart';
-import 'package:qhub/Config/MyTheme.dart';
+import 'package:qhub/domain/locators.dart';
+import 'package:qhub/domain/core/client/client.dart';
+import 'package:qhub/config/my_theme.dart';
 
 class MyDrawer extends StatelessWidget {
   final client = locator<Client>();
